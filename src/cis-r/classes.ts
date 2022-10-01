@@ -4,7 +4,7 @@ import type {
   ItemProperties,
   NextItemFun,
   ProcessAnswerFun,
-    StateProperties
+  StateProperties,
 } from "./types";
 import { ItemType } from "./types";
 
@@ -13,6 +13,7 @@ export class State {
   readonly items: Item[];
   readonly onComplete: (state: State) => void;
 
+  private _data: any;
   current_item: Item | undefined;
   item_history: Item[] = [];
 
@@ -54,6 +55,14 @@ export class State {
     const item = this.items.find(i => i.id === id);
     if (!item) throw `Cannot find item with id ${id}`;
     return item;
+  }
+
+  get data(): any {
+    return this._data;
+  }
+
+  set data(value: any) {
+    this._data = value;
   }
 }
 
