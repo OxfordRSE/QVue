@@ -17,6 +17,7 @@ const state = ref(cis.CIS());
       @next="(ans) => state.next_q(ans)"
       @back="state.last_q()"
     />
-    <ResultSheet v-else :content="state.data">No item to display.</ResultSheet>
+    <ResultSheet v-else :content="state.data"/>
+    <ResultSheet :content="{summary: '<p>Test ResultSheet</p>', }"/>
   </main>
 </template>

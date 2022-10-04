@@ -1,5 +1,7 @@
 # CIS-R
 
+[![Build Vue](https://github.com/OxfordRSE/CIS-R/actions/workflows/build-vue.yml/badge.svg)](https://github.com/OxfordRSE/CIS-R/actions/workflows/build-vue.yml)
+
 This template should help get you started developing with Vue 3 in Vite.
 
 ## Recommended IDE Setup

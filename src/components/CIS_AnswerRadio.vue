@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { watch, getCurrentInstance  } from "vue";
+import { watch  } from "vue";
 import type { Answer } from "@/cis-r/types";
 
 export interface Props {
