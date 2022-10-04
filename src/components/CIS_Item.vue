@@ -24,23 +24,25 @@ defineEmits<{
 
 <template>
   <div class="radio-form">
-    <div class="question">
+    <div class="question lead">
       {{ item.question }}
     </div>
-    <div class="answers" v-if="item.type !== ItemType.NONE">
+    <div class="answers flex-grow-1 my-4" v-if="item.type !== ItemType.NONE">
       <CIS_AnswerRadio
         v-if="item.type === ItemType.RADIO"
         :answers="item.answer_options"
+        :answer="item.answer"
         @answer="(a) => $emit('answer', a)"
       />
       <CIS_AnswerNumber
         v-if="item.type === ItemType.NUMBER"
+        :answer="item.answer?.value"
         @answer="(a) => $emit('answer', a)"
       />
     </div>
     <div class="buttons">
       <button
-        class="btn btn-outline-primary"
+        class="btn btn-outline-secondary"
         @click="$emit('back')"
         @keydown="
           (evt) => {
@@ -52,7 +54,7 @@ defineEmits<{
         Back
       </button>
       <button
-        class="btn btn-primary"
+        class="btn btn-primary flex-grow-1 ms-2"
         @click="$emit('next')"
         @keydown="
           (evt) => {
@@ -74,11 +76,7 @@ defineEmits<{
   justify-content: space-between;
   height: 100%;
 }
-.answers {
-  height: 100%;
-}
 .buttons {
   display: flex;
-  justify-content: space-between;
 }
 </style>

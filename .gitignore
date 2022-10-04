@@ -28,3 +28,7 @@ coverage
 *.sw?
 
 .vscode/
+
+.test/
+
+package-lock.json

@@ -13,7 +13,7 @@ export class State {
   readonly items: Item[];
   readonly onComplete: (state: State) => void;
 
-  private _data: any;
+  private _data: any = undefined;
   current_item: Item | undefined;
   item_history: Item[] = [];
 
@@ -27,14 +27,17 @@ export class State {
 
   next_q(ans: Answer | undefined) {
     if (typeof this.current_item === "undefined") {
-      throw "Cannot process next_q for undefined current_item";
+      throw `Cannot process next_q for undefined current_item [${this.item_history.map(i => i.id)}]`;
     }
     // Process answer
-    if (!ans && this.current_item.type !== ItemType.NONE) {
+    if (
+      typeof ans === "undefined" &&
+      this.current_item.type !== ItemType.NONE
+    ) {
       console.warn(`Question ${this.current_item.id} must have an answer.`);
       return;
     }
-    this.current_item.answer = ans;
+    this.current_item.answer = ans ? {...ans, utc_time: new Date().toUTCString()} : undefined;
     this.current_item.handleAnswer(ans, this);
     this.item_history.push(this.current_item);
     this.current_item = this.current_item.next_item(ans, this);
@@ -53,7 +56,7 @@ export class State {
 
   getItemById(id: string): Item {
     const item = this.items.find(i => i.id === id);
-    if (!item) throw `Cannot find item with id ${id}`;
+    if (!item) throw `[${this.current_item?.id}] Cannot find item with id ${id}`;
     return item;
   }
 
@@ -141,8 +144,18 @@ export class CounterSet {
     return counter;
   }
 
-  get(name: string): number {
-    return this._find_counter(name).value;
+  /**
+   * Return the value of a counter, or default_value if the counter
+   * does not exist yet. If default_value is null and the counter
+   * does not yet exist, throw an error.
+   */
+  get(name: string, default_value: number | null = null): number {
+    try {
+      return this._find_counter(name).value;
+    } catch (e: any) {
+      if (default_value !== null) return default_value;
+      throw e;
+    }
   }
 
   /**
@@ -194,6 +207,7 @@ export class Item {
   readonly type: ItemType;
   readonly handleAnswer: ProcessAnswerFun;
   readonly getNextItemId: NextItemFun;
+  readonly conditional_routing: boolean; // used for heuristic testing
   private _answer: Answer | undefined;
 
   constructor(props: ItemProperties) {
@@ -206,8 +220,18 @@ export class Item {
       props.type ||
       (this.answer_options.length ? ItemType.RADIO : ItemType.NONE);
     this.handleAnswer = props.process_answer_fun || function () {};
-    if (props.next_item_fun) this.getNextItemId = props.next_item_fun;
-    else this.getNextItemId = () => props.next_item || null;
+    if (
+      typeof props.next_item === "undefined" &&
+      typeof props.next_item_fun === "undefined"
+    )
+      throw `No next item property or function declared for item ${props.id}`;
+    if (props.next_item_fun) {
+      this.getNextItemId = props.next_item_fun;
+      this.conditional_routing = true;
+    } else {
+      this.getNextItemId = () => props.next_item || null;
+      this.conditional_routing = false;
+    }
   }
 
   get answer(): Answer | undefined {
@@ -218,10 +242,11 @@ export class Item {
     this._answer = value;
   }
 
-  next_item(answer: Answer | undefined, state: State): Item {
+  next_item(answer: Answer | undefined, state: State): Item | undefined {
     const item_id = this.getNextItemId(answer, state);
+    if (item_id === null) return undefined;
     const item = state.items.find((i) => i.id === item_id);
-    if (!item) throw `Cannot find item with id ${item_id}`;
+    if (!item) throw `Cannot find next_item with id ${item_id}`;
     return item;
   }
 }

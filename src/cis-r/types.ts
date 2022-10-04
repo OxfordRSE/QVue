@@ -1,4 +1,4 @@
-import type { CounterSet, Item, State } from "./classes";
+import type { Item, State } from "./classes";
 
 export type StateProperties = {
   items: Item[];
@@ -8,6 +8,7 @@ export type StateProperties = {
 export type Answer = {
   value: number;
   text?: string;
+  utc_time?: string;
 };
 
 export type CounterOperation = {
@@ -29,6 +30,6 @@ export type ItemProperties = {
   type?: ItemType;
   answer_options?: Answer[];
   process_answer_fun?: ProcessAnswerFun;
-  next_item?: string;
+  next_item?: string | null;
   next_item_fun?: NextItemFun;
 };

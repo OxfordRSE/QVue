@@ -1,6 +1,7 @@
 {
   "extends": "./tsconfig.app.json",
-  "exclude": [],
+  "include": ["**/*.{test,spec}.{ts,mts,cts,tsx}"],
+  "exclude": ["**/node_modules/**", "**/cis-r/tests/**"],
   "compilerOptions": {
     "composite": true,
     "lib": [],

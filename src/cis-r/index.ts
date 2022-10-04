@@ -1,4 +1,4 @@
-import type { Answer } from "@/cis-r/types";
+import type { Answer, StateProperties } from "@/cis-r/types";
 import { ItemType } from "@/cis-r/types";
 import { State, Item } from "@/cis-r/classes";
 
@@ -8,14 +8,14 @@ export * from "@/cis-r/types";
 // Utility navigation functions
 const panic_navigation = (ans: Answer | undefined, state: State) => {
   if (
-    state.getItemById("anixety").answer?.value === 1 &&
+    state.getItemById("anxiety").answer?.value === 1 &&
     state.getItemById("anxiety-tense").answer?.value === 1
   )
     return "anxiety-outro";
   return "panic";
 };
 
-const overall_navigation = (ans: Answer | undefined, state: State) => {
+export const _overall_navigation = (ans: Answer | undefined, state: State) => {
   const counters = [
     "somatic",
     "hypochondria",
@@ -24,23 +24,23 @@ const overall_navigation = (ans: Answer | undefined, state: State) => {
     "irritability",
     "concentration",
     "depression",
-    "DEPTHTS",
+    "depressive_ideas",
     "phobia",
     "worry",
     "anxiety",
     "panic",
-    "compulsive",
-    "obsessive",
+    "compulsions",
+    "obsessions",
   ];
   let follow_up = false;
   counters.forEach((c) => {
-    const v = state.counters.get(c) || 0;
+    const v = state.counters.get(c, 0);
     if (v >= 2) follow_up = true;
   });
   return follow_up ? "overall-follow-up" : null;
 };
 
-export const state: State = new State({
+export const _state_properties: StateProperties = {
   items: [
     new Item({
       id: "demo-intro",
@@ -109,6 +109,7 @@ export const state: State = new State({
     new Item({
       id: "health-intro",
       question: "I would now like to ask you about your health and well-being",
+      next_item: "health-appetite-loss",
     }),
     new Item({
       id: "health-appetite-loss",
@@ -120,12 +121,12 @@ export const state: State = new State({
       ],
       process_answer_fun: (ans, state) => {
         if (ans?.value === 2) {
-          state.counters.increment("depression-criterion-3", 1);
-          state.counters.set("weight-change", 1);
+          state.counters.increment("depression_criterion_3", 1);
+          state.counters.set("weight_detail", 1);
         }
       },
       next_item_fun: (ans) =>
-        ans?.value === 2 ? "weight-loss" : "appetite-gain",
+        ans?.value === 2 ? "health-weight-loss" : "health-appetite-gain",
     }),
     new Item({
       id: "health-weight-loss",
@@ -146,7 +147,7 @@ export const state: State = new State({
       ],
       process_answer_fun: (ans, state) => {
         if (ans?.value === 1) {
-          state.counters.set("weight-change", 2);
+          state.counters.set("weight_detail", 2);
         }
       },
       next_item_fun: (ans) =>
@@ -162,8 +163,8 @@ export const state: State = new State({
       ],
       process_answer_fun: (ans, state) => {
         if (ans?.value === 1) {
-          state.counters.increment("depression-criterion-3", 1);
-          state.counters.set("weight-change", 3);
+          state.counters.increment("depression_criterion_3", 1);
+          state.counters.set("weight_detail", 3);
         }
       },
       next_item: "health-gp-visits",
@@ -185,19 +186,19 @@ export const state: State = new State({
               ? "health-weight-gain-male"
               : "health-weight-gain-female";
         }
-        throw `Could not determine next question for ${state.current_item?.id}`;
+        throw `Could not determine next question for ${state.current_item?.id} [${ans?.value}]`;
       },
     }),
     new Item({
       id: "health-weight-gain-male",
-      question: "Have you lost any weight in the PAST MONTH?",
+      question: "Have you gained any weight in the PAST MONTH?",
       answer_options: [
         { value: 1, text: "No" },
         { value: 2, text: "Yes" },
       ],
       process_answer_fun: (ans, state) => {
         if (ans?.value === 2) {
-          state.counters.set("weight-change", 2);
+          state.counters.set("weight_detail", 2);
         }
       },
       next_item_fun: (ans) =>
@@ -205,15 +206,15 @@ export const state: State = new State({
     }),
     new Item({
       id: "health-weight-gain-female",
-      question: "Have you lost any weight in the PAST MONTH?",
+      question: "Have you gained any weight in the PAST MONTH?",
       answer_options: [
         { value: 1, text: "No" },
         { value: 2, text: "Yes" },
-        { value: 23, text: "Yes, but I am pregnant" },
+        { value: 3, text: "Yes, but I am pregnant" },
       ],
       process_answer_fun: (ans, state) => {
         if (ans?.value === 2) {
-          state.counters.set("weight-change", 2);
+          state.counters.set("weight_detail", 2);
         }
       },
       next_item_fun: (ans) =>
@@ -228,8 +229,8 @@ export const state: State = new State({
         { value: 2, text: "I gained less than half a stone" },
       ],
       process_answer_fun: (ans, state) => {
-        if (ans?.value === 1 && state.counters.get("weight-change") === 2) {
-          state.counters.set("weight-change", 4);
+        if (ans?.value === 1 && state.counters.get("weight_detail", 0) === 2) {
+          state.counters.set("weight_detail", 4);
         }
       },
       next_item: "health-gp-visits",
@@ -247,15 +248,15 @@ export const state: State = new State({
       ],
       process_answer_fun: (ans, state) => {
         if (
-          state.counters.get("weight-change") === 3 &&
+          state.counters.get("weight_detail", 0) === 3 &&
           state.getItemById("health-appetite-loss").answer?.value === 2
         )
-          state.counters.increment("depression-criterion-2", 1);
+          state.counters.increment("depression_criterion_2", 1);
         if (
-          state.counters.get("weight-change") === 4 &&
+          state.counters.get("weight_detail", 0) === 4 &&
           state.getItemById("health-appetite-gain").answer?.value === 2
         )
-          state.counters.increment("depression-criterion-2", 1);
+          state.counters.increment("depression_criterion_2", 1);
       },
       next_item: "health-disability",
     }),
@@ -307,7 +308,7 @@ export const state: State = new State({
         { value: 3, text: "Always" },
       ],
       next_item_fun: (ans) =>
-        ans?.value === 1 ? "somatic-discomfort" : "somatic-pain-freqency",
+        ans?.value === 1 ? "somatic-discomfort" : "somatic-pain-frequency",
     }),
     new Item({
       id: "somatic-pain-frequency",
@@ -396,7 +397,7 @@ export const state: State = new State({
         { value: 3, text: "Always" },
       ],
       next_item_fun: (ans) =>
-        ans?.value === 1 ? "fatigue" : "somatic-discomfort-freqency",
+        ans?.value === 1 ? "fatigue" : "somatic-discomfort-frequency",
     }),
     new Item({
       id: "somatic-discomfort-frequency",
@@ -411,10 +412,10 @@ export const state: State = new State({
         if (ans?.value === 3) state.counters.increment("somatic", 1);
       },
       next_item_fun: (ans) =>
-        ans?.value === 1 ? "fatigue" : "somatic-fatigue-duration",
+        ans?.value === 1 ? "fatigue" : "somatic-discomfort-long",
     }),
     new Item({
-      id: "somatic-fatigue-duration",
+      id: "somatic-discomfort-long",
       question:
         "In total, did the discomfort last for more than 3 hours on ANY day during the PAST SEVEN DAYS?",
       answer_options: [
@@ -476,10 +477,10 @@ export const state: State = new State({
         { value: 5, text: "Between 2 and 5 years" },
         { value: 6, text: "More than 5 years" },
       ],
-      next_item: "fatigue-tired",
+      next_item: "fatigue",
     }),
     new Item({
-      id: "fatigue-tired",
+      id: "fatigue",
       question:
         "Have you noticed that you've been getting tired in the PAST MONTH?",
       answer_options: [
@@ -487,7 +488,7 @@ export const state: State = new State({
         { value: 2, text: "Yes" },
       ],
       process_answer_fun: (ans, state) => {
-        state.counters.set("score", state.counters.get("somatic") || 0);
+        state.counters.set("score", state.counters.get("somatic", 0));
       },
       next_item_fun: (ans) =>
         ans?.value === 1 ? "fatigue-energy" : "fatigue-tired-cause",
@@ -664,7 +665,7 @@ export const state: State = new State({
       next_item: "fatigue-duration",
     }),
     new Item({
-      id: "fatigure-duration",
+      id: "fatigue-duration",
       question:
         "How long have you been feeling tired or lacking in energy in the way you have just described?",
       answer_options: [
@@ -677,8 +678,8 @@ export const state: State = new State({
       ],
       process_answer_fun: (ans, state) => {
         if (
-          state.counters.get("somatic") >= 2 &&
-          state.counters.get("fatigue") >= 2
+          state.counters.get("somatic", 0) >= 2 &&
+          state.counters.get("fatigue", 0) >= 2
         )
           state.counters.increment("NEURAS", 1);
       },
@@ -694,10 +695,10 @@ export const state: State = new State({
         { value: 2, text: "Yes, problems concentrating on what I am doing" },
       ],
       process_answer_fun: (ans, state) => {
-        const fatigue = state.counters.get("fatigue");
+        const fatigue = state.counters.get("fatigue", 0);
         if (!fatigue) return;
         state.counters.increment("score", fatigue);
-        if (fatigue >= 2) state.counters.increment("depression-criterion-1", 1);
+        if (fatigue >= 2) state.counters.increment("depression_criterion_1", 1);
       },
       next_item: "concentration-forgetting",
     }),
@@ -783,8 +784,8 @@ export const state: State = new State({
       ],
       process_answer_fun: (ans, state) => {
         if (
-          state.counters.get("somatic") >= 2 &&
-          state.counters.get("fatigue") >= 2
+          state.counters.get("somatic", 0) >= 2 &&
+          state.counters.get("fatigue", 0) >= 2
         )
           state.counters.increment("NEURAS", 1);
       },
@@ -829,13 +830,13 @@ export const state: State = new State({
         { value: 2, text: "Yes" },
       ],
       process_answer_fun: (ans, state) => {
-        const conc = state.counters.get("concentration");
+        const conc = state.counters.get("concentration", 0);
         if (!conc) return;
         state.counters.increment("score", conc);
-        if (conc >= 2) state.counters.increment("depression-criterion-2", 1);
+        if (conc >= 2) state.counters.increment("depression_criterion_2", 1);
       },
       next_item_fun: (ans) =>
-        ans?.value === 1 ? "sleep-increase" : "sleep-loss-frequency",
+        ans?.value === 1 ? "sleep-gain" : "sleep-loss-frequency",
     }),
     new Item({
       id: "sleep-loss-frequency",
@@ -895,12 +896,12 @@ export const state: State = new State({
       ],
       process_answer_fun: (ans, state) => {
         const v = ans?.value;
-        const sleep = state.counters.get("sleep");
+        const sleep = state.counters.get("sleep", 0);
         if (!v || !sleep) return;
-        if (v >= 1 && sleep >= 1) state.counters.set("SLEEPCH", 2);
+        if (v >= 1 && sleep >= 1) state.counters.set("sleep_detail", 2);
         if (v === 2) {
-          if (sleep >= 1) state.counters.set("SLEEPCH", 1);
-          state.counters.increment("depression-criterion-3", 1);
+          if (sleep >= 1) state.counters.set("sleep_detail", 1);
+          state.counters.increment("depression_criterion_3", 1);
         }
       },
       next_item: "sleep-cause",
@@ -963,8 +964,8 @@ export const state: State = new State({
         if (!v) return;
         if (v === 2) state.counters.increment("sleep", 1);
         if (v >= 3) state.counters.increment("sleep", 2);
-        if (v >= 3 && state.counters.get("SLEEPCH") >= 1)
-          state.counters.set("SLEEPCH", 3);
+        if (v >= 3 && state.counters.get("sleep_detail", 0) >= 1)
+          state.counters.set("sleep_detail", 3);
       },
       next_item_fun: (ans) =>
         ans?.value === 1 ? "irritability" : "sleep-gain-long",
@@ -1009,10 +1010,10 @@ export const state: State = new State({
         },
       ],
       process_answer_fun: (ans, state) => {
-        const sleep = state.counters.get("sleep");
+        const sleep = state.counters.get("sleep", 0);
         if (!sleep) return;
         state.counters.increment("score", sleep);
-        if (sleep >= 2) state.counters.increment("depression-criterion-2", 1);
+        if (sleep >= 2) state.counters.increment("depression_criterion_2", 1);
       },
       next_item_fun: (ans) =>
         ans?.value === 2 ? "irritability-frequency" : "irritability-trivial",
@@ -1103,9 +1104,9 @@ export const state: State = new State({
         { value: 6, text: "More than 5 years" },
       ],
       process_answer_fun: (ans, state) => {
-        const irritation = state.counters.get("irritability") || 0;
-        const fatigue = state.counters.get("fatigue") || 0;
-        const sleep = state.counters.get("sleep") || 0;
+        const irritation = state.counters.get("irritability", 0);
+        const fatigue = state.counters.get("fatigue", 0);
+        const sleep = state.counters.get("sleep", 0);
         if (irritation >= 2 && fatigue >= 2)
           state.counters.increment("NEURAS", 1);
         if (sleep >= 2 && fatigue >= 2) state.counters.increment("NEURAS", 1);
@@ -1124,7 +1125,7 @@ export const state: State = new State({
         },
       ],
       process_answer_fun: (ans, state) => {
-        const irritability = state.counters.get("irritability");
+        const irritability = state.counters.get("irritability", 0);
         if (!irritability) return;
         state.counters.increment("score", irritability);
       },
@@ -1187,7 +1188,7 @@ export const state: State = new State({
         if (!v) return;
         if (ans?.value >= 3) state.counters.increment("hypochondria", 1);
       },
-      next_item: "hypochondria-distration",
+      next_item: "hypochondria-distraction",
     }),
     new Item({
       id: "hypochondria-distraction",
@@ -1231,7 +1232,7 @@ export const state: State = new State({
         },
       ],
       process_answer_fun: (ans, state) => {
-        const hypochondria = state.counters.get("hypochondria");
+        const hypochondria = state.counters.get("hypochondria", 0);
         if (!hypochondria) return;
         state.counters.increment("score", hypochondria);
       },
@@ -1260,7 +1261,7 @@ export const state: State = new State({
       next_item_fun: (ans, state) => {
         if (
           ans?.value === 1 &&
-          state.getItemById("depression-recent").answer?.value === 1
+          state.getItemById("depression-recent").answer?.value !== 2
         )
           return "worry";
         return "depression-enjoy-recent";
@@ -1280,8 +1281,8 @@ export const state: State = new State({
         if (!v) return;
         if (ans?.value >= 2) {
           state.counters.increment("depression", 1);
-          state.counters.increment("depression-criterion-1", 1);
-          state.counters.increment("depression-criterion-3", 1);
+          state.counters.increment("depression_criterion_1", 1);
+          state.counters.increment("depression_criterion_3", 1);
         }
       },
       next_item_fun: (ans, state) => {
@@ -1324,7 +1325,7 @@ export const state: State = new State({
           state.getItemById("depression-sad").answer?.value === 3 &&
           state.getItemById("depression-sad-long").answer?.value === 2
         )
-          state.counters.increment("depression-criterion-1", 1);
+          state.counters.increment("depression_criterion_1", 1);
       },
       next_item: "depression-content",
     }),
@@ -1359,7 +1360,7 @@ export const state: State = new State({
         if (!v) return;
         if (v >= 2) {
           state.counters.increment("depression", 1);
-          state.counters.increment("depression-criterion-3", 1);
+          state.counters.increment("depression_criterion_3", 1);
         }
       },
       next_item: "depression-duration",
@@ -1377,7 +1378,7 @@ export const state: State = new State({
         { value: 6, text: "More than 5 years" },
       ],
       next_item_fun: (ans, state) => {
-        if (state.counters.get("depression") > 0) return "worry";
+        if (state.counters.get("depression", 0) > 0) return "worry";
         return "depression-detail-time";
       },
     }),
@@ -1398,7 +1399,7 @@ export const state: State = new State({
         const v = ans?.value;
         if (!v) return;
         if (v <= 2) state.counters.set("DVM", v);
-        if (v === 1) state.counters.increment("depression-criterion-3", 1);
+        if (v === 1) state.counters.increment("depression_criterion_3", 1);
       },
       next_item: "depression-detail-sex",
     }),
@@ -1415,7 +1416,7 @@ export const state: State = new State({
       process_answer_fun: (ans, state) => {
         if (ans?.value === 4) {
           state.counters.set("libido", 1);
-          state.counters.increment("depression-criterion-3", 1);
+          state.counters.increment("depression_criterion_3", 1);
         }
       },
       next_item: "depression-detail-restless",
@@ -1443,9 +1444,9 @@ export const state: State = new State({
       ],
       process_answer_fun: (ans, state) => {
         if (ans?.value === 2) state.counters.set("PSYCHMOT", 1);
-        if ([1, 2].includes(state.counters.get("PSYCHMOT"))) {
-          state.counters.increment("depression-criterion-2", 1);
-          state.counters.increment("depression-criterion-3", 1);
+        if ([1, 2].includes(state.counters.get("PSYCHMOT", 0))) {
+          state.counters.increment("depression_criterion_2", 1);
+          state.counters.increment("depression_criterion_3", 1);
         }
       },
       next_item: "depression-detail-guilt",
@@ -1464,8 +1465,8 @@ export const state: State = new State({
         const v = ans?.value;
         if (!v) return;
         if (v >= 3) {
-          state.counters.increment("DEPTHTS", 1);
-          state.counters.increment("depression-criterion-2", 1);
+          state.counters.increment("depressive_ideas", 1);
+          state.counters.increment("depression_criterion_2", 1);
         }
       },
       next_item: "depression-detail-worth",
@@ -1480,8 +1481,8 @@ export const state: State = new State({
       ],
       process_answer_fun: (ans, state) => {
         if (ans?.value === 2) {
-          state.counters.increment("DEPTHTS", 1);
-          state.counters.increment("depression-criterion-2", 1);
+          state.counters.increment("depressive_ideas", 1);
+          state.counters.increment("depression_criterion_2", 1);
         }
       },
       next_item: "depression-detail-hopeless",
@@ -1496,12 +1497,13 @@ export const state: State = new State({
       ],
       process_answer_fun: (ans, state) => {
         if (ans?.value === 2) {
-          state.counters.increment("DEPTHTS", 1);
+          state.counters.increment("depressive_ideas", 1);
           state.counters.increment("suicide", 1);
         }
       },
       next_item_fun: (ans, state) => {
-        if (!state.counters.get("DEPTHTS")) return "depression-outro";
+        if (!state.counters.get("depressive_ideas", 0))
+          return "depression-outro";
         return "depression-suicide";
       },
     }),
@@ -1518,7 +1520,7 @@ export const state: State = new State({
         const v = ans?.value;
         if (!v) return;
         if (v >= 2) {
-          state.counters.increment("DEPTHTS", 1);
+          state.counters.increment("depressive_ideas", 1);
           state.counters.set("suicide", 2);
         }
       },
@@ -1544,8 +1546,8 @@ export const state: State = new State({
         if (v >= 2) {
           state.counters.set("suicide", 3);
           if (v === 3) {
-            state.counters.increment("DEPTHTS", 1);
-            state.counters.increment("depression-criterion-2", 1);
+            state.counters.increment("depressive_ideas", 1);
+            state.counters.increment("depression_criterion_2", 1);
           }
         }
       },
@@ -1604,11 +1606,11 @@ export const state: State = new State({
         { value: 3, text: "Often" },
       ],
       process_answer_fun: (ans, state) => {
+        state.counters.increment("score", state.counters.get("depression", 0));
         state.counters.increment(
           "score",
-          state.counters.get("depression") || 0
+          state.counters.get("depressive_ideas", 0)
         );
-        state.counters.increment("score", state.counters.get("DEPTHTS") || 0);
       },
       next_item_fun: (ans) => {
         if (ans?.value === 1) return "worry-any";
@@ -1645,7 +1647,7 @@ export const state: State = new State({
       next_item: "worry-intro",
     }),
     new Item({
-      id: "worry-inro",
+      id: "worry-intro",
       question:
         "The next few questions are about the worries you have had OTHER than those about your physical health.",
       next_item: "worry-frequency",
@@ -1735,7 +1737,7 @@ export const state: State = new State({
         { value: 2, text: "Yes" },
       ],
       process_answer_fun: (ans, state) => {
-        state.counters.increment("score", state.counters.get("worry") || 0);
+        state.counters.increment("score", state.counters.get("worry", 0));
       },
       next_item: "anxiety-tense",
     }),
@@ -1766,7 +1768,7 @@ export const state: State = new State({
         { value: 2, text: "Yes" },
       ],
       next_item_fun: (ans) => {
-        if (ans?.value === 1) return "anxiety-general-frequency";
+        if (ans?.value === 1) return "anxiety-frequency";
         return "anxiety-phobia-only";
       },
     }),
@@ -1786,7 +1788,7 @@ export const state: State = new State({
       ],
       process_answer_fun: (ans, state) => state.counters.increment("phobia", 1),
       next_item_fun: (ans) => {
-        if (ans?.value === 1) return "phobia-type";
+        if (ans?.value === 1) return "phobia_type";
         return "anxiety-intro";
       },
     }),
@@ -1808,10 +1810,10 @@ export const state: State = new State({
       process_answer_fun: (ans, state) => {
         if (ans?.value === 3) state.counters.increment("anxiety", 1);
       },
-      next_item_fun: (ans) => {
+      next_item_fun: (ans, state) => {
         if (ans?.value === 1) {
-          if (state.counters.get("phobia") === 1) return "phobia-type";
-          return "compulsive";
+          if (state.counters.get("phobia", 0) === 1) return "phobia_type";
+          return "compulsions";
         }
         return "anxiety-valence";
       },
@@ -1934,7 +1936,8 @@ export const state: State = new State({
       ],
       process_answer_fun: (ans, state) => {
         if (ans?.value === 2) state.counters.increment("AN4", 1);
-        if (state.counters.get("AN4")) state.counters.increment("anxiety", 1);
+        if (state.counters.get("AN4", 0))
+          state.counters.increment("anxiety", 1);
       },
       next_item: "anxiety-long",
     }),
@@ -1964,9 +1967,9 @@ export const state: State = new State({
         { value: 6, text: "More than 5 years" },
       ],
       next_item_fun: (ans, state) => {
-        if (state.counters.get("phobia") === 1) return "phobia-type";
-        const anx = state.counters.get("anxiety") || 0;
-        if (anx <= 1) return "compulsive";
+        if (state.counters.get("phobia", 0) === 1) return "phobia_type";
+        const anx = state.counters.get("anxiety", 0);
+        if (anx <= 1) return "compulsions";
         return panic_navigation(ans, state);
       },
     }),
@@ -1980,14 +1983,14 @@ export const state: State = new State({
       ],
       next_item_fun: (ans, state) => {
         if (ans?.value === 1) {
-          const anx = state.counters.get("anxiety") || 0;
-          if (anx <= 1) return "compulsive";
+          const anx = state.counters.get("anxiety", 0);
+          if (anx <= 1) return "compulsions";
           return panic_navigation(ans, state);
-        } else return "phobia-type";
+        } else return "phobia_type";
       },
     }),
     new Item({
-      id: "phobia-type",
+      id: "phobia_type",
       question:
         "Here is a list of things that some people feel nervous about.\n\nWhich one of these are you MOST afraid of?",
       answer_options: [
@@ -2012,7 +2015,7 @@ export const state: State = new State({
         else if ([3, 7].includes(v)) type = 2;
         else if (v === 4) type = 3;
         else if ([6, 8].includes(v)) type = 4;
-        state.counters.set("phobia-type", type);
+        state.counters.set("phobia_type", type);
       },
       next_item: "phobia-frequency",
     }),
@@ -2134,7 +2137,8 @@ export const state: State = new State({
       ],
       process_answer_fun: (ans, state) => {
         if (ans?.value === 2) state.counters.increment("PHO2", 1);
-        if (state.counters.get("PHO2")) state.counters.increment("phobia", 1);
+        if (state.counters.get("PHO2", 0))
+          state.counters.increment("phobia", 1);
       },
       next_item: "phobia-avoid",
     }),
@@ -2148,8 +2152,8 @@ export const state: State = new State({
       ],
       next_item_fun: (ans, state) => {
         if (ans?.value === 1) {
-          const anx = state.counters.get("anxiety") || 0;
-          const pho = state.counters.get("phobia") || 0;
+          const anx = state.counters.get("anxiety", 0);
+          const pho = state.counters.get("phobia", 0);
           if (anx <= 1 && !pho) return "anxiety-outro";
           if (anx >= 2 || pho) return panic_navigation(ans, state);
         }
@@ -2170,7 +2174,7 @@ export const state: State = new State({
         if (ans?.value === 3) state.counters.increment("phobia", 2);
       },
       next_item_fun: (ans, state) => {
-        const anx = state.counters.get("anxiety") || 0;
+        const anx = state.counters.get("anxiety", 0);
         if (
           state.getItemById("phobia-frequency").answer?.value === 1 &&
           anx <= 1
@@ -2458,10 +2462,10 @@ export const state: State = new State({
     new Item({
       id: "anxiety-outro",
       question: "Thank you for answering those questions on anxiety and worry.",
-      next_item: "compulsive",
+      next_item: "compulsions",
     }),
     new Item({
-      id: "compulsive",
+      id: "compulsions",
       question:
         "In the PAST MONTH, did you find that you kept on doing things over and over again when you knew you had already done them, for instance checking things like taps, or washing yourself when you had already done so?",
       answer_options: [
@@ -2470,15 +2474,15 @@ export const state: State = new State({
         { value: 3, text: "Often" },
       ],
       process_answer_fun: (ans, state) => {
-        state.counters.increment("score", state.counters.get("anxiety") || 0);
-        state.counters.increment("score", state.counters.get("phobia") || 0);
-        state.counters.increment("score", state.counters.get("panic") || 0);
+        state.counters.increment("score", state.counters.get("anxiety", 0));
+        state.counters.increment("score", state.counters.get("phobia", 0));
+        state.counters.increment("score", state.counters.get("panic", 0));
       },
       next_item_fun: (ans) =>
-        ans?.value === 1 ? "obsessive" : "compulsive-frequency",
+        ans?.value === 1 ? "obsessions" : "compulsions-frequency",
     }),
     new Item({
-      id: "compulsive-frequency",
+      id: "compulsions-frequency",
       question:
         "On how many days in the PAST SEVEN DAYS did you find yourself doing things over again that you had already done?",
       answer_options: [
@@ -2487,13 +2491,13 @@ export const state: State = new State({
         { value: 3, text: "Four days or more" },
       ],
       process_answer_fun: (ans, state) => {
-        if (ans?.value === 3) state.counters.increment("compulsive", 1);
+        if (ans?.value === 3) state.counters.increment("compulsions", 1);
       },
       next_item_fun: (ans) =>
-        ans?.value === 1 ? "obsessive" : "compulsive-control",
+        ans?.value === 1 ? "obsessions" : "compulsions-control",
     }),
     new Item({
-      id: "compulsive-control",
+      id: "compulsions-control",
       question:
         "During the PAST SEVEN DAYS, have you tried to stop yourself repeating things over again?",
       answer_options: [
@@ -2501,12 +2505,12 @@ export const state: State = new State({
         { value: 2, text: "Yes, on at least one occasion" },
       ],
       process_answer_fun: (ans, state) => {
-        if (ans?.value === 2) state.counters.increment("compulsive", 1);
+        if (ans?.value === 2) state.counters.increment("compulsions", 1);
       },
-      next_item: "compulsive-valence",
+      next_item: "compulsions-valence",
     }),
     new Item({
-      id: "compulsive-valence",
+      id: "compulsions-valence",
       question:
         "Has repeating things over again made you upset or annoyed with yourself in the PAST SEVEN DAYS?",
       answer_options: [
@@ -2514,12 +2518,12 @@ export const state: State = new State({
         { value: 2, text: "Yes, it has upset or annoyed me" },
       ],
       process_answer_fun: (ans, state) => {
-        if (ans?.value === 2) state.counters.increment("compulsive", 1);
+        if (ans?.value === 2) state.counters.increment("compulsions", 1);
       },
-      next_item: "compulsive-repeats",
+      next_item: "compulsions-repeats",
     }),
     new Item({
-      id: "compulsive-repeats",
+      id: "compulsions-repeats",
       question:
         "In the PAST SEVEN DAYS, what is the GREATEST NUMBER of times you repeated something you had already done?",
       answer_options: [
@@ -2528,12 +2532,12 @@ export const state: State = new State({
         { value: 3, text: "Three or more repeats" },
       ],
       process_answer_fun: (ans, state) => {
-        if (ans?.value === 3) state.counters.increment("compulsive", 1);
+        if (ans?.value === 3) state.counters.increment("compulsions", 1);
       },
-      next_item: "compulsive-duration",
+      next_item: "compulsions-duration",
     }),
     new Item({
-      id: "compulsive-duration",
+      id: "compulsions-duration",
       question:
         "How long have you been repeating things that you have already done in the way you have described?",
       answer_options: [
@@ -2544,10 +2548,10 @@ export const state: State = new State({
         { value: 5, text: "Between 2 and 5 years" },
         { value: 6, text: "More than 5 years" },
       ],
-      next_item: "obsessive",
+      next_item: "obsessions",
     }),
     new Item({
-      id: "obsessive",
+      id: "obsessions",
       question:
         "In the PAST MONTH, did you have any thoughts or ideas over and over again that you found unpleasant and would prefer not to think about, that still kept coming into your mind?",
       answer_options: [
@@ -2556,16 +2560,15 @@ export const state: State = new State({
         { value: 3, text: "Often" },
       ],
       process_answer_fun: (ans, state) => {
-        state.counters.increment(
-          "score",
-          state.counters.get("compulsive") || 0
-        );
+        state.counters.increment("score", state.counters.get("compulsions", 0));
       },
       next_item_fun: (ans, state) =>
-        ans?.value === 1 ? overall_navigation(ans, state) : "obsessive-repeat",
+        ans?.value === 1
+          ? _overall_navigation(ans, state)
+          : "obsessions-repeat",
     }),
     new Item({
-      id: "obsessive-repeat",
+      id: "obsessions-repeat",
       question:
         "Are these the SAME thoughts or ideas over and over again, or are you worrying about something in GENERAL?",
       answer_options: [
@@ -2574,11 +2577,11 @@ export const state: State = new State({
       ],
       next_item_fun: (ans, state) =>
         ans?.value === 2
-          ? overall_navigation(ans, state)
-          : "obsessive-frequency",
+          ? _overall_navigation(ans, state)
+          : "obsessions-frequency",
     }),
     new Item({
-      id: "obsessive-frequency",
+      id: "obsessions-frequency",
       question:
         "On how many days in the PAST SEVEN DAYS have you had these unpleasant thoughts?",
       answer_options: [
@@ -2587,13 +2590,15 @@ export const state: State = new State({
         { value: 3, text: "Four days or more" },
       ],
       process_answer_fun: (ans, state) => {
-        if (ans?.value === 3) state.counters.increment("obsessive", 1);
+        if (ans?.value === 3) state.counters.increment("obsessions", 1);
       },
       next_item_fun: (ans, state) =>
-        ans?.value === 2 ? overall_navigation(ans, state) : "obsessive-control",
+        ans?.value === 2
+          ? _overall_navigation(ans, state)
+          : "obsessions-control",
     }),
     new Item({
-      id: "obsessive-control",
+      id: "obsessions-control",
       question:
         "During the PAST SEVEN DAYS, have you tried to stop yourself thinking any of these thoughts?",
       answer_options: [
@@ -2604,12 +2609,12 @@ export const state: State = new State({
         },
       ],
       process_answer_fun: (ans, state) => {
-        if (ans?.value === 2) state.counters.increment("obsessive", 1);
+        if (ans?.value === 2) state.counters.increment("obsessions", 1);
       },
-      next_item: "obsessive-valence",
+      next_item: "obsessions-valence",
     }),
     new Item({
-      id: "obsessive-valence",
+      id: "obsessions-valence",
       question:
         "Have you become upset or annoyed with yourself when you have had these thoughts in the PAST SEVEN DAYS?",
       answer_options: [
@@ -2620,12 +2625,12 @@ export const state: State = new State({
         },
       ],
       process_answer_fun: (ans, state) => {
-        if (ans?.value === 2) state.counters.increment("obsessive", 1);
+        if (ans?.value === 2) state.counters.increment("obsessions", 1);
       },
-      next_item: "obsessive-long",
+      next_item: "obsessions-long",
     }),
     new Item({
-      id: "obsessive-long",
+      id: "obsessions-long",
       question:
         "What is the longest time you have spent thinking these thoughts, in the PAST SEVEN DAYS?",
       answer_options: [
@@ -2633,13 +2638,13 @@ export const state: State = new State({
         { value: 2, text: "Fifteen minutes or more" },
       ],
       process_answer_fun: (ans, state) => {
-        if (ans?.value === 2) state.counters.increment("obsessive", 1);
-        state.counters.increment("score", state.counters.get("obsessive") || 0);
+        if (ans?.value === 2) state.counters.increment("obsessions", 1);
+        state.counters.increment("score", state.counters.get("obsessions", 0));
       },
-      next_item: "obsessive-duration",
+      next_item: "obsessions-duration",
     }),
     new Item({
-      id: "obsessive-duration",
+      id: "obsessions-duration",
       question:
         "How long have you been having these thoughts in the way which you have described?",
       answer_options: [
@@ -2650,7 +2655,7 @@ export const state: State = new State({
         { value: 5, text: "Between 2 and 5 years" },
         { value: 6, text: "More than 5 years" },
       ],
-      next_item_fun: overall_navigation,
+      next_item_fun: _overall_navigation,
     }),
     new Item({
       id: "overall-follow-up",
@@ -2669,6 +2674,30 @@ export const state: State = new State({
     }),
   ],
   onComplete: (state) => {
+    const now = new Date();
+    const diagnoses = [
+      "No diagnosis identified",
+      "ICD10 Mixed anxiety & depressive disorder (mild)",
+      "ICD10 Generalised anxiety disorder - mild",
+      "ICD10 Obsessive-compulsive disorder",
+      "ICD10 Mixed anxiety and depressive disorder",
+      "ICD10 Specific (isolated) phobia",
+      "ICD10 Social phobia",
+      "ICD10 Agoraphobia",
+      "ICD10 Generalised anxiety disorder",
+      "ICD10 Panic disorder",
+      "ICD10 Mild depressive episode",
+      "ICD10 Moderate depressive episode",
+      "ICD10 Severe depressive episode",
+    ];
+
+    const impairment = [
+      "None",
+      "More difficult but everything gets done",
+      "One activity stopped",
+      "More than one activity stopped",
+    ];
+
     const outputs = {
       DIAG1: 0,
       DIAG2: 0,
@@ -2689,33 +2718,49 @@ export const state: State = new State({
       AN4: number;
       panic: number;
       phobia: number;
-      "phobia-type": number;
-      obsessive: number;
-      compulsive: number;
-      "depression-criterion-1": number;
-      "depression-criterion-2": number;
-      "depression-criterion-3": number;
+      phobia_type: number;
+      obsessions: number;
+      compulsions: number;
+      depression_criterion_1: number;
+      depression_criterion_2: number;
+      depression_criterion_3: number;
       NEURAS: number;
       score: number;
+      somatic: number;
+      hypochondria: number;
+      irritability: number;
+      concentration: number;
+      fatigue: number;
+      sleep: number;
+      sleep_detail: number;
+      depression: number;
+      weight_detail: number;
+      depressive_ideas: number;
+      worry: number;
     } = {
-      anxiety: state.counters.get("anxiety") || 0,
-      AN4: state.counters.get("AN4") || 0,
-      panic: state.counters.get("panic") || 0,
-      phobia: state.counters.get("phobia") || 0,
-      "phobia-type":
-        typeof state.counters.get("phobia-type") === "undefined"
-          ? -1
-          : state.counters.get("phobia-type"),
-      obsessive: state.counters.get("obsessive") || 0,
-      compulsive: state.counters.get("compulsive") || 0,
-      "depression-criterion-1":
-        state.counters.get("depression-criterion-1") || 0,
-      "depression-criterion-2":
-        state.counters.get("depression-criterion-2") || 0,
-      "depression-criterion-3":
-        state.counters.get("depression-criterion-3") || 0,
-      NEURAS: state.counters.get("NEURAS") || 0,
-      score: state.counters.get("score") || 0,
+      anxiety: state.counters.get("anxiety", 0),
+      AN4: state.counters.get("AN4", 0),
+      panic: state.counters.get("panic", 0),
+      phobia: state.counters.get("phobia", 0),
+      phobia_type: state.counters.get("phobia_type", -1),
+      obsessions: state.counters.get("obsessions", 0),
+      compulsions: state.counters.get("compulsions", 0),
+      depression_criterion_1: state.counters.get("depression_criterion_1", 0),
+      depression_criterion_2: state.counters.get("depression_criterion_2", 0),
+      depression_criterion_3: state.counters.get("depression_criterion_3", 0),
+      NEURAS: state.counters.get("NEURAS", 0),
+      score: state.counters.get("score", 0),
+      somatic: state.counters.get("somatic", 0),
+      hypochondria: state.counters.get("hypochondria", 0),
+      irritability: state.counters.get("irritability", 0),
+      concentration: state.counters.get("concentration", 0),
+      fatigue: state.counters.get("fatigue", 0),
+      sleep: state.counters.get("sleep", 0),
+      sleep_detail: state.counters.get("sleep_detail", 0),
+      depression: state.counters.get("depression", 0),
+      weight_detail: state.counters.get("weight_detail", 0),
+      depressive_ideas: state.counters.get("depressive_ideas", 0),
+      worry: state.counters.get("worry", 0),
     };
 
     // Generalized anxiety
@@ -2730,30 +2775,30 @@ export const state: State = new State({
     // Phobias
     const pho = state.getItemById("phobia-avoid").answer?.value || 0;
     if (pho === 2 && counters.phobia >= 2) {
-      if (counters["phobia-type"] === 1) outputs.PHOBAG = 1;
-      if (counters["phobia-type"] === 2) outputs.PHOBSOC = 1;
-      if (counters["phobia-type"] >= 3) outputs.PHOBSPEC = 1;
-      if (counters["phobia-type"] === 0) outputs.PHOBSPEC = 1;
+      if (counters["phobia_type"] === 1) outputs.PHOBAG = 1;
+      if (counters["phobia_type"] === 2) outputs.PHOBSOC = 1;
+      if (counters["phobia_type"] >= 3) outputs.PHOBSPEC = 1;
+      if (counters["phobia_type"] === 0) outputs.PHOBSPEC = 1;
     }
 
-    // Obsessive-compulsive
-    const ob = state.getItemById("obsessive-control").answer?.value || 0;
-    const co = state.getItemById("compulsive-control").answer?.value || 0;
-    const ob_dur = state.getItemById("obsessive-duration").answer?.value || 0;
-    const co_dur = state.getItemById("compulsive-duration").answer?.value || 0;
+    // Obsessive-compulsions
+    const ob = state.getItemById("obsessions-control").answer?.value || 0;
+    const co = state.getItemById("compulsions-control").answer?.value || 0;
+    const ob_dur = state.getItemById("obsessions-duration").answer?.value || 0;
+    const co_dur = state.getItemById("compulsions-duration").answer?.value || 0;
     const imp = state.getItemById("overall-follow-up").answer?.value || 0;
     if (imp >= 2) {
       if (ob === 2 && ob_dur >= 2) {
         if (
-          counters.obsessive + counters.compulsive >= 6 ||
-          counters.obsessive === 4
+          counters.obsessions + counters.compulsions >= 6 ||
+          counters.obsessions === 4
         )
           outputs.OBCOMP = 1;
       }
       if (co === 2 && co_dur >= 2) {
         if (
-          counters.obsessive + counters.compulsive >= 6 ||
-          counters.compulsive === 4
+          counters.obsessions + counters.compulsions >= 6 ||
+          counters.compulsions === 4
         )
           outputs.OBCOMP = 1;
       }
@@ -2763,22 +2808,22 @@ export const state: State = new State({
     const dep_dur = state.getItemById("depression-duration").answer?.value || 0;
     if (dep_dur >= 2) {
       if (
-        counters["depression-criterion-1"] > 1 &&
-        counters["depression-criterion-1"] +
-          counters["depression-criterion-2"] >
+        counters["depression_criterion_1"] > 1 &&
+        counters["depression_criterion_1"] +
+          counters["depression_criterion_2"] >
           3
       ) {
         if (
-          counters["depression-criterion-1"] +
-            counters["depression-criterion-2"] >
+          counters["depression_criterion_1"] +
+            counters["depression_criterion_2"] >
           5
         )
           outputs.DEPRMOD = 1;
         else outputs.DEPRMILD = 1;
       }
       if (
-        counters["depression-criterion-1"] === 3 &&
-        counters["depression-criterion-2"] > 4
+        counters["depression_criterion_1"] === 3 &&
+        counters["depression_criterion_2"] > 4
       )
         outputs.DEPRSEV = 1;
     }
@@ -2811,11 +2856,145 @@ export const state: State = new State({
     if (outputs.DIAG1 >= 10 && outputs.PANICD) outputs.DIAG2 = 9;
 
     state.data = {
-      outputs,
-      counters,
-      items: state.items.map((i) => {
-        return { id: i.id, question: i.question, answer: i.answer };
-      }),
+      summary: `
+      <h1>CIS-R output</h1>
+      <div class="datetime text-muted">
+        <span class="date">${now.toLocaleDateString()}</span> 
+        <span class="time">${now.toLocaleTimeString()}</span>
+      </div>
+      <div class="disclaimer my-2 small">
+        The results should only be used in conjunction with a clinical assessment
+      </div>
+      <ul class="major-output list-unstyled">
+        <li class="d-flex">
+          <strong class="label">Primary Diagnosis:</strong> 
+          <span class="value flex-grow-1 text-end">${
+            diagnoses[outputs.DIAG1]
+          }</span>
+        </li>
+        <li class="d-flex">
+          <strong class="label">Secondary Diagnosis:</strong> 
+          <span class="value flex-grow-1 text-end">${
+            diagnoses[outputs.DIAG2]
+          }</span>
+        </li>
+        <li class="d-flex">
+          <strong class="label">Total score:</strong> 
+          <span class="value flex-grow-1 text-end">${counters.score}</span>
+        </li>
+      </ul>
+      <ul class="minor-output list-unstyled">
+        <li class="d-flex ${counters.somatic > 2 ? "mark" : ""}">
+          <strong class="label">Somatic symptoms:</strong> 
+          <span class="value flex-grow-1 text-end">${counters.somatic}</span>
+        </li>
+        <li class="d-flex ${counters.hypochondria > 2 ? "mark" : ""}">
+          <strong class="label">Worry over Physical Health:</strong> 
+          <span class="value flex-grow-1 text-end">${
+            counters.hypochondria
+          }</span>
+        </li>
+        <li class="d-flex ${counters.irritability > 2 ? "mark" : ""}">
+          <strong class="label">Irritability:</strong> 
+          <span class="value flex-grow-1 text-end">${
+            counters.irritability
+          }</span>
+        </li>
+        <li class="d-flex ${counters.concentration > 2 ? "mark" : ""}">
+          <strong class="label">Poor concentration:</strong> 
+          <span class="value flex-grow-1 text-end">${
+            counters.concentration
+          }</span>
+        </li>
+        <li class="d-flex ${counters.fatigue > 2 ? "mark" : ""}">
+          <strong class="label">Fatigue:</strong> 
+          <span class="value flex-grow-1 text-end">${counters.fatigue}</span>
+        </li>
+        <li class="d-flex flex-wrap ${counters.sleep > 2 ? "mark" : ""}">
+          <strong class="label">Sleep problems:</strong> 
+          <span class="value flex-grow-1 text-end">${counters.sleep}</span>
+          <p class="detail small ms-4 my-0 text-justify${
+            counters.sleep_detail ? "" : " d-none"
+          }">
+            ${
+              counters.sleep_detail === 1
+                ? "Patient reports early morning waking"
+                : counters.sleep_detail === 2
+                ? "Patient reports insomnia but not early morning waking"
+                : "Patient reports sleeping more than usual"
+            }
+          </p>
+        </li>
+        <li class="d-flex flex-wrap ${counters.depression > 2 ? "mark" : ""}">
+          <strong class="label">Depression:</strong> 
+          <span class="value flex-grow-1 text-end">${counters.depression}</span>
+          <p class="detail small ms-4 my-0 text-justify${
+            counters.weight_detail < 2 ? " d-none" : ""
+          }">
+            ${
+              counters.weight_detail === 2
+                ? "Patient has lost/gained weight but less than half a stone"
+                : counters.weight_detail === 3
+                ? "Patient has lost more than half a stone in weight"
+                : "Patient has gained more than half a stone in weight"
+            }
+          </p>
+        </li>
+        <li class="d-flex ${counters.depressive_ideas > 2 ? "mark" : ""}">
+          <strong class="label">Depressive Ideas:</strong> 
+          <span class="value flex-grow-1 text-end">${
+            counters.depressive_ideas
+          }</span>
+        </li>
+        <li class="d-flex ${counters.phobia > 2 ? "mark" : ""}">
+          <strong class="label">Phobias:</strong> 
+          <span class="value flex-grow-1 text-end">${counters.phobia}</span>
+        </li>
+        <li class="d-flex ${counters.worry > 2 ? "mark" : ""}">
+          <strong class="label">Worry:</strong> 
+          <span class="value flex-grow-1 text-end">${counters.worry}</span>
+        </li>
+        <li class="d-flex ${counters.anxiety > 2 ? "mark" : ""}">
+          <strong class="label">Anxiety:</strong> 
+          <span class="value flex-grow-1 text-end">${counters.anxiety}</span>
+        </li>
+        <li class="d-flex ${counters.panic > 2 ? "mark" : ""}">
+          <strong class="label">Panic:</strong> 
+          <span class="value flex-grow-1 text-end">${counters.panic}</span>
+        </li>
+        <li class="d-flex ${counters.compulsions > 2 ? "mark" : ""}">
+          <strong class="label">Compulsions:</strong> 
+          <span class="value flex-grow-1 text-end">${
+            counters.compulsions
+          }</span>
+        </li>
+        <li class="d-flex ${counters.obsessions > 2 ? "mark" : ""}">
+          <strong class="label">Obsessions:</strong> 
+          <span class="value flex-grow-1 text-end">${counters.obsessions}</span>
+        </li>
+        <li class="d-flex ${imp ? "mark" : ""}">
+          <strong class="label">Social Impairment:</strong> 
+          <span class="value flex-grow-1 text-end">${impairment[imp]}</span>
+        </li>
+      </ul>
+      `,
+      key_data: {
+        time: now.toUTCString(),
+        primary_diagnosis_code: outputs.DIAG1,
+        primary_diagnosis_text: diagnoses[outputs.DIAG1],
+        secondary_diagnosis_code: outputs.DIAG2,
+        secondary_diagnosis_text: diagnoses[outputs.DIAG2],
+        total_score: counters.score,
+      },
+      items: state.items
+        .filter((i) => i.answer)
+        .map((i) => {
+          return { id: i.id, question: i.question, answer: i.answer };
+        }),
+      datetime: now.toUTCString(),
     };
   },
-});
+};
+
+export const cis = new State(_state_properties);
+export const CIS: () => State = () => new State(_state_properties);

@@ -1,21 +1,22 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import type { Ref } from "vue";
+// import type { Ref } from "vue";
 import * as cis from "@/cis-r";
 import CIS_Item from "@/components/CIS_Item.vue";
+import ResultSheet from "@/components/ResultSheet.vue";
 
-const state: Ref<cis.State> = ref(cis.state);
+const state = ref(cis.CIS());
 </script>
 
 <template>
-  <main>
+  <main class="container-sm">
     <CIS_Item
       v-if="state.current_item"
       :item="state.current_item"
-      @answer="record_answer"
+      @answer="(ans) => state.next_q(ans)"
       @next="(ans) => state.next_q(ans)"
       @back="state.last_q()"
     />
-    <p v-else>No item to display.</p>
+    <ResultSheet v-else :content="state.data">No item to display.</ResultSheet>
   </main>
 </template>
