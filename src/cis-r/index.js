@@ -2809,6 +2809,7 @@ export const _state_properties = {
         <li class="d-flex flex-wrap ${counters.sleep > 2 ? "mark" : ""}">
           <strong class="label">Sleep problems:</strong> 
           <span class="value flex-grow-1 text-end">${counters.sleep}</span>
+        </li>
           <p class="detail small ms-4 my-0 text-justify${counters.sleep_detail ? "" : " d-none"}">
             ${counters.sleep_detail === 1
                 ? "Patient reports early morning waking"
@@ -2816,10 +2817,10 @@ export const _state_properties = {
                     ? "Patient reports insomnia but not early morning waking"
                     : "Patient reports sleeping more than usual"}
           </p>
-        </li>
         <li class="d-flex flex-wrap ${counters.depression > 2 ? "mark" : ""}">
           <strong class="label">Depression:</strong> 
           <span class="value flex-grow-1 text-end">${counters.depression}</span>
+        </li>
           <p class="detail small ms-4 my-0 text-justify${counters.weight_detail < 2 ? " d-none" : ""}">
             ${counters.weight_detail === 2
                 ? "Patient has lost/gained weight but less than half a stone"
@@ -2827,7 +2828,6 @@ export const _state_properties = {
                     ? "Patient has lost more than half a stone in weight"
                     : "Patient has gained more than half a stone in weight"}
           </p>
-        </li>
         <li class="d-flex ${counters.depressive_ideas > 2 ? "mark" : ""}">
           <strong class="label">Depressive Ideas:</strong> 
           <span class="value flex-grow-1 text-end">${counters.depressive_ideas}</span>

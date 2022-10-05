@@ -18,6 +18,5 @@ const state = ref(cis.CIS());
       @back="state.last_q()"
     />
     <ResultSheet v-else :content="state.data"/>
-    <ResultSheet :content="{summary: '<p>Test ResultSheet</p>', }"/>
   </main>
 </template>
