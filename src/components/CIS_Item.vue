@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Item, Answer } from "@/cis-r";
+import type { Answer, Item } from "@/cis-r";
 import { ItemType } from "@/cis-r";
 import CIS_AnswerRadio from "@/components/CIS_AnswerRadio.vue";
 import CIS_AnswerNumber from "@/components/CIS_AnswerNumber.vue";
@@ -15,11 +15,21 @@ const props = withDefaults(defineProps<Props>(), {
   next_button_label: "Next",
 });
 
-defineEmits<{
-  (e: "answer", ans: Answer): void;
+const emit = defineEmits<{
+  (e: "answer", ans: Answer | undefined): void;
   (e: "back"): void;
-  (e: "next"): void;
+  (e: "next", ans: Answer | undefined): void;
 }>();
+
+let answer: Answer | undefined;
+const record_answer = (ans: Answer | undefined) => {
+  answer = ans;
+  emit("answer", ans);
+};
+
+const next = () => {
+  emit("next", answer);
+};
 </script>
 
 <template>
@@ -32,12 +42,12 @@ defineEmits<{
         v-if="item.type === ItemType.RADIO"
         :answers="item.answer_options"
         :answer="item.answer"
-        @answer="(a) => $emit('answer', a)"
+        @answer="(a) => record_answer(a)"
       />
       <CIS_AnswerNumber
         v-if="item.type === ItemType.NUMBER"
         :answer="item.answer?.value"
-        @answer="(a) => $emit('answer', a)"
+        @answer="(a) => record_answer(a)"
       />
     </div>
     <div class="buttons">
@@ -55,10 +65,10 @@ defineEmits<{
       </button>
       <button
         class="btn btn-primary flex-grow-1 ms-2"
-        @click="$emit('next')"
+        @click="next"
         @keydown="
           (evt) => {
-            if (evt.key === 'Enter' || evt.key === 'Space') $emit('next');
+            if (evt.key === 'Enter' || evt.key === 'Space') next();
             else console.debug(evt.key);
           }
         "

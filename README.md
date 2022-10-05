@@ -1,6 +1,7 @@
 # CIS-R
 
 [![Build Vue](https://github.com/OxfordRSE/CIS-R/actions/workflows/build-vue.yml/badge.svg)](https://github.com/OxfordRSE/CIS-R/actions/workflows/build-vue.yml)
+[![Pages](https://github.com/OxfordRSE/CIS-R/actions/workflows/pages.yml/badge.svg)](https://OxfordRSE.github.io/CIS-R/)
 
 ## Customising user experience
 

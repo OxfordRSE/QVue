@@ -13,5 +13,5 @@ export default defineConfig({
       "~bootstrap": path.resolve(__dirname, "node_modules/bootstrap"),
     },
   },
-  base: "/CIS-R/",
+  base: process.env.GITHUB_ACTIONS ? "/CIS-R/" : "/",
 });

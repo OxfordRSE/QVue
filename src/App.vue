@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from "vue-router";
 import CheckSpec from "@/components/CheckSpec.vue";
+import SettingsMenu from "@/components/SettingsMenu.vue";
 </script>
 
 <template>
@@ -9,6 +10,7 @@ import CheckSpec from "@/components/CheckSpec.vue";
     <nav>
       <RouterLink to="/">Home</RouterLink>
       <RouterLink to="/report">Check report</RouterLink>
+      <SettingsMenu />
     </nav>
   </header>
 
