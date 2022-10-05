@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import VueMarkdown from "vue-markdown-render"
 import { getCurrentInstance, ref, type Ref } from "vue";
 
 export interface Props {
@@ -25,7 +26,7 @@ let uploadStatus: Ref<number | undefined> = ref();
 if (typeof specification?.fetch?.url === "string" && props.content) {
   fetch(specification?.fetch.url, {
     method: "POST",
-    headers: { "Content-Type": "application/json", ...specification.fetch.headers },
+    headers: { "Content-Type": "application/json", ...specification?.fetch?.headers },
     body: JSON.stringify(props.content),
   })
     .then((r) => {
@@ -50,9 +51,10 @@ if (typeof specification?.fetch?.url === "string" && props.content) {
     </p>
     <p v-else class="text-bg-success">Upload complete!</p>
   </div>
-  <div
+  <VueMarkdown
     v-if="specification.content?.custom"
-    class="summary"
+    class="custom"
+    :source="specification.content?.custom"
   />
   <div
     v-if="specification.content?.summary"

@@ -115,6 +115,11 @@ Note that `summary` and `key_data` are conveniences;
 their content can be reproduced with a knowledge of the instrument and
 the information in `items`. 
 
+**Warning**: Allowing users to upload information can be dangerous.
+A user can customise the fetch request because it comes from their computer,
+but good-faith uploads will conform to the spec presented here.
+Please ensure your endpoint appropriately sanitizes input.
+
 ## Development
 
 This template should help get you started developing with Vue 3 in Vite.
