@@ -68,7 +68,7 @@ if (specification?.content?.download) {
 </script>
 
 <template>
-  <div v-if="specification?.fetch?.url" class="sticky-top text-center">
+  <div v-if="specification?.fetch?.url && !specification?.content?.silent_fetch" class="sticky-top text-center">
     <p v-if="!uploadComplete" class="text-bg-info">
       Uploading to
       {{ specification.fetch.display || specification.fetch.url }}...
