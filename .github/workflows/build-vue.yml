@@ -13,4 +13,5 @@ jobs:
         with:
           username: 'OxfordRSE'
           reponame: 'CIS-R'
+          cname: 'tools.oxrse.uk'
           token: ${{ secrets.GITHUB_TOKEN }} # Leave this line unchanged
