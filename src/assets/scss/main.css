@@ -8,6 +8,9 @@
   padding: 2rem;
 
   font-weight: normal;
+
+  display: flex;
+  flex-direction: column;
 }
 
 #app main { max-height: 600px;}

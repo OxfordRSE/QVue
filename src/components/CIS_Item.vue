@@ -7,12 +7,14 @@ import CIS_AnswerNumber from "@/components/CIS_AnswerNumber.vue";
 export interface Props {
   item: Item;
   next_button_label?: string;
+  next_button_key?: string;
   disable_back_button?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   disable_back_button: false,
-  next_button_label: "Next",
+  next_button_label: "<kbd>N</kbd>ext",
+  next_button_key: "n",
 });
 
 const emit = defineEmits<{
@@ -69,12 +71,11 @@ const next = () => {
         @keydown="
           (evt) => {
             if (evt.key === 'Enter' || evt.key === 'Space') next();
-            else console.debug(evt.key);
           }
         "
-      >
-        {{ props.next_button_label }}
-      </button>
+        :data-click-on-key="props.next_button_key"
+        v-html="props.next_button_label"
+      />
     </div>
   </div>
 </template>

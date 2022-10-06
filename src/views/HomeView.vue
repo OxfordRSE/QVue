@@ -14,9 +14,11 @@ const state = ref(cis.CIS());
 let progress_width: Ref<number> = ref(0);
 let answerTimeout: Ref<number | undefined> = ref();
 let tickTimeout: Ref<number | undefined> = ref();
-let answerDelay = computed(() => (auto_continue_delay.value * 1000));
+let answerDelay = computed(() => auto_continue_delay.value * 1000);
 let tickDelay = computed(() => Math.max(answerDelay.value / 100, 50));
-let progress_increment = computed(() => 120 / (answerDelay.value / tickDelay.value));
+let progress_increment = computed(
+  () => 120 / (answerDelay.value / tickDelay.value)
+);
 const updateProgress = () => {
   progress_width.value = progress_width.value + progress_increment.value;
   if (progress_width.value < 100)
