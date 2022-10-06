@@ -51,6 +51,7 @@ export class State {
       return;
     }
     this.counters.revert(q);
+    q.answer = undefined;
     this.current_item = q;
   }
 

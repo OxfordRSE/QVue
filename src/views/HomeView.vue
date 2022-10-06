@@ -42,9 +42,18 @@ const answer = (ans: any) => {
   }
 };
 
+const confirm_unload = () => {
+  return confirm(
+    "You have not finished the questionnaire. Are you sure you want to quit?"
+  );
+};
+
 const next = (ans: any) => {
   clearProgress();
   state.value.next_q(ans);
+  if (state.value.current_item)
+    window.addEventListener("beforeunload", confirm_unload);
+  else window.removeEventListener("beforeunload", confirm_unload);
 };
 </script>
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { watch  } from "vue";
+import { watch } from "vue";
 import type { Answer } from "@/cis-r/types";
 
 export interface Props {
@@ -13,19 +13,29 @@ defineEmits<{
   (e: "answer", ans: Answer): void;
 }>();
 
-watch(() => props.answers, () => {
-  // Do something with the updated value.
+watch(
+  () => props.answers,
+  () => {
+    // Do something with the updated value.
     window.document
       .querySelectorAll('div.answer-option > input[type="radio"]')
-      .forEach((e: any) => {e.checked = false});
+      .forEach((e: any) => {
+        e.checked = false;
+      });
     // @ts-ignore
-    window.document.querySelector('div.question')?.blur();
-});
+    window.document.activeElement?.blur();
+  }
+);
 </script>
 
 <template>
-  <div class="answer-option d-flex p-1 my-2" v-for="a in props.answers" :key="a.value" ref="inputs">
-    <kbd v-if="/^\d$/.test(a.value.toString())" class="me-2">{{a.value}}</kbd>
+  <div
+    class="answer-option d-flex p-1 my-2"
+    v-for="a in props.answers"
+    :key="a.value"
+    ref="inputs"
+  >
+    <kbd v-if="/^\d$/.test(a.value.toString())" class="me-2">{{ a.value }}</kbd>
     <input
       class="form-check-input me-1"
       type="radio"
@@ -43,8 +53,17 @@ watch(() => props.answers, () => {
 .answer-option {
   align-items: center;
   border: 2px solid transparent;
-  input, label { cursor: pointer}
-  label { max-width: calc(100% - 3em) }
+  input,
+  label {
+    cursor: pointer;
+  }
+  label {
+    max-width: calc(100% - 3em);
+  }
 }
-.answer-option:has(*:hover) { border-color: var(--bs-primary) }
+@media (hover: hover) {
+  .answer-option:has(*:hover) {
+    border-color: var(--bs-primary);
+  }
+}
 </style>

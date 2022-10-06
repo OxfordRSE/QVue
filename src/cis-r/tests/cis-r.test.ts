@@ -53,7 +53,7 @@ describe("CIS-R detail", function () {
       pathway = last_run.pathway;
       pathways_tested = last_run.pathways_tested;
     } catch (e) { console.error(e) }
-    let breadcrumbs: Node[] = [];
+    let breadcrumbs: Node[] = [...pathway];
     let i = 10_000_000;
     let answer: Answer | undefined;
     while (i--) {
@@ -92,7 +92,9 @@ describe("CIS-R detail", function () {
               throw `Too many items in pathway: ${pathway.map(
                 (p) => p.question_id
               )}`;
-            pathway.push(asNode(state.current_item, 0));
+            if (pathway.map(i => i.question_id).includes(state.current_item.id))
+              throw `Trying to add circular link to pathway: ${state.current_item?.id}`;
+            else pathway.push(asNode(state.current_item, 0));
             answer = state.current_item.answer_options[0];
           } else {
             if (state.current_item?.id !== crumb?.question_id)
