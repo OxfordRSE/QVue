@@ -2,11 +2,10 @@
 
 #app {
   width: 100%;
-  max-width: 1280px;
+  max-width: 576px;
   min-width: 300px;
   margin: 0 auto;
-  padding: 2rem;
-
+  padding: .5em;
   font-weight: normal;
 
   display: flex;

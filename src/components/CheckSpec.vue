@@ -1,11 +1,19 @@
 <script setup lang="ts">
-import {getCurrentInstance} from "vue";
+import {useURLStore, type URLOptions} from "@/stores/url_settings";
+import {parseQuery} from "vue-router";
+
+const store = useURLStore();
+
 let spec_error = false;
 try {
-  const spec_64 = getCurrentInstance()?.proxy?.$route.query.spec;
+  const query = parseQuery(window.location.search);
+  const spec_64 = query?.spec;
   if (typeof spec_64 === "string") {
     const spec = atob(spec_64);
-    const json = JSON.parse(spec);
+    const json: URLOptions = JSON.parse(spec);
+    store.display = json.display || store.display;
+    store.content = json.content || store.content;
+    store.fetch = json.fetch || store.fetch;
   }
 } catch (e) {
   console.error(e);

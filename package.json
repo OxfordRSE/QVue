@@ -16,6 +16,7 @@
     "pinia": "^2.0.22",
     "vue": "^3.2.38",
     "vue-markdown-render": "^2.0.0",
+    "vue-material-design-icons": "^5.1.2",
     "vue-router": "^4.1.5"
   },
   "devDependencies": {

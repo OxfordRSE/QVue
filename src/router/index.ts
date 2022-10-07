@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
+import ToolView from "../views/ToolView.vue";
 
 const router = createRouter({
   // history: createWebHistory(import.meta.env.BASE_URL),
@@ -10,9 +11,13 @@ const router = createRouter({
       name: "home",
       component: HomeView,
     },
-    { path: "/CIS-R/", redirect: { name: "home" } },
     {
-      path: "/CIS-R/report",
+      path: "/tool",
+      name: "tool",
+      component: ToolView,
+    },
+    {
+      path: "/report",
       name: "report",
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route

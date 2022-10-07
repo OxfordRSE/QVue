@@ -45,13 +45,14 @@ export class State {
   }
 
   last_q() {
+    if (typeof this.current_item !== "undefined")
+      this.current_item.answer = undefined;
     const q = this.item_history.pop();
     if (!q) {
       console.warn("No history to go_back to.");
       return;
     }
     this.counters.revert(q);
-    q.answer = undefined;
     this.current_item = q;
   }
 

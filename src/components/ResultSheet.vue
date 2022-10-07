@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import VueMarkdown from "vue-markdown-render";
 import { getCurrentInstance, ref, type Ref } from "vue";
+import { useURLStore } from "@/stores/url_settings";
+
+const specification = useURLStore();
 
 export interface Props {
   content: Object;
@@ -8,55 +11,40 @@ export interface Props {
 
 const props = withDefaults(defineProps<Props>(), {});
 
-// Parse a URL with d, t, a query params (base64 encoded)
-// e.g. http://localhost:5173/CIS-R/report?spec=eyJmZXRjaCI6eyJ1cmwiOiJodHRwczovL2FwaS5leGFtcGxlLmNvbS9lbmRwb2ludC8iLCJoZWFkZXJzIjp7IlVzZXItVG9rZW4iOiJ1c2VyXzAwMDEiLCJBdXRob3JpemF0aW9uIjoiYmVhcmVyIHRrbl91c2VyXzAwMDFfYWJjZGVmMTIzIn0sImRpc3BsYXkiOiJFeGFtcGxlIEFQSSBVcGxvYWQifSwiY29udGVudCI6eyJjdXN0b20iOiIjIFRoYW5rIHlvdVxuXG5UaGFuayB5b3UgZm9yIGNvbXBsZXRpbmcgdGhlIENJUy1SLiBBIHN1bW1hcnkgb2YgeW91ciByZXN1bHRzIGlzIHNob3duIGJlbG93LiIsInN1bW1hcnkiOnRydWUsImRvd25sb2FkIjp0cnVlfX0=
-const spec_64 = getCurrentInstance()?.proxy?.$route.query.spec || null;
-
-let spec_error = false;
-let spec = "{}";
-try {
-  if (typeof spec_64 === "string") spec = atob(spec_64);
-} catch (e) {
-  console.error(e);
-  spec_error = true;
-}
-let specification: {
-  fetch?: { url: string; headers: { [key: string]: string }; display: string };
-  content?: {
-    thank_you?: string;
-    custom?: string;
-    summary?: boolean;
-    download?: boolean;
-    silent_fetch?: boolean;
-  };
-} = {};
-try {
-  if (spec) specification = JSON.parse(spec);
-} catch (e) {
-  spec_error = true;
-  console.error(e);
-}
-
 let uploadComplete: Ref<boolean> = ref(false);
 let uploadStatus: Ref<number | undefined> = ref();
 
 if (typeof specification?.fetch?.url === "string" && props.content) {
-  fetch(specification?.fetch.url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      ...specification?.fetch?.headers,
-    },
-    body: JSON.stringify(props.content),
-  })
-    .then((r) => {
-      uploadComplete.value = true;
-      uploadStatus.value = r.status;
+  if (
+    confirm(
+      `${
+        specification.fetch.display ? `${specification.fetch.display}:\n\n` : ""
+      }Your data will now be sent to ${specification.fetch.url.replace(
+        /.+:\/\/([^/]+)\/?.*/,
+        "$1"
+      )}`
+    )
+  ) {
+    fetch(specification?.fetch?.url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        ...specification?.fetch?.headers,
+      },
+      body: JSON.stringify(props.content),
     })
-    .catch((e) => {
-      console.error(e);
-      uploadComplete.value = true;
-    });
+      .then((r) => {
+        uploadComplete.value = true;
+        uploadStatus.value = r.status;
+      })
+      .catch((e) => {
+        console.error(e);
+        uploadComplete.value = true;
+      });
+  } else {
+    uploadComplete.value = true;
+    uploadStatus.value = -1;
+  }
 }
 
 let data_url: string = "";
@@ -68,10 +56,17 @@ if (specification?.content?.download) {
 </script>
 
 <template>
-  <div v-if="specification?.fetch?.url && !specification?.content?.silent_fetch" class="sticky-top text-center">
+  <div
+    v-if="specification?.fetch?.url && !specification?.fetch?.silent"
+    class="sticky-top text-center"
+  >
     <p v-if="!uploadComplete" class="text-bg-info">
       Uploading to
       {{ specification.fetch.display || specification.fetch.url }}...
+    </p>
+    <p v-else-if="uploadStatus === -1" class="text-bg-warning">
+      You refused permission to upload data to
+      {{ specification.fetch.display || specification.fetch.url }}.
     </p>
     <p v-else-if="uploadStatus !== 200" class="text-bg-danger">
       Error uploading results to
@@ -86,11 +81,10 @@ if (specification?.content?.download) {
   <div
     v-if="
       specification?.content?.thank_you ||
-      !(typeof specification?.content === 'object') ||
-      (typeof specification?.content === 'object' &&
-        Object.keys(specification?.content) === ['silent_fetch'])
+      typeof specification?.content !== 'object' ||
+      Object.keys(specification.content).length === 0
     "
-    class="blank"
+    class="blank mb-2"
   >
     <p>Thank you for answering those questions.</p>
     <p>This is the end of the computerised interview.</p>
@@ -98,12 +92,12 @@ if (specification?.content?.download) {
   </div>
   <VueMarkdown
     v-if="specification?.content?.custom"
-    class="custom"
+    class="custom mb-2"
     :source="specification?.content?.custom"
   />
   <div
     v-if="specification?.content?.summary"
-    class="summary"
+    class="summary mb-2"
     v-html="props.content.summary"
   />
   <a
@@ -111,7 +105,7 @@ if (specification?.content?.download) {
     class="download"
     download="CIS-R.json"
     :href="data_url"
-    ><button class="btn btn-primary">Download data</button></a
+    ><button class="btn btn-primary mb-2">Download data</button></a
   >
 </template>
 

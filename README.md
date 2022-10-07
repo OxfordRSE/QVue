@@ -1,7 +1,7 @@
 # CIS-R
 
 [![Build Vue](https://github.com/OxfordRSE/CIS-R/actions/workflows/build-vue.yml/badge.svg)](https://github.com/OxfordRSE/CIS-R/actions/workflows/build-vue.yml)
-[![Pages](https://github.com/OxfordRSE/CIS-R/actions/workflows/pages.yml/badge.svg)](https://OxfordRSE.github.io/CIS-R/)
+[![Pages](https://github.com/OxfordRSE/CIS-R/actions/workflows/pages.yml/badge.svg)](https://tools.oxrse.uk/)
 
 ## Customising user experience
 
@@ -13,18 +13,22 @@ A `spec` argument should be appended to the URL, with JSON stringified content b
 The JSON should correspond to the following type definition:
 
 ```typescript
-type json = {
+type URLOptions = {
   fetch?: { 
-    url: string,
-    headers?: {[key: string]: string},
-    display?: string 
-  },
+    url: string;
+    headers?: {[key: string]: string};
+    display?: string;
+    silent?: boolean;
+  } | null;
   content?: {
-    custom?: string,
-    summary?: boolean,
-    download?: boolean,
-    silent_fetch: boolean 
-  } 
+    custom?: string;
+    summary?: boolean;
+    download?: boolean;
+    silent_fetch: boolean;
+  };
+  display?: {
+    banner_html?: string;
+  };
 }
 ```
 
@@ -34,14 +38,17 @@ A detailed description of those parameters is given here for reference:
   * `fetch.url` is your endpoint for handling the data
   * `fetch.headers` should be used for authorisation and user identification. Unless overridden, "Content-Type" is specified as "application/json".
   * `fetch.display` is a human-readable name for your endpoint to display to the user.
+  * `silent` will suppress upload feedback if set to `true`
+    * Note: this will not suppress the confirmation dialogue before dispatch
+    * Note: if this is `true` the user will not be notified if the upload fails!
 * `content`: allows you to customise what the user sees at the end of the instrument:
   * `custom` can contain markdown-formatted text to display
   * `thank_you` will show a default thank you text
     * Note: if no content is specified, only this is displayed.
   * `summary` will show the instrument's summary results page if set to `true`
   * `download` will offer the user a download link if set to `true`
-  * `silent_fetch` will suppress upload feedback if set to `true`
-    * Note: if this is `true` the user will not be notified if the upload fails!
+* `display`: allows customisation of the display
+  * `banner_html` may hold HTML for the banner section to enable custom branding
 
 ### Example:
 

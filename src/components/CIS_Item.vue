@@ -3,7 +3,7 @@ import type { Answer, Item } from "@/cis-r";
 import { ItemType } from "@/cis-r";
 import CIS_AnswerRadio from "@/components/CIS_AnswerRadio.vue";
 import CIS_AnswerNumber from "@/components/CIS_AnswerNumber.vue";
-import { watch } from "vue";
+import { watch, ref, type Ref } from "vue";
 
 export interface Props {
   item: Item;
@@ -24,21 +24,22 @@ const emit = defineEmits<{
   (e: "next", ans: Answer | undefined): void;
 }>();
 
-let answer: Answer | undefined;
+let answer: Ref<Answer | undefined> = ref();
 watch(
   () => props.item,
-  () => {
-    answer = undefined;
+  (new_item) => {
+    console.log(`New item: ${new_item.id}, answer=${new_item.answer?.value}`)
+    answer.value = new_item.answer;
   }
 );
 const record_answer = (ans: Answer | undefined) => {
-  answer = ans;
+  answer.value = ans;
   emit("answer", ans);
 };
 
 const next = () => {
-  if (typeof answer !== "undefined" || props.item.type === ItemType.NONE)
-    emit("next", answer);
+  if (typeof answer.value !== "undefined" || props.item.type === ItemType.NONE)
+    emit("next", answer.value);
 };
 </script>
 
@@ -56,7 +57,7 @@ const next = () => {
       />
       <CIS_AnswerNumber
         v-if="item.type === ItemType.NUMBER"
-        :answer="item.answer?.value"
+        :answer="item.answer"
         @answer="(a) => record_answer(a)"
       />
     </div>
@@ -70,9 +71,9 @@ const next = () => {
           }
         "
         :disabled="props.disable_back_button"
-        data-click-on-key="b"
+        data-click-on-key="g"
       >
-        <kbd>B</kbd>ack
+        <kbd>G</kbd>o back
       </button>
       <button
         class="btn btn-primary flex-grow-1 ms-2"

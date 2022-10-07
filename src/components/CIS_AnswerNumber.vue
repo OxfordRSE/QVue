@@ -1,12 +1,21 @@
 <script setup lang="ts">
 import type { Answer } from "@/cis-r";
+import { computed } from "vue";
 
-defineEmits<{
+export interface Props {
+  answer: Answer | undefined;
+}
+const props = withDefaults(defineProps<Props>(), {});
+
+const emit = defineEmits<{
   (e: "answer", ans: Answer): void;
 }>();
-defineProps<{
-  answer: Answer | undefined;
-}>();
+
+const _value = computed({
+  get: () => props.answer?.value,
+  // @ts-ignore
+  set: (val) => emit("answer", { value: val }),
+});
 </script>
 
 <template>
@@ -15,8 +24,8 @@ defineProps<{
     name="answer"
     type="number"
     aria-label="Please type your answer"
-    :value="answer?.value"
-    @change="x => $emit('answer', { x, text: '' })"
+    v-model="_value"
+    autofocus
   />
 </template>
 

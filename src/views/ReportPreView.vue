@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import * as cis from "@/cis-r";
 import ResultSheet from "@/components/ResultSheet.vue";
+import { useURLStore } from "@/stores/url_settings";
+
+const store = useURLStore();
 
 const item_data = [
   {
@@ -896,7 +899,13 @@ const content = {
 </script>
 
 <template>
+  <header>
+    <div v-if="store.display?.banner_html" class="navbar" v-html="store.display.banner_html"/>
+  </header>
   <main class="container-sm">
     <ResultSheet :content="content" />
   </main>
 </template>
+<style lang="scss" scoped>
+header {min-height: 3em;}
+</style>

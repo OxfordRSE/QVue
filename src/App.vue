@@ -1,19 +1,10 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from "vue-router";
+import { RouterView } from "vue-router";
 import CheckSpec from "@/components/CheckSpec.vue";
-import SettingsMenu from "@/components/SettingsMenu.vue";
 </script>
 
 <template>
   <CheckSpec />
-  <header class="mb-2">
-    <nav>
-      <RouterLink to="/">Home</RouterLink>
-      <RouterLink to="/report">Check report</RouterLink>
-      <SettingsMenu />
-    </nav>
-  </header>
-
   <RouterView />
 </template>
 
@@ -47,4 +38,8 @@ nav a:first-of-type {
   border: 0;
 }
 
+.banner {
+  min-width: 300px;
+  min-height: 60px;
+}
 </style>

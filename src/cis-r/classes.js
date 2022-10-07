@@ -30,6 +30,8 @@ export class State {
             this.onComplete(this);
     }
     last_q() {
+        if (typeof this.current_item !== "undefined")
+            this.current_item.answer = undefined;
         const q = this.item_history.pop();
         if (!q) {
             console.warn("No history to go_back to.");
