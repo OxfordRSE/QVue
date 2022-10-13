@@ -80,6 +80,7 @@ if (specification?.content?.download) {
   </div>
   <div
     v-if="
+      specification?.content === null ||
       specification?.content?.thank_you ||
       typeof specification?.content !== 'object' ||
       Object.keys(specification.content).length === 0
