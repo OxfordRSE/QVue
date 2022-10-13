@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import VueMarkdown from "vue-markdown-render";
-import { getCurrentInstance, ref, type Ref } from "vue";
+import { ref, type Ref } from "vue";
 import { useURLStore } from "@/stores/url_settings";
 
 const specification = useURLStore();

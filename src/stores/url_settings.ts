@@ -1,14 +1,12 @@
 import { defineStore } from "pinia";
 import { ref, type Ref } from "vue";
 type Header = { [key: string]: string };
-type FetchOptions =
-  | {
-      url: string;
-      headers?: Header;
-      display?: string;
-      silent?: boolean;
-    }
-  | {};
+type FetchOptions = {
+  url: string;
+  headers?: Header;
+  display?: string;
+  silent?: boolean;
+};
 type ContentOptions = {
   custom?: string;
   summary?: boolean;
@@ -24,8 +22,8 @@ export type URLOptions = {
 };
 
 export const useURLStore = defineStore("url-settings", () => {
-  const fetch: Ref<FetchOptions> = ref({});
-  const content: Ref<ContentOptions> = ref({});
-  const display: Ref<DisplayOptions> = ref({});
+  const fetch: Ref<FetchOptions | null> = ref(null);
+  const content: Ref<ContentOptions | null> = ref(null);
+  const display: Ref<DisplayOptions | null> = ref(null);
   return { fetch, content, display };
 });

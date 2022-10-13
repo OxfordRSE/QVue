@@ -4,7 +4,7 @@ import { _state_properties, CIS, Item, ItemType } from "..";
 import { describe, expect, it, vi } from "vitest";
 import { writeFileSync, readFileSync } from "fs";
 
-describe("CIS-R spec", function () {
+describe.only("CIS-R spec", function () {
   it("should have unique item ids", function () {
     const ids: string[] = [];
     _state_properties.items.forEach((i) => {

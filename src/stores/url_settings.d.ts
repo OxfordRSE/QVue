@@ -7,7 +7,7 @@ declare type FetchOptions = {
     headers?: Header;
     display?: string;
     silent?: boolean;
-} | null;
+};
 declare type ContentOptions = {
     custom?: string;
     summary?: boolean;
@@ -22,16 +22,16 @@ export declare type URLOptions = {
     display?: DisplayOptions;
 };
 export declare const useURLStore: import("pinia").StoreDefinition<"url-settings", import("pinia")._UnwrapAll<Pick<{
-    fetch: Ref<FetchOptions>;
-    content: Ref<ContentOptions>;
-    display: Ref<DisplayOptions>;
+    fetch: Ref<FetchOptions | null>;
+    content: Ref<ContentOptions | null>;
+    display: Ref<DisplayOptions | null>;
 }, "fetch" | "content" | "display">>, Pick<{
-    fetch: Ref<FetchOptions>;
-    content: Ref<ContentOptions>;
-    display: Ref<DisplayOptions>;
+    fetch: Ref<FetchOptions | null>;
+    content: Ref<ContentOptions | null>;
+    display: Ref<DisplayOptions | null>;
 }, never>, Pick<{
-    fetch: Ref<FetchOptions>;
-    content: Ref<ContentOptions>;
-    display: Ref<DisplayOptions>;
+    fetch: Ref<FetchOptions | null>;
+    content: Ref<ContentOptions | null>;
+    display: Ref<DisplayOptions | null>;
 }, never>>;
 export {};
