@@ -6,7 +6,7 @@ const settings = useSettingsStore();
 </script>
 
 <template>
-  <div class="dropstart p-2">
+  <div class="dropstart ps-2 pb-2">
     <button
       class="btn btn-light"
       type="button"
@@ -53,12 +53,6 @@ const settings = useSettingsStore();
 </template>
 
 <style scoped lang="scss">
-.dropstart {
-  position: absolute;
-  top: 0;
-  right: 0;
-  z-index: 1;
-}
 .menu {
   min-width: 200px;
   padding: 1em;

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Answer, Item } from "@/cis-r";
 import { ItemType } from "@/cis-r";
+import SettingsMenu from "@/components/SettingsMenu.vue";
 import CIS_AnswerRadio from "@/components/CIS_AnswerRadio.vue";
 import CIS_AnswerNumber from "@/components/CIS_AnswerNumber.vue";
 import { watch, ref, type Ref } from "vue";
@@ -46,6 +47,9 @@ const next = () => {
 <template>
   <div class="radio-form">
     <div class="question lead">
+      <aside class="float-end">
+        <SettingsMenu />
+      </aside>
       {{ item.question }}
     </div>
     <div class="answers flex-grow-1 my-4" v-if="item.type !== ItemType.NONE">

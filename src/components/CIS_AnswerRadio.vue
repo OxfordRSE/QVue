@@ -39,7 +39,7 @@ watch(
     <input
       class="form-check-input me-1"
       type="radio"
-      name="`answer"
+      name="answer"
       :id="`answer_${a.value}`"
       @change="$emit('answer', a)"
       :checked="a.value === props.answer?.value"

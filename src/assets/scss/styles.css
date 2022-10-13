@@ -5,10 +5,9 @@ Error: File to import not found or unreadable: ~bootstrap/scss/bootstrap.
 1: // Import all of Bootstrap's CSS
 2: @import "~bootstrap/scss/bootstrap";
 3: 
-4: #app {
-5:   height: 100vh;
+4: main {
+5:   height: 100%;
 6: }
-7: 
 
 Backtrace:
 styles.scss:2
@@ -49,4 +48,4 @@ D:/Ruby27-x64/bin/sass:23:in `<main>'
 body:before {
   white-space: pre;
   font-family: monospace;
-  content: "Error: File to import not found or unreadable: ~bootstrap/scss/bootstrap.\A         on line 2 of styles.scss\A \A 1: // Import all of Bootstrap's CSS\A 2: @import \"~bootstrap/scss/bootstrap\";\A 3: \A 4: #app {\A 5:   height: 100vh;\A 6: }\A 7: "; }
+  content: "Error: File to import not found or unreadable: ~bootstrap/scss/bootstrap.\A         on line 2 of styles.scss\A \A 1: // Import all of Bootstrap's CSS\A 2: @import \"~bootstrap/scss/bootstrap\";\A 3: \A 4: main {\A 5:   height: 100%;\A 6: }"; }

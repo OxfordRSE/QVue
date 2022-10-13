@@ -4,9 +4,10 @@ import * as cis from "@/cis-r";
 import CIS_Item from "@/components/CIS_Item.vue";
 import ResultSheet from "@/components/ResultSheet.vue";
 import WelcomeMessage from "@/components/WelcomeMessage.vue";
+import PetrushkaBanner from "@/components/PetrushkaBanner.vue";
+import FooterCredits from "@/components/FooterCredits.vue";
 import { useSettingsStore } from "@/stores/settings";
 import { storeToRefs } from "pinia";
-import SettingsMenu from "@/components/SettingsMenu.vue";
 import { useURLStore } from "@/stores/url_settings";
 
 const store = useURLStore();
@@ -30,6 +31,7 @@ try {
 }
 
 const load_state = () => {
+  window.scrollTo(0, 0);
   try {
     while (past_answers.length) {
       const op = past_answers.shift();
@@ -100,24 +102,24 @@ const last = () => {
 </script>
 
 <template>
-  <div v-if="!ready" class="h-100">
+  <div class="page" v-if="!ready">
     <WelcomeMessage
       @okay="ready = true"
       @resume="load_state"
       :show_continue="past_answers.length > 0"
     />
   </div>
-  <div v-else class="h-100">
+  <div class="page d-flex flex-column h-100" v-else>
     <header>
       <div
         v-if="store.display?.banner_html"
         class="navbar"
         v-html="store.display.banner_html"
       />
-      <SettingsMenu />
+      <PetrushkaBanner v-else />
     </header>
-    <main class="container-sm">
-      <div v-if="state.current_item" class="h-100">
+    <main class="container-sm d-flex flex-column h-100 flex-grow-1">
+      <div v-if="state.current_item" class="item d-flex flex-column h-100 flex-grow-1">
         <CIS_Item
           :item="state.current_item"
           @answer="(ans) => answer(ans)"
@@ -125,23 +127,39 @@ const last = () => {
           @back="last"
           :disable_back_button="state.current_item === state.items[0]"
         />
-        <div v-if="answerTimeout" class="progress mt-2" style="height: 1px">
+        <div v-if="answerTimeout" class="progress mt-2 flex-grow-0" style="height: 1px">
           <div
             class="progress-bar"
             role="progressbar"
-            aria-label="Basic example"
+            aria-label="Submitting answer in..."
             :aria-valuenow="progress_width"
             :aria-valuemin="0"
             :aria-valuemax="100"
             :style="`width: ${progress_width}%`"
           ></div>
         </div>
+        <div v-else-if="settings.auto_continue" class="progress mt-2 flex-grow-0" style="height: 1px">
+          <div
+            class="progress-bar"
+            role="progressbar"
+            aria-hidden="true"
+            style="width: 0"
+          ></div>
+        </div>
       </div>
       <ResultSheet v-else :content="state.data" />
     </main>
   </div>
+  <FooterCredits />
 </template>
 <style lang="scss" scoped>
+.page {
+  min-height: 95vh;
+}
+.item > *:not(.progress-bar) {
+  height: 100%;
+  flex-grow: 1;
+}
 header {
   min-height: 3em;
 }
