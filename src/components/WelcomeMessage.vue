@@ -46,13 +46,16 @@ const url_settings = useURLStore();
       </p>
       <details v-if="url_settings.fetch?.url">
         <summary><h3>Sending Data</h3></summary>
-        When you have completed the questionnaire the data will be sent to
-        <mark>{{
-          url_settings.fetch?.url?.replace(/.+:\/\/([^/]+)\/?.*/, "$1")
-        }}</mark
-        >. This address should look similar to the email address or website
-        address that you got this link from. It should also make sense with the
-        banner you see at the top of the page while doing the questionnaire.
+        <p>
+          When you have completed the questionnaire the data will be sent to
+          <mark>{{
+            url_settings.fetch?.url?.replace(/.+:\/\/([^/]+)\/?.*/, "$1")
+          }}</mark
+          >. This address should look similar to the email address or website
+          address that you got this link from. It should also make sense with
+          the banner you see at the top of the page while doing the
+          questionnaire.
+        </p>
         <p>
           <strong
             >If you do not trust the source of the link that brought you to this
@@ -62,14 +65,18 @@ const url_settings = useURLStore();
       </details>
       <details v-if="url_settings.content?.download">
         <summary><h3>Saveable Data</h3></summary>
-        When you have completed the questionnaire, you will be able to download
-        and save a copy of the data it generates.
+        <p>
+          When you have completed the questionnaire, you will be able to
+          download and save a copy of the data it generates.
+        </p>
       </details>
       <details>
         <summary><h3>Temporary Data</h3></summary>
-        This site stores a small amount of information on your computer to track
-        your progress through the questionnaire. When you complete the
-        questionnaire this information is removed.
+        <p>
+          This site stores a small amount of information on your computer to
+          track your progress through the questionnaire. When you complete the
+          questionnaire this information is removed.
+        </p>
       </details>
       <h2>Note:</h2>
       <p>
