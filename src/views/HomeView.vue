@@ -30,8 +30,8 @@ try {
   past_answers = [];
 }
 
+const scroll = () => window.scrollTo(0, 0);
 const load_state = () => {
-  window.scrollTo(0, 0);
   try {
     while (past_answers.length) {
       const op = past_answers.shift();
@@ -104,8 +104,14 @@ const last = () => {
 <template>
   <div class="page" v-if="!ready">
     <WelcomeMessage
-      @okay="ready = true"
-      @resume="load_state"
+      @okay="
+        ready = true;
+        scroll();
+      "
+      @resume="
+        load_state();
+        scroll();
+      "
       :show_continue="past_answers.length > 0"
     />
   </div>
@@ -119,7 +125,10 @@ const last = () => {
       <PetrushkaBanner v-else />
     </header>
     <main class="container-sm d-flex flex-column h-100 flex-grow-1">
-      <div v-if="state.current_item" class="item d-flex flex-column h-100 flex-grow-1">
+      <div
+        v-if="state.current_item"
+        class="item d-flex flex-column h-100 flex-grow-1"
+      >
         <CIS_Item
           :item="state.current_item"
           @answer="(ans) => answer(ans)"
@@ -127,7 +136,11 @@ const last = () => {
           @back="last"
           :disable_back_button="state.current_item === state.items[0]"
         />
-        <div v-if="answerTimeout" class="progress mt-2 flex-grow-0" style="height: 1px">
+        <div
+          v-if="answerTimeout"
+          class="progress mt-2 flex-grow-0"
+          style="height: 1px"
+        >
           <div
             class="progress-bar"
             role="progressbar"
@@ -138,7 +151,11 @@ const last = () => {
             :style="`width: ${progress_width}%`"
           ></div>
         </div>
-        <div v-else-if="settings.auto_continue" class="progress mt-2 flex-grow-0" style="height: 1px">
+        <div
+          v-else-if="settings.auto_continue"
+          class="progress mt-2 flex-grow-0"
+          style="height: 1px"
+        >
           <div
             class="progress-bar"
             role="progressbar"
