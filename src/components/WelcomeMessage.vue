@@ -44,36 +44,33 @@ const url_settings = useURLStore();
         The tool will not collect any data itself, but it will create some data
         you need to know about:
       </p>
-      <dl>
-        <dt v-if="url_settings.fetch?.url">Sending Data</dt>
-        <dd v-if="url_settings.fetch?.url">
-          When you have completed the questionnaire the data will be sent to
-          <mark>{{
-            url_settings.fetch?.url?.replace(/.+:\/\/([^/]+)\/?.*/, "$1")
-          }}</mark
-          >. This address should look similar to the email address or website
-          address that you got this link from. It should also make sense with
-          the banner you see at the top of the page while doing the
-          questionnaire.
-          <p>
-            <strong
-              >If you do not trust the source of the link that brought you to
-              this site, do not continue.</strong
-            >
-          </p>
-        </dd>
-        <dt v-if="url_settings.content?.download">Saveable Data</dt>
-        <dd v-if="url_settings.content?.download">
-          When you have completed the questionnaire, you will be able to
-          download and save a copy of the data it generates.
-        </dd>
-        <dt>Temporary Data</dt>
-        <dd>
-          This site stores a small amount of information on your computer to
-          track your progress through the questionnaire. When you complete the
-          questionnaire this information is removed.
-        </dd>
-      </dl>
+      <details v-if="url_settings.fetch?.url">
+        <summary><h3>Sending Data</h3></summary>
+        When you have completed the questionnaire the data will be sent to
+        <mark>{{
+          url_settings.fetch?.url?.replace(/.+:\/\/([^/]+)\/?.*/, "$1")
+        }}</mark
+        >. This address should look similar to the email address or website
+        address that you got this link from. It should also make sense with the
+        banner you see at the top of the page while doing the questionnaire.
+        <p>
+          <strong
+            >If you do not trust the source of the link that brought you to this
+            site, do not continue.</strong
+          >
+        </p>
+      </details>
+      <details v-if="url_settings.content?.download">
+        <summary><h3>Saveable Data</h3></summary>
+        When you have completed the questionnaire, you will be able to download
+        and save a copy of the data it generates.
+      </details>
+      <details>
+        <summary><h3>Temporary Data</h3></summary>
+        This site stores a small amount of information on your computer to track
+        your progress through the questionnaire. When you complete the
+        questionnaire this information is removed.
+      </details>
       <h2>Note:</h2>
       <p>
         Once you pass this page, your user experience will be customised by
@@ -107,4 +104,9 @@ const url_settings = useURLStore();
   </main>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+h3 {
+  display: inline-block;
+  font-size: calc(0.9rem + 0.6vw);
+}
+</style>
