@@ -27,7 +27,13 @@ type URLOptions = {
     silent_fetch: boolean;
   };
   display?: {
-    banner_html?: string;
+    banner_img_src: string;
+    banner_href?: string;
+    banner_img_alt?: string;
+    banner_img_title?: string;
+  } | {
+    banner_text: string;
+    banner_href?: string;
   };
 }
 ```
@@ -35,7 +41,7 @@ type URLOptions = {
 A detailed description of those parameters is given here for reference:
 
 * `fetch`: if present, results are sent to the `fetch.url` address in JSON format, with `fetch.headers` as the headers.
-  * `fetch.url` is your endpoint for handling the data
+  * `fetch.url` is your endpoint for handling the data. **Required** if `fetch` is specified.
   * `fetch.headers` should be used for authorisation and user identification. Unless overridden, "Content-Type" is specified as "application/json".
   * `fetch.display` is a human-readable name for your endpoint to display to the user.
   * `silent` will suppress upload feedback if set to `true`
@@ -48,7 +54,12 @@ A detailed description of those parameters is given here for reference:
   * `summary` will show the instrument's summary results page if set to `true`
   * `download` will offer the user a download link if set to `true`
 * `display`: allows customisation of the display
-  * `banner_html` may hold HTML for the banner section to enable custom branding
+  * `banner_img_src` can contain a URL for an image to be used as the banner image
+  * `banner_img_alt` alt text for banner image
+  * `banner_img_title` title property for banner image (uses `banner_img_alt` if unset)
+  * `banner_text` text for the banner (if `banner_img_src` is not set)
+  * `banner_href` URL for the banner to hyperlink to
+  * Note: either `banner_text` or `banner_img_src` should be set if `display` is specified.
 
 ### Example:
 

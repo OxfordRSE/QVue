@@ -117,13 +117,36 @@ const last = () => {
   </div>
   <div class="page d-flex flex-column h-100" v-else>
     <header>
-      <div
-        v-if="store.display?.banner_html"
-        class="navbar"
-        v-html="store.display.banner_html"
-      />
+      <div v-if="store.display?.banner_img_src" class="navbar">
+        <a v-if="store.display.banner_href" :href="store.display.banner_href">
+          <img
+            :src="store.display.banner_img_src"
+            :alt="store.display.banner_img_alt || ''"
+            :title="
+              store.display.banner_img_title ||
+              store.display.banner_img_alt ||
+              ''
+            "
+          />
+        </a>
+        <img
+          v-else
+          :src="store.display.banner_img_src"
+          :alt="store.display.banner_img_alt || ''"
+          :title="
+            store.display.banner_img_title || store.display.banner_img_alt || ''
+          "
+        />
+      </div>
+      <div v-else-if="store.display?.banner_text" class="navbar">
+        <a v-if="store.display.banner_href" :href="store.display.banner_href">
+          {{ store.display.banner_text }}
+        </a>
+        <span v-else>{{ store.display.banner_text }}</span>
+      </div>
       <PetrushkaBanner v-else />
     </header>
+    <hr />
     <main class="container-sm d-flex flex-column h-100 flex-grow-1">
       <div
         v-if="state.current_item"
@@ -179,5 +202,22 @@ const last = () => {
 }
 header {
   min-height: 3em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .navbar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--bs-black);
+    font-size: 2em;
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+    img {
+      max-width: 90vw;
+    }
+  }
 }
 </style>

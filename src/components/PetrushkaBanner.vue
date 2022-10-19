@@ -5,7 +5,6 @@
   <svg class="logo" viewBox="0 0 86 20">
     <text x="0" y="15" class="petrushka">PETRUSHKA</text>
   </svg>
-  <hr />
 </template>
 
 <style scoped lang="scss">

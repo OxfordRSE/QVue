@@ -12,9 +12,17 @@ type ContentOptions = {
   summary?: boolean;
   download?: boolean;
 };
-type DisplayOptions = {
-  banner_html?: string;
-};
+type DisplayOptions =
+  | {
+      banner_img_src: string;
+      banner_href?: string;
+      banner_img_alt?: string;
+      banner_img_title?: string;
+    }
+  | {
+      banner_text: string;
+      banner_href?: string;
+    };
 export type URLOptions = {
   fetch?: FetchOptions;
   content?: ContentOptions;
