@@ -3,7 +3,16 @@
 <template>
   <hr />
   <footer class="d-flex flex-column pb-2 text-light">
-    <div class="p-2">Developed by:</div>
+    <div class="p-2">Clinical Interview Schedule (Revised)</div>
+    <div class="citation px-4">
+      <a href="https://doi.org/10.1017/S0033291700030415">
+        Lewis G, Pelosi AJ, Araya R, et al.
+        Measuring psychiatric disorders in the community: a standardised assessment for use by lay interviewers.
+        <em>Psychological Medicine.</em>
+        1992;22:465–486
+      </a>
+    </div>
+    <div class="p-2 pt-4">Web application developed by:</div>
     <div
       class="d-flex mb-2 justify-content-evenly align-content-center text-center"
     >
@@ -29,7 +38,7 @@
         />
       </a>
     </div>
-    <div class="p-2">With funding support from:</div>
+    <div class="p-2 pt-4">With funding support from:</div>
     <div
       class="d-flex mb-2 justify-content-evenly align-content-center text-center"
     >
@@ -49,6 +58,13 @@
 footer {
   background-color: #002147;
   font-size: small;
+}
+.citation > a {
+  color: var(--bs-light);
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
 }
 img {
   height: 6em;
