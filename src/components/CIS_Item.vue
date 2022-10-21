@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import type { Answer, Item } from "@/cis-r";
-import { ItemType } from "@/cis-r";
+import { type Answer, type Item, ItemType } from "questionnaire-core/dist";
 import SettingsMenu from "@/components/SettingsMenu.vue";
 import CIS_AnswerRadio from "@/components/CIS_AnswerRadio.vue";
 import CIS_AnswerNumber from "@/components/CIS_AnswerNumber.vue";

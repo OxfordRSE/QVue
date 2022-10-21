@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { watch } from "vue";
-import type { Answer } from "@/cis-r/types";
+import type { Answer } from "@/questionnaire";
 
 export interface Props {
   answers: Answer[];

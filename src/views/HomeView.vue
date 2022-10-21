@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, type Ref } from "vue";
-import * as cis from "@/cis-r";
+import type { Item } from "questionnaire-core/dist";
 import CIS_Item from "@/components/CIS_Item.vue";
 import ResultSheet from "@/components/ResultSheet.vue";
 import WelcomeMessage from "@/components/WelcomeMessage.vue";
@@ -14,10 +14,19 @@ const store = useURLStore();
 const settings = useSettingsStore();
 const { auto_continue, auto_continue_delay } = storeToRefs(settings);
 
+let state = ref();
+const questionnaires = [];
+
+if (store.questionnaires.includes('cis-r')) {
+  import("questionnaire-cis-r/dist").then((m) => {
+    questionnaires.push(m.CIS());
+    state.value = m.CIS();
+  });
+}
+
 const local_storage_key: string = "answers";
 
 const ready: Ref<boolean> = ref(false);
-let state = ref(cis.CIS());
 let past_answers: any;
 try {
   const state_str = localStorage.getItem(local_storage_key) || "";
@@ -42,7 +51,7 @@ const load_state = () => {
       }
     }
   } catch (e) {
-    state.value = cis.CIS();
+    // state.value = cis.CIS();
     console.error(`Error restoring questionnaire from local data.`);
     console.error(e);
   } finally {
@@ -89,7 +98,7 @@ const next = (ans: any) => {
     localStorage.setItem(
       local_storage_key,
       JSON.stringify(
-        state.value.item_history.map((i) => ({ id: i.id, answer: i.answer }))
+        state.value.item_history.map((i: Item) => ({ id: i.id, answer: i.answer }))
       )
     );
   else localStorage.removeItem(local_storage_key);

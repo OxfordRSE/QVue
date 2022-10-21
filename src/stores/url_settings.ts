@@ -33,5 +33,6 @@ export const useURLStore = defineStore("url-settings", () => {
   const fetch: Ref<FetchOptions | null> = ref(null);
   const content: Ref<ContentOptions | null> = ref(null);
   const display: Ref<DisplayOptions | null> = ref(null);
-  return { fetch, content, display };
+  const questionnaires: Ref<any> = ref(["cis-r"]);
+  return { fetch, content, display, questionnaires };
 });

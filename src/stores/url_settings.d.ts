@@ -14,7 +14,13 @@ declare type ContentOptions = {
     download?: boolean;
 };
 declare type DisplayOptions = {
-    banner_html?: string;
+    banner_img_src: string;
+    banner_href?: string;
+    banner_img_alt?: string;
+    banner_img_title?: string;
+} | {
+    banner_text: string;
+    banner_href?: string;
 };
 export declare type URLOptions = {
     fetch?: FetchOptions;
@@ -25,13 +31,16 @@ export declare const useURLStore: import("pinia").StoreDefinition<"url-settings"
     fetch: Ref<FetchOptions | null>;
     content: Ref<ContentOptions | null>;
     display: Ref<DisplayOptions | null>;
-}, "fetch" | "content" | "display">>, Pick<{
+    questionnaires: Ref<any>;
+}, "fetch" | "content" | "display" | "questionnaires">>, Pick<{
     fetch: Ref<FetchOptions | null>;
     content: Ref<ContentOptions | null>;
     display: Ref<DisplayOptions | null>;
+    questionnaires: Ref<any>;
 }, never>, Pick<{
     fetch: Ref<FetchOptions | null>;
     content: Ref<ContentOptions | null>;
     display: Ref<DisplayOptions | null>;
+    questionnaires: Ref<any>;
 }, never>>;
 export {};
