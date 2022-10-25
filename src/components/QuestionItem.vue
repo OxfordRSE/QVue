@@ -1,12 +1,14 @@
 <script setup lang="ts">
-import { type Answer, type Item, ItemType } from "questionnaire-core/dist";
 import SettingsMenu from "@/components/SettingsMenu.vue";
-import CIS_AnswerRadio from "@/components/CIS_AnswerRadio.vue";
-import CIS_AnswerNumber from "@/components/CIS_AnswerNumber.vue";
-import { watch, ref, type Ref } from "vue";
+import AnswerSet from "@/components/AnswerSet.vue";
+import { watch, computed, type Ref } from "vue";
+import { storeToRefs } from "pinia";
+import { useQuestionnaireStore } from "@/stores/questionnaire";
+
+const questionnaireStore = useQuestionnaireStore();
+const { questionnaire } = storeToRefs(questionnaireStore);
 
 export interface Props {
-  item: Item;
   next_button_label?: string;
   next_button_key?: string;
   disable_back_button?: boolean;
@@ -18,29 +20,17 @@ const props = withDefaults(defineProps<Props>(), {
   next_button_key: "n",
 });
 
-const emit = defineEmits<{
-  (e: "answer", ans: Answer | undefined): void;
-  (e: "back"): void;
-  (e: "next", ans: Answer | undefined): void;
-}>();
+const item = computed(() => questionnaire.value.current_item);
 
-let answer: Ref<Answer | undefined> = ref();
 watch(
-  () => props.item,
-  (new_item) => {
-    console.log(`New item: ${new_item.id}, answer=${new_item.answer?.value}`)
-    answer.value = new_item.answer;
+  () => item,
+  (new_id) => {
+    console.log(`New item: ${new_id}`);
   }
 );
-const record_answer = (ans: Answer | undefined) => {
-  answer.value = ans;
-  emit("answer", ans);
-};
 
-const next = () => {
-  if (typeof answer.value !== "undefined" || props.item.type === ItemType.NONE)
-    emit("next", answer.value);
-};
+const next = () => questionnaire.value.next_q();
+const back = () => questionnaire.value.last_q();
 </script>
 
 <template>
@@ -51,23 +41,13 @@ const next = () => {
       </aside>
       {{ item.question }}
     </div>
-    <div class="answers flex-grow-1 my-4" v-if="item.type !== ItemType.NONE">
-      <CIS_AnswerRadio
-        v-if="item.type === ItemType.RADIO"
-        :answers="item.answer_options"
-        :answer="item.answer"
-        @answer="(a) => record_answer(a)"
-      />
-      <CIS_AnswerNumber
-        v-if="item.type === ItemType.NUMBER"
-        :answer="item.answer"
-        @answer="(a) => record_answer(a)"
-      />
+    <div class="answers flex-grow-1 my-4" v-if="item.answers.length">
+      <AnswerSet />
     </div>
     <div class="buttons">
       <button
         class="btn btn-outline-secondary"
-        @click="$emit('back')"
+        @click="back"
         @keydown="
           (evt) => {
             if (evt.key === 'Enter' || evt.key === 'Space') $emit('back');
@@ -86,9 +66,7 @@ const next = () => {
             if (evt.key === 'Enter' || evt.key === 'Space') next();
           }
         "
-        :disabled="
-          typeof answer === 'undefined' && props.item.type !== ItemType.NONE
-        "
+        :disabled="item.find_issues() !== false"
         :data-click-on-key="props.next_button_key"
         v-html="props.next_button_label"
       />

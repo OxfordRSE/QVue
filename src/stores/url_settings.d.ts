@@ -31,16 +31,13 @@ export declare const useURLStore: import("pinia").StoreDefinition<"url-settings"
     fetch: Ref<FetchOptions | null>;
     content: Ref<ContentOptions | null>;
     display: Ref<DisplayOptions | null>;
-    questionnaires: Ref<any>;
-}, "fetch" | "content" | "display" | "questionnaires">>, Pick<{
+}, "fetch" | "content" | "display">>, Pick<{
     fetch: Ref<FetchOptions | null>;
     content: Ref<ContentOptions | null>;
     display: Ref<DisplayOptions | null>;
-    questionnaires: Ref<any>;
 }, never>, Pick<{
     fetch: Ref<FetchOptions | null>;
     content: Ref<ContentOptions | null>;
     display: Ref<DisplayOptions | null>;
-    questionnaires: Ref<any>;
 }, never>>;
 export {};
