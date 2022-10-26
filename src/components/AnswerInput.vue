@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import * as Q from "questionnaire-core";
+import ItemBlank from "@/components/ItemBlank.vue";
 import ItemRadio from "@/components/ItemRadio.vue";
+import ItemSelect from "@/components/ItemSelect.vue";
 import ItemNumber from "@/components/ItemNumber.vue";
 import ItemText from "@/components/ItemText.vue";
 import { storeToRefs } from "pinia";
@@ -29,7 +31,9 @@ const answer = computed(() => {
 </script>
 
 <template>
+  <ItemBlank v-if="answer.type === Q.AnswerType.NONE" :id="answer.id" :base="props.base" />
   <ItemRadio v-if="answer.type === Q.AnswerType.RADIO" :id="answer.id" :base="props.base" />
+  <ItemSelect v-if="answer.type === Q.AnswerType.SELECT" :id="answer.id" :base="props.base" />
   <ItemNumber v-if="answer.type === Q.AnswerType.NUMBER" :id="answer.id" :base="props.base" />
   <ItemText v-if="answer.type === Q.AnswerType.TEXT" :id="answer.id" :base="props.base" />
 </template>

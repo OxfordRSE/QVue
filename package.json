@@ -18,7 +18,7 @@
     "bootstrap": "^5.2.1",
     "pinia": "^2.0.22",
     "questionnaire-cis-r": "^0.2.1",
-    "questionnaire-core": "^0.2.9",
+    "questionnaire-core": "^0.2.14",
     "vue": "^3.2.38",
     "vue-markdown-render": "^2.0.0",
     "vue-material-design-icons": "^5.1.2",

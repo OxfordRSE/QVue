@@ -19,17 +19,21 @@ const props = withDefaults(defineProps<Props>(), {
 const answers = computed(() =>
   props.base ? props.base : questionnaire.value.current_item?.answers
 );
-
 </script>
 
 <template>
-  <div v-for="a in answers" :key="a.id">
+  <div
+    class="answer-set"
+    :class="props.base === null ? 'root' : ''"
+    v-for="a in answers"
+    :key="a.id"
+  >
     <AnswerInput :id="a.id" :base="props.base" />
   </div>
 </template>
 
 <style lang="scss" scoped>
-div:not(:last-child) {
-  padding-bottom: 0.5em;
+.answer-set.root:not(:last-child) {
+  padding-bottom: 1em;
 }
 </style>

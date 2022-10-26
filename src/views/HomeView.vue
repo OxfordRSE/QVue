@@ -218,7 +218,7 @@ const last = () => {
           ></div>
         </div>
       </div>
-      <ResultSheet v-else :content="questionnaire.data" />
+      <ResultSheet v-else />
     </main>
   </div>
   <FooterCredits />

@@ -66,7 +66,7 @@ const back = () => questionnaire.value.last_q();
             if (evt.key === 'Enter' || evt.key === 'Space') next();
           }
         "
-        :disabled="item.find_issues() !== false"
+        :disabled="item.find_issues().length > 0"
         :data-click-on-key="props.next_button_key"
         v-html="props.next_button_label"
       />

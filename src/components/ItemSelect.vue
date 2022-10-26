@@ -23,35 +23,32 @@ const answer = computed(() => {
     throw `Cannot locate answer ${props.id} in undefined base.`;
   return base.find((a: Answer) => a.id === props.id);
 });
+const selected = computed(() => {
+  try { return answer.value.options[answer.value.content] }
+  catch (e) { return null }
+})
 </script>
 
 <template>
-  <div
-    class="answer-option d-flex p-1 my-2"
-    v-for="(o, i) in answer.options"
-    :key="o.content"
-    ref="inputs"
-  >
-    <kbd v-if="/^\d$/.test(o.content.toString())" class="me-2">{{
-      o.content
-    }}</kbd>
-    <input
-      class="form-check-input me-1"
-      type="radio"
-      name="answer"
-      :id="`${answer.id}_${i}`"
-      @change="answer.content = o"
-      :checked="o === answer?.content"
-      :data-click-on-key="o.content"
-    />
-    <label class="flex-grow-1" :for="`${answer.id}_${i}`">
-      {{ o.label }}
-      <AnswerSet
-        v-if="o.extra_answers && o.extra_answers.length"
-        :base="o.extra_answers"
-      />
-    </label>
+  <div class="d-flex justify-content-between align-items-center">
+    <label v-if="answer.label"
+           :for="answer.id"
+    >{{ answer.label }}</label>
+    <select v-model="answer.content" :id="answer.id" class="form-select">
+      <option
+        v-for="(o, i) in answer.options"
+        :key="o.content"
+        :value="i"
+        :id="`${answer.id}_${i}`"
+      >
+        {{ o.label }}
+      </option>
+    </select>
   </div>
+  <AnswerSet
+    v-if="selected && selected.extra_answers && selected.extra_answers.length"
+    :base="selected.extra_answers"
+  />
   <AnswerSet
     v-if="answer.extra_answers && answer.extra_answers.length"
     :base="answer.extra_answers"
