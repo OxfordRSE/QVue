@@ -17,6 +17,11 @@ const router = createRouter({
             // which is lazy-loaded when the route is visited.
             component: () => import("../views/ReportPreView.vue"),
         },
+        {
+            path: "/run/:questionnaire",
+            name: "run",
+            component: HomeView,
+        },
     ],
 });
 export default router;

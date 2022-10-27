@@ -14,7 +14,13 @@ declare type ContentOptions = {
     download?: boolean;
 };
 declare type DisplayOptions = {
-    banner_html?: string;
+    banner_img_src: string;
+    banner_href?: string;
+    banner_img_alt?: string;
+    banner_img_title?: string;
+} | {
+    banner_text: string;
+    banner_href?: string;
 };
 export declare type URLOptions = {
     fetch?: FetchOptions;

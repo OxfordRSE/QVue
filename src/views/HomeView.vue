@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, type Ref } from "vue";
-import * as cis from "@/cis-r";
-import CIS_Item from "@/components/CIS_Item.vue";
+import type { Item } from "questionnaire-core";
+import QuestionItem from "@/components/QuestionItem.vue";
 import ResultSheet from "@/components/ResultSheet.vue";
 import WelcomeMessage from "@/components/WelcomeMessage.vue";
 import PetrushkaBanner from "@/components/PetrushkaBanner.vue";
@@ -9,15 +9,45 @@ import FooterCredits from "@/components/FooterCredits.vue";
 import { useSettingsStore } from "@/stores/settings";
 import { storeToRefs } from "pinia";
 import { useURLStore } from "@/stores/url_settings";
+import { useRoute } from "vue-router";
+import { useQuestionnaireStore } from "@/stores/questionnaire";
 
+const router = useRoute();
 const store = useURLStore();
 const settings = useSettingsStore();
+const questionnaireStore = useQuestionnaireStore();
 const { auto_continue, auto_continue_delay } = storeToRefs(settings);
+const { questionnaire } = storeToRefs(questionnaireStore);
+
+if (router.params.questionnaire) {
+  // @ts-ignore
+  // import(`../../node_modules/questionnaire-${router.params.questionnaire}/index.js`)
+  import(`../dev/${router.params.questionnaire}.js`)
+    .then((m) => {
+      console.debug(`Loaded module questionnaire-${router.params.questionnaire}/index.js`)
+      questionnaire.value = m.questionnaire();
+    })
+    .catch((e) => {
+      console.error(
+        `Unable to load module questionnaire-${router.params.questionnaire}`,
+        e
+      );
+    });
+} else {
+  import('../dev/pecunia.js')
+    .then(m => {
+      console.log(m.questionnaire());
+      return m;
+    })
+    .then(m => questionnaire.value = m.questionnaire())
+    .then(() => console.log("loaded pecunia"))
+}
 
 const local_storage_key: string = "answers";
 
-const ready: Ref<boolean> = ref(false);
-let state = ref(cis.CIS());
+// const ready: Ref<boolean> = ref(false);
+// @ts-ignore
+const ready: Ref<boolean> = ref(questionnaire.value !== {});
 let past_answers: any;
 try {
   const state_str = localStorage.getItem(local_storage_key) || "";
@@ -35,14 +65,14 @@ const load_state = () => {
   try {
     while (past_answers.length) {
       const op = past_answers.shift();
-      if (state.value.current_item?.id === op.id) {
-        state.value.next_q(op.answer);
+      if (questionnaire.value.current_item?.id === op.id) {
+        questionnaire.value.next_q();
       } else {
-        throw `Mismatched ids for Q(${state.value.current_item?.id}) and Op(${op.id})`;
+        throw `Mismatched ids for Q(${questionnaire.value.current_item?.id}) and Op(${op.id})`;
       }
     }
   } catch (e) {
-    state.value = cis.CIS();
+    // questionnaire.value = cis.CIS();
     console.error(`Error restoring questionnaire from local data.`);
     console.error(e);
   } finally {
@@ -82,22 +112,25 @@ const answer = (ans: any) => {
 
 const next = (ans: any) => {
   clearProgress();
-  // console.log(`${state.value.current_item?.id} <- ${ans?.value}`)
-  state.value.next_q(ans);
-  // console.log(state.value.items.filter((_, i) => i < 10).map(i => `${i.id}: ${i.answer?.value}`))
-  if (state.value.current_item)
+  // console.log(`${questionnaire.value.current_item?.id} <- ${ans?.value}`)
+  questionnaire.value.next_q();
+  // console.log(questionnaire.value.items.filter((_, i) => i < 10).map(i => `${i.id}: ${i.answer?.value}`))
+  if (questionnaire.value.current_item)
     localStorage.setItem(
       local_storage_key,
       JSON.stringify(
-        state.value.item_history.map((i) => ({ id: i.id, answer: i.answer }))
+        questionnaire.value.item_history.map((i: Item) => ({
+          id: i.id,
+          answer: i.answers,
+        }))
       )
     );
   else localStorage.removeItem(local_storage_key);
 };
 
 const last = () => {
-  state.value.last_q();
-  // console.log(state.value.items.filter((_, i) => i < 10).map(i => `${i.id}: ${i.answer?.value}`));
+  questionnaire.value.last_q();
+  // console.log(questionnaire.value.items.filter((_, i) => i < 10).map(i => `${i.id}: ${i.answer?.value}`));
 };
 </script>
 
@@ -149,15 +182,13 @@ const last = () => {
     <hr />
     <main class="container-sm d-flex flex-column h-100 flex-grow-1">
       <div
-        v-if="state.current_item"
+        v-if="questionnaire && questionnaire.current_item"
         class="item d-flex flex-column h-100 flex-grow-1"
       >
-        <CIS_Item
-          :item="state.current_item"
-          @answer="(ans) => answer(ans)"
-          @next="(ans) => next(ans)"
-          @back="last"
-          :disable_back_button="state.current_item === state.items[0]"
+        <QuestionItem
+          :disable_back_button="
+            questionnaire.current_item === questionnaire.items[0]
+          "
         />
         <div
           v-if="answerTimeout"
@@ -187,7 +218,7 @@ const last = () => {
           ></div>
         </div>
       </div>
-      <ResultSheet v-else :content="state.data" />
+      <ResultSheet v-else />
     </main>
   </div>
   <FooterCredits />

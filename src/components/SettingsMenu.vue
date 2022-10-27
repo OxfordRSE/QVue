@@ -6,7 +6,7 @@ const settings = useSettingsStore();
 </script>
 
 <template>
-  <div class="dropstart ps-2 pb-2">
+  <div class="dropstart ps-2 pb-2 d-none">
     <button
       class="btn btn-light"
       type="button"

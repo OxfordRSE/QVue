@@ -1,20 +1,21 @@
 <script setup lang="ts">
 import VueMarkdown from "vue-markdown-render";
-import { ref, type Ref } from "vue";
+import { computed, markRaw, ref, type Ref, toRaw } from "vue";
 import { useURLStore } from "@/stores/url_settings";
+import { useQuestionnaireStore } from "@/stores/questionnaire";
+import { storeToRefs } from "pinia";
 
 const specification = useURLStore();
+const questionnaireStore = useQuestionnaireStore();
+const { questionnaire } = storeToRefs(questionnaireStore);
 
-export interface Props {
-  content: Object;
-}
-
-const props = withDefaults(defineProps<Props>(), {});
+const content = computed(() => questionnaire.value.data);
+const data = computed(() => toRaw(questionnaire.value).data);
 
 let uploadComplete: Ref<boolean> = ref(false);
 let uploadStatus: Ref<number | undefined> = ref();
 
-if (typeof specification?.fetch?.url === "string" && props.content) {
+if (typeof specification?.fetch?.url === "string" && content) {
   if (
     confirm(
       `${
@@ -31,7 +32,7 @@ if (typeof specification?.fetch?.url === "string" && props.content) {
         "Content-Type": "application/json",
         ...specification?.fetch?.headers,
       },
-      body: JSON.stringify(props.content),
+      body: JSON.stringify(data.value),
     })
       .then((r) => {
         uploadComplete.value = true;
@@ -49,7 +50,7 @@ if (typeof specification?.fetch?.url === "string" && props.content) {
 
 let data_url: string = "";
 if (specification?.content?.download) {
-  const blob_part = JSON.stringify(props.content, null, 2);
+  const blob_part = JSON.stringify(data.value, null, 2);
   const blob = new Blob([blob_part], { type: "application/json" });
   data_url = window.URL.createObjectURL(blob);
 }
@@ -99,12 +100,12 @@ if (specification?.content?.download) {
   <div
     v-if="specification?.content?.summary"
     class="summary mb-2"
-    v-html="props.content.summary"
+    v-html="content.summary"
   />
   <a
     v-if="specification?.content?.download"
     class="download"
-    download="CIS-R.json"
+    download="questionnaire-data.json"
     :href="data_url"
     ><button class="btn btn-primary mb-2">Download data</button></a
   >
