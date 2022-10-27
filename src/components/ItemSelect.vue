@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import AnswerSet from "@/components/AnswerSet.vue";
+import ItemLabel from "@/components/ItemLabel.vue";
 import { storeToRefs } from "pinia";
 import { useQuestionnaireStore } from "@/stores/questionnaire";
 import { computed } from "vue";
@@ -10,7 +11,7 @@ const { questionnaire } = storeToRefs(questionnaireStore);
 
 export interface Props {
   id: string;
-  base: Answer | null;
+  base?: Answer | null;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -30,10 +31,8 @@ const selected = computed(() => {
 </script>
 
 <template>
-  <div class="d-flex justify-content-between align-items-center">
-    <label v-if="answer.label"
-           :for="answer.id"
-    >{{ answer.label }}</label>
+  <div class="answer-wrapper d-flex justify-content-between align-items-center" :class="answer.class_wrapper">
+    <ItemLabel :id="props.id" :base="props.base" />
     <select v-model="answer.content" :id="answer.id" class="form-select">
       <option
         v-for="(o, i) in answer.options"
@@ -48,10 +47,6 @@ const selected = computed(() => {
   <AnswerSet
     v-if="selected && selected.extra_answers && selected.extra_answers.length"
     :base="selected.extra_answers"
-  />
-  <AnswerSet
-    v-if="answer.extra_answers && answer.extra_answers.length"
-    :base="answer.extra_answers"
   />
 </template>
 

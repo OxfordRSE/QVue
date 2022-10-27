@@ -26,14 +26,12 @@ const answer = computed(() => {
 </script>
 
 <template>
-  <div class="answer-wrapper d-flex flex-grow-1" :class="answer.class_wrapper">
+  <div class="answer-wrapper" :class="answer.class_wrapper">
     <ItemLabel :id="props.id" :base="props.base" />
-    <input
-      class="form-control flex-grow-1"
+    <textarea
+      class="form-control"
       :id="props.id"
       name="answer"
-      type="text"
-      :placeholder="answer.placeholder"
       aria-label="Please type your answer"
       v-model="answer.content"
       autofocus

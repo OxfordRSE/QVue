@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import AnswerSet from "@/components/AnswerSet.vue";
-import ItemLabel from "@/components/ItemLabel.vue";
 import { storeToRefs } from "pinia";
 import { useQuestionnaireStore } from "@/stores/questionnaire";
-import { computed } from "vue";
+import { computed, type Ref, ref } from "vue";
 import type { Answer } from "questionnaire-core";
+import ItemLabel from "@/components/ItemLabel.vue";
 
 const questionnaireStore = useQuestionnaireStore();
 const { questionnaire } = storeToRefs(questionnaireStore);
@@ -18,12 +18,26 @@ const props = withDefaults(defineProps<Props>(), {
   base: null,
 });
 
+const inputRefs: Ref<HTMLInputElement[]> = ref([]);
+
 const answer = computed(() => {
   const base = props.base || questionnaire.value.current_item?.answers;
   if (typeof base === "undefined")
     throw `Cannot locate answer ${props.id} in undefined base.`;
   return base.find((a: Answer) => a.id === props.id);
 });
+const id = computed(() => props.id.replace(/\./, '_'));
+
+const answer_content = computed(() => answer.value.content || []);
+
+const updateAnswer: (index: number) => void = (i) => {
+  if (answer.value.content instanceof Array)
+    answer.value.content = answer.value.content.filter((n: number) => n !== i);
+  else answer.value.content = [];
+
+  const e = inputRefs.value[i].querySelector(`#${id.value}_${i}`);
+  if (e instanceof HTMLInputElement && e.checked) answer.value.content.push(i);
+};
 </script>
 
 <template>
@@ -33,27 +47,24 @@ const answer = computed(() => {
       class="answer-option d-flex p-1 my-2"
       v-for="(o, i) in answer.options"
       :key="o.content"
-      ref="inputs"
+      ref="inputRefs"
     >
       <kbd v-if="/^\d$/.test(o.content.toString())" class="me-2">{{
-          o.content
-        }}</kbd>
+        o.content
+      }}</kbd>
       <input
         class="form-check-input me-1"
-        type="radio"
+        type="checkbox"
         name="answer"
-        :id="`${answer.id}_${i}`"
+        :id="`${id}_${i}`"
         :value="i"
-        @change="answer.content = i"
-        :checked="answer?.content === i"
+        @change="updateAnswer(i)"
+        :checked="answer_content.includes(i)"
         :data-click-on-key="o.content"
       />
-      <label class="flex-grow-1" :for="`${answer.id}_${i}`">
-        {{ o.label || o.content }}
-        <AnswerSet
-          v-if="o.extra_answers && o.extra_answers.length"
-          :base="o.extra_answers"
-        />
+      <label class="flex-grow-1" :for="`${id}_${i}`">
+        {{ o.label }}
+        <AnswerSet v-if="o.extra_answers.length" :base="o.extra_answers" />
       </label>
     </div>
   </div>

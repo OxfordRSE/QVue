@@ -9,7 +9,7 @@ const questionnaireStore = useQuestionnaireStore();
 const { questionnaire } = storeToRefs(questionnaireStore);
 
 export interface Props {
-  base: Answer | null;
+  base?: Answer | null;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -23,7 +23,7 @@ const answers = computed(() =>
 
 <template>
   <div
-    class="answer-set"
+    class="answer-set flex-grow-1"
     :class="props.base === null ? 'root' : ''"
     v-for="a in answers"
     :key="a.id"

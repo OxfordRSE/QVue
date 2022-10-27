@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ItemLabel from "@/components/ItemLabel.vue";
+import AnswerSet from "@/components/AnswerSet.vue";
 import { storeToRefs } from "pinia";
 import { useQuestionnaireStore } from "@/stores/questionnaire";
 import { computed } from "vue";
@@ -26,19 +26,17 @@ const answer = computed(() => {
 </script>
 
 <template>
-  <div class="answer-wrapper d-flex flex-grow-1" :class="answer.class_wrapper">
-    <ItemLabel :id="props.id" :base="props.base" />
-    <input
-      class="form-control flex-grow-1"
-      :id="props.id"
-      name="answer"
-      type="text"
-      :placeholder="answer.placeholder"
-      aria-label="Please type your answer"
-      v-model="answer.content"
-      autofocus
+  <label
+    v-if="answer.label || answer.extra_answers.length"
+    :for="props.id"
+    class="flex-grow-1 w-100 pe-2"
+  >
+    <div v-if="answer.label" v-html="answer.label"></div>
+    <AnswerSet
+      v-if="answer.extra_answers.length"
+      :base="answer.extra_answers"
     />
-  </div>
+  </label>
 </template>
 
 <style scoped lang="scss">

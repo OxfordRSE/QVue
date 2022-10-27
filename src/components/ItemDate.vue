@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import ItemLabel from "@/components/ItemLabel.vue";
+import Datepicker from "@vuepic/vue-datepicker";
 import { storeToRefs } from "pinia";
 import { useQuestionnaireStore } from "@/stores/questionnaire";
 import { computed } from "vue";
 import type { Answer } from "questionnaire-core";
+import ItemLabel from "@/components/ItemLabel.vue";
 
 const questionnaireStore = useQuestionnaireStore();
 const { questionnaire } = storeToRefs(questionnaireStore);
@@ -26,23 +27,20 @@ const answer = computed(() => {
 </script>
 
 <template>
-  <div class="answer-wrapper d-flex flex-grow-1" :class="answer.class_wrapper">
+  <div class="answer-wrapper d-flex" :class="answer.class_wrapper">
     <ItemLabel :id="props.id" :base="props.base" />
-    <input
-      class="form-control flex-grow-1"
+    <Datepicker
       :id="props.id"
-      name="answer"
-      type="text"
-      :placeholder="answer.placeholder"
-      aria-label="Please type your answer"
+      format="MM/dd/yyyy"
+      inlineWithInput
       v-model="answer.content"
-      autofocus
     />
   </div>
 </template>
 
 <style scoped lang="scss">
 input.form-control {
+  width: 4em;
   height: unset;
   align-self: end;
 }

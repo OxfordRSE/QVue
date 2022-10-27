@@ -2,8 +2,9 @@ import { AnswerType, Item, Questionnaire, } from "questionnaire-core";
 export * from "questionnaire-core";
 // Utility navigation functions
 const panic_navigation = (state) => {
-    if (state.getItemById("anxiety")?.last_changed_answer?.content?.content === 1 &&
-        state.getItemById("anxiety-tense")?.last_changed_answer?.content
+    if (state.getItemById("anxiety")?.last_changed_answer?.selected_option
+        ?.content === 1 &&
+        state.getItemById("anxiety-tense")?.last_changed_answer?.selected_option
             ?.content === 1)
         return "anxiety-outro";
     return "panic";
@@ -136,13 +137,13 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2) {
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2) {
                     state.counters.increment("depression_criterion_3", 1);
                     state.counters.set("weight_detail", 1);
                 }
             },
-            next_item_fun: (last_answer_content) => last_answer_content === 2
+            next_item_fun: (last_changed_answer) => last_changed_answer?.selected_option?.content === 2
                 ? "health-weight-loss"
                 : "health-appetite-gain",
         }),
@@ -158,7 +159,7 @@ export const _state_properties = {
                     ],
                 },
             ],
-            next_item_fun: (last_answer_content) => last_answer_content === 2
+            next_item_fun: (last_changed_answer) => last_changed_answer?.selected_option?.content === 2
                 ? "health-weight-loss-diet"
                 : "health-gp-visits",
         }),
@@ -174,12 +175,12 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 1) {
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 1) {
                     state.counters.set("weight_detail", 2);
                 }
             },
-            next_item_fun: (last_answer_content) => last_answer_content === 1
+            next_item_fun: (last_changed_answer) => last_changed_answer?.selected_option?.content === 1
                 ? "health-weight-loss-amount"
                 : "health-gp-visits",
         }),
@@ -195,8 +196,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 1) {
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 1) {
                     state.counters.increment("depression_criterion_3", 1);
                     state.counters.set("weight_detail", 3);
                 }
@@ -215,17 +216,18 @@ export const _state_properties = {
                     ],
                 },
             ],
-            next_item_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 1)
+            next_item_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 1)
                     return "health-gp-visits";
-                if (last_answer_content.content === 2) {
-                    const sex_ans = state.getItemById("demo-sex")?.last_changed_answer?.content.content;
+                if (last_changed_answer?.selected_option?.content === 2) {
+                    const sex_ans = state.getItemById("demo-sex")?.last_changed_answer?.selected_option
+                        ?.content;
                     if (typeof sex_ans === "number")
                         return sex_ans === 1
                             ? "health-weight-gain-male"
                             : "health-weight-gain-female";
                 }
-                throw `Could not determine next question for ${state.current_item?.id} [${last_answer_content}]`;
+                throw `Could not determine next question for ${state.current_item?.id} [${last_changed_answer?.selected_option?.content}]`;
             },
         }),
         new Item({
@@ -240,12 +242,12 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2) {
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2) {
                     state.counters.set("weight_detail", 2);
                 }
             },
-            next_item_fun: (last_answer_content) => last_answer_content === 2
+            next_item_fun: (last_changed_answer) => last_changed_answer?.selected_option?.content === 2
                 ? "health-weight-gain-amount"
                 : "health-gp-visits",
         }),
@@ -262,12 +264,12 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2) {
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2) {
                     state.counters.set("weight_detail", 2);
                 }
             },
-            next_item_fun: (last_answer_content) => last_answer_content === 2
+            next_item_fun: (last_changed_answer) => last_changed_answer?.selected_option?.content === 2
                 ? "health-weight-gain-amount"
                 : "health-gp-visits",
         }),
@@ -283,8 +285,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content === 1 &&
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 1 &&
                     state.counters.get("weight_detail", 0) === 2) {
                     state.counters.set("weight_detail", 4);
                 }
@@ -306,7 +308,7 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
+            process_answer_fun: (last_changed_answer, current_item, state) => {
                 if (state.counters.get("weight_detail", 0) === 3 &&
                     state.getItemById("health-appetite-loss")?.last_changed_answer
                         ?.content === 2)
@@ -365,7 +367,9 @@ export const _state_properties = {
                     ],
                 },
             ],
-            next_item_fun: (last_answer_content) => last_answer_content === 1 ? "somatic-discomfort" : "somatic-stress",
+            next_item_fun: (last_changed_answer) => last_changed_answer?.selected_option?.content === 1
+                ? "somatic-discomfort"
+                : "somatic-stress",
         }),
         new Item({
             id: "somatic-stress",
@@ -380,7 +384,7 @@ export const _state_properties = {
                     ],
                 },
             ],
-            next_item_fun: (last_answer_content) => last_answer_content === 1
+            next_item_fun: (last_changed_answer) => last_changed_answer?.selected_option?.content === 1
                 ? "somatic-discomfort"
                 : "somatic-pain-frequency",
         }),
@@ -397,11 +401,11 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 3)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 3)
                     state.counters.increment("somatic", 1);
             },
-            next_item_fun: (last_answer_content) => last_answer_content === 1
+            next_item_fun: (last_changed_answer) => last_changed_answer?.selected_option?.content === 1
                 ? "somatic-discomfort"
                 : "somatic-pain-duration",
         }),
@@ -420,8 +424,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2)
                     state.counters.increment("somatic", 1);
             },
             next_item: "somatic-pain-valence",
@@ -440,8 +444,9 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (typeof last_answer_content === "number" && last_answer_content >= 3)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (typeof last_changed_answer?.selected_option?.content === "number" &&
+                    last_changed_answer >= 3)
                     state.counters.increment("somatic", 1);
             },
             next_item: "somatic-pain-distress",
@@ -465,8 +470,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2)
                     state.counters.increment("somatic", 1);
             },
             next_item: "somatic-duration",
@@ -483,7 +488,9 @@ export const _state_properties = {
                     ],
                 },
             ],
-            next_item_fun: (last_answer_content) => last_answer_content === 1 ? "fatigue" : "somatic-discomfort-stress",
+            next_item_fun: (last_changed_answer) => last_changed_answer?.selected_option?.content === 1
+                ? "fatigue"
+                : "somatic-discomfort-stress",
         }),
         new Item({
             id: "somatic-discomfort-stress",
@@ -498,7 +505,9 @@ export const _state_properties = {
                     ],
                 },
             ],
-            next_item_fun: (last_answer_content) => last_answer_content === 1 ? "fatigue" : "somatic-discomfort-frequency",
+            next_item_fun: (last_changed_answer) => last_changed_answer?.selected_option?.content === 1
+                ? "fatigue"
+                : "somatic-discomfort-frequency",
         }),
         new Item({
             id: "somatic-discomfort-frequency",
@@ -513,11 +522,13 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 3)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 3)
                     state.counters.increment("somatic", 1);
             },
-            next_item_fun: (last_answer_content) => last_answer_content === 1 ? "fatigue" : "somatic-discomfort-long",
+            next_item_fun: (last_changed_answer) => last_changed_answer?.selected_option?.content === 1
+                ? "fatigue"
+                : "somatic-discomfort-long",
         }),
         new Item({
             id: "somatic-discomfort-long",
@@ -534,8 +545,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2)
                     state.counters.increment("somatic", 1);
             },
             next_item: "somatic-discomfort-valence",
@@ -554,8 +565,9 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (typeof last_answer_content === "number" && last_answer_content >= 3)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (typeof last_changed_answer?.selected_option?.content === "number" &&
+                    last_changed_answer >= 3)
                     state.counters.increment("somatic", 1);
             },
             next_item: "somatic-discomfort-distress",
@@ -579,8 +591,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2)
                     state.counters.increment("somatic", 1);
             },
             next_item: "somatic-duration",
@@ -615,10 +627,12 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
+            process_answer_fun: (last_changed_answer, current_item, state) => {
                 state.counters.set("score", state.counters.get("somatic", 0));
             },
-            next_item_fun: (last_answer_content) => last_answer_content === 1 ? "fatigue-energy" : "fatigue-tired-cause",
+            next_item_fun: (last_changed_answer) => last_changed_answer?.selected_option?.content === 1
+                ? "fatigue-energy"
+                : "fatigue-tired-cause",
         }),
         new Item({
             id: "fatigue-tired-cause",
@@ -644,7 +658,9 @@ export const _state_properties = {
                     ],
                 },
             ],
-            next_item_fun: (last_answer_content) => last_answer_content === 6 ? "concentration" : "fatigue-tired-frequency",
+            next_item_fun: (last_changed_answer) => last_changed_answer?.selected_option?.content === 6
+                ? "concentration"
+                : "fatigue-tired-frequency",
         }),
         new Item({
             id: "fatigue-tired-frequency",
@@ -659,11 +675,13 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 3)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 3)
                     state.counters.increment("fatigue", 1);
             },
-            next_item_fun: (last_answer_content) => last_answer_content === 1 ? "fatigue-energy" : "fatigue-tired-duration",
+            next_item_fun: (last_changed_answer) => last_changed_answer?.selected_option?.content === 1
+                ? "fatigue-energy"
+                : "fatigue-tired-duration",
         }),
         new Item({
             id: "fatigue-tired-duration",
@@ -680,8 +698,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2)
                     state.counters.increment("fatigue", 1);
             },
             next_item: "fatigue-tired-push",
@@ -698,8 +716,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2)
                     state.counters.increment("fatigue", 1);
             },
             next_item: "fatigue-tired-enjoy",
@@ -720,8 +738,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2)
                     state.counters.increment("fatigue", 1);
             },
             next_item: "fatigue-duration",
@@ -738,7 +756,9 @@ export const _state_properties = {
                     ],
                 },
             ],
-            next_item_fun: (last_answer_content) => last_answer_content === 1 ? "concentration" : "fatigue-energy-cause",
+            next_item_fun: (last_changed_answer) => last_changed_answer?.selected_option?.content === 1
+                ? "concentration"
+                : "fatigue-energy-cause",
         }),
         new Item({
             id: "fatigue-energy-cause",
@@ -764,7 +784,7 @@ export const _state_properties = {
                     ],
                 },
             ],
-            next_item_fun: (last_answer_content) => last_answer_content === 6
+            next_item_fun: (last_changed_answer) => last_changed_answer?.selected_option?.content === 6
                 ? "concentration"
                 : "fatigue-energy-frequency",
         }),
@@ -781,11 +801,13 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 3)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 3)
                     state.counters.increment("fatigue", 1);
             },
-            next_item_fun: (last_answer_content) => last_answer_content === 1 ? "concentration" : "fatigue-energy-duration",
+            next_item_fun: (last_changed_answer) => last_changed_answer?.selected_option?.content === 1
+                ? "concentration"
+                : "fatigue-energy-duration",
         }),
         new Item({
             id: "fatigue-energy-duration",
@@ -802,8 +824,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2)
                     state.counters.increment("fatigue", 1);
             },
             next_item: "fatigue-energy-push",
@@ -820,8 +842,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2)
                     state.counters.increment("fatigue", 1);
             },
             next_item: "fatigue-energy-enjoy",
@@ -842,8 +864,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2)
                     state.counters.increment("fatigue", 1);
             },
             next_item: "fatigue-duration",
@@ -864,7 +886,7 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
+            process_answer_fun: (last_changed_answer, current_item, state) => {
                 if (state.counters.get("somatic", 0) >= 2 &&
                     state.counters.get("fatigue", 0) >= 2)
                     state.counters.increment("NEURAS", 1);
@@ -886,7 +908,7 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
+            process_answer_fun: (last_changed_answer, current_item, state) => {
                 const fatigue = state.counters.get("fatigue", 0);
                 if (!fatigue)
                     return;
@@ -908,10 +930,10 @@ export const _state_properties = {
                     ],
                 },
             ],
-            next_item_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content === 1 &&
-                    state.getItemById("concentration")?.last_changed_answer?.content
-                        ?.content === 1)
+            next_item_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 1 &&
+                    state.getItemById("concentration")?.last_changed_answer
+                        ?.selected_option?.content === 1)
                     return "sleep-loss";
                 return "concentration-frequency";
             },
@@ -929,14 +951,14 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 3)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 3)
                     state.counters.increment("concentration", 1);
             },
-            next_item_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 1)
+            next_item_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 1)
                     return "sleep-loss";
-                if (last_answer_content === 1 &&
+                if (last_changed_answer?.selected_option?.content === 1 &&
                     state.getItemById("concentration-forgetting")?.last_changed_answer
                         ?.content === 2)
                     return "concentration-forgetting-important";
@@ -958,8 +980,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2)
                     state.counters.increment("concentration", 1);
             },
             next_item: "concentration-distress",
@@ -976,8 +998,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2)
                     state.counters.increment("concentration", 1);
             },
             next_item: "concentration-duration",
@@ -998,12 +1020,12 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
+            process_answer_fun: (last_changed_answer, current_item, state) => {
                 if (state.counters.get("somatic", 0) >= 2 &&
                     state.counters.get("fatigue", 0) >= 2)
                     state.counters.increment("NEURAS", 1);
             },
-            next_item_fun: (last_answer_content, current_item, state) => {
+            next_item_fun: (last_changed_answer, current_item, state) => {
                 if (state.getItemById("concentration-forgetting")?.last_changed_answer
                     ?.content === 1)
                     return "sleep-loss";
@@ -1022,8 +1044,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2)
                     state.counters.increment("concentration", 1);
             },
             next_item: "concentration-forgetting-duration",
@@ -1058,7 +1080,7 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
+            process_answer_fun: (last_changed_answer, current_item, state) => {
                 const conc = state.counters.get("concentration", 0);
                 if (!conc)
                     return;
@@ -1066,7 +1088,9 @@ export const _state_properties = {
                 if (conc >= 2)
                     state.counters.increment("depression_criterion_2", 1);
             },
-            next_item_fun: (last_answer_content) => last_answer_content === 1 ? "sleep-gain" : "sleep-loss-frequency",
+            next_item_fun: (last_changed_answer) => last_changed_answer?.selected_option?.content === 1
+                ? "sleep-gain"
+                : "sleep-loss-frequency",
         }),
         new Item({
             id: "sleep-loss-frequency",
@@ -1081,11 +1105,13 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 3)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 3)
                     state.counters.increment("sleep", 1);
             },
-            next_item_fun: (last_answer_content) => last_answer_content === 1 ? "irritability" : "sleep-loss-time",
+            next_item_fun: (last_changed_answer) => last_changed_answer?.selected_option?.content === 1
+                ? "irritability"
+                : "sleep-loss-time",
         }),
         new Item({
             id: "sleep-loss-time",
@@ -1101,8 +1127,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                const v = last_answer_content;
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                const v = last_changed_answer;
                 if (!v)
                     return;
                 if (v === 2)
@@ -1110,7 +1136,9 @@ export const _state_properties = {
                 if (v >= 3)
                     state.counters.increment("sleep", 2);
             },
-            next_item_fun: (last_answer_content) => last_answer_content === 1 ? "irritability" : "sleep-loss-long",
+            next_item_fun: (last_changed_answer) => last_changed_answer?.selected_option?.content === 1
+                ? "irritability"
+                : "sleep-loss-long",
         }),
         new Item({
             id: "sleep-loss-long",
@@ -1125,8 +1153,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 3)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 3)
                     state.counters.increment("sleep", 1);
             },
             next_item: "sleep-loss-morning",
@@ -1143,8 +1171,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                const v = last_answer_content;
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                const v = last_changed_answer;
                 const sleep = state.counters.get("sleep", 0);
                 if (!v || !sleep)
                     return;
@@ -1192,7 +1220,7 @@ export const _state_properties = {
                     ],
                 },
             ],
-            next_item_fun: (last_answer_content) => last_answer_content !== 3 ? "irritability" : "sleep-gain-frequency",
+            next_item_fun: (last_changed_answer) => last_changed_answer !== 3 ? "irritability" : "sleep-gain-frequency",
         }),
         new Item({
             id: "sleep-gain-frequency",
@@ -1207,11 +1235,13 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 3)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 3)
                     state.counters.increment("sleep", 1);
             },
-            next_item_fun: (last_answer_content) => last_answer_content === 1 ? "irritability" : "sleep-gain-time",
+            next_item_fun: (last_changed_answer) => last_changed_answer?.selected_option?.content === 1
+                ? "irritability"
+                : "sleep-gain-time",
         }),
         new Item({
             id: "sleep-gain-time",
@@ -1227,8 +1257,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                const v = last_answer_content;
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                const v = last_changed_answer;
                 if (!v)
                     return;
                 if (v === 2)
@@ -1238,7 +1268,9 @@ export const _state_properties = {
                 if (v >= 3 && state.counters.get("sleep_detail", 0) >= 1)
                     state.counters.set("sleep_detail", 3);
             },
-            next_item_fun: (last_answer_content) => last_answer_content === 1 ? "irritability" : "sleep-gain-long",
+            next_item_fun: (last_changed_answer) => last_changed_answer?.selected_option?.content === 1
+                ? "irritability"
+                : "sleep-gain-long",
         }),
         new Item({
             id: "sleep-gain-long",
@@ -1253,8 +1285,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 3)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 3)
                     state.counters.increment("sleep", 1);
             },
             next_item: "sleep-duration",
@@ -1292,7 +1324,7 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
+            process_answer_fun: (last_changed_answer, current_item, state) => {
                 const sleep = state.counters.get("sleep", 0);
                 if (!sleep)
                     return;
@@ -1300,7 +1332,7 @@ export const _state_properties = {
                 if (sleep >= 2)
                     state.counters.increment("depression_criterion_2", 1);
             },
-            next_item_fun: (last_answer_content) => last_answer_content === 2
+            next_item_fun: (last_changed_answer) => last_changed_answer?.selected_option?.content === 2
                 ? "irritability-frequency"
                 : "irritability-trivial",
         }),
@@ -1317,7 +1349,9 @@ export const _state_properties = {
                     ],
                 },
             ],
-            next_item_fun: (last_answer_content) => last_answer_content === 1 ? "hypochondria" : "irritability-frequency",
+            next_item_fun: (last_changed_answer) => last_changed_answer?.selected_option?.content === 1
+                ? "hypochondria"
+                : "irritability-frequency",
         }),
         new Item({
             id: "irritability-frequency",
@@ -1332,11 +1366,13 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 3)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 3)
                     state.counters.increment("irritability", 1);
             },
-            next_item_fun: (last_answer_content) => last_answer_content === 1 ? "hypochondria" : "irritability-long",
+            next_item_fun: (last_changed_answer) => last_changed_answer?.selected_option?.content === 1
+                ? "hypochondria"
+                : "irritability-long",
         }),
         new Item({
             id: "irritability-long",
@@ -1353,8 +1389,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2)
                     state.counters.increment("irritability", 1);
             },
             next_item: "irritability-shout",
@@ -1375,8 +1411,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                const v = last_answer_content;
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                const v = last_changed_answer;
                 if (!v)
                     return;
                 if (v >= 2)
@@ -1397,8 +1433,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 3)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 3)
                     state.counters.increment("irritability", 1);
             },
             next_item: "irritability-duration",
@@ -1419,7 +1455,7 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
+            process_answer_fun: (last_changed_answer, current_item, state) => {
                 const irritation = state.counters.get("irritability", 0);
                 const fatigue = state.counters.get("fatigue", 0);
                 const sleep = state.counters.get("sleep", 0);
@@ -1442,13 +1478,13 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
+            process_answer_fun: (last_changed_answer, current_item, state) => {
                 const irritability = state.counters.get("irritability", 0);
                 if (!irritability)
                     return;
                 state.counters.increment("score", irritability);
             },
-            next_item_fun: (last_answer_content) => last_answer_content === 2
+            next_item_fun: (last_changed_answer) => last_changed_answer?.selected_option?.content === 2
                 ? "hypochondria-frequency"
                 : "hypochondria-serious",
         }),
@@ -1464,7 +1500,9 @@ export const _state_properties = {
                     ],
                 },
             ],
-            next_item_fun: (last_answer_content) => last_answer_content === 1 ? "depression" : "hypochondria-frequency",
+            next_item_fun: (last_changed_answer) => last_changed_answer?.selected_option?.content === 1
+                ? "depression"
+                : "hypochondria-frequency",
         }),
         new Item({
             id: "hypochondria-frequency",
@@ -1479,11 +1517,13 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 3)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 3)
                     state.counters.increment("hypochondria", 1);
             },
-            next_item_fun: (last_answer_content) => last_answer_content === 1 ? "depression" : "hypochondria-excessive",
+            next_item_fun: (last_changed_answer) => last_changed_answer?.selected_option?.content === 1
+                ? "depression"
+                : "hypochondria-excessive",
         }),
         new Item({
             id: "hypochondria-excessive",
@@ -1497,8 +1537,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2)
                     state.counters.increment("hypochondria", 1);
             },
             next_item: "hypochondria-valence",
@@ -1517,10 +1557,10 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (!last_answer_content)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (!last_changed_answer)
                     return;
-                if (last_answer_content >= 3)
+                if (last_changed_answer >= 3)
                     state.counters.increment("hypochondria", 1);
             },
             next_item: "hypochondria-distraction",
@@ -1540,8 +1580,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2)
                     state.counters.increment("hypochondria", 1);
             },
             next_item: "hypochondria-duration",
@@ -1576,13 +1616,15 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
+            process_answer_fun: (last_changed_answer, current_item, state) => {
                 const hypochondria = state.counters.get("hypochondria", 0);
                 if (!hypochondria)
                     return;
                 state.counters.increment("score", hypochondria);
             },
-            next_item_fun: (last_answer_content) => last_answer_content === 1 ? "depression-enjoy" : "depression-recent",
+            next_item_fun: (last_changed_answer) => last_changed_answer?.selected_option?.content === 1
+                ? "depression-enjoy"
+                : "depression-recent",
         }),
         new Item({
             id: "depression-recent",
@@ -1611,10 +1653,10 @@ export const _state_properties = {
                     ],
                 },
             ],
-            next_item_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content === 1 &&
-                    state.getItemById("depression-recent")?.last_changed_answer?.content
-                        ?.content !== 2)
+            next_item_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 1 &&
+                    state.getItemById("depression-recent")?.last_changed_answer
+                        ?.selected_option?.content !== 2)
                     return "worry";
                 return "depression-enjoy-recent";
             },
@@ -1632,19 +1674,19 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (!last_answer_content)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (!last_changed_answer)
                     return;
-                if (last_answer_content >= 2) {
+                if (last_changed_answer >= 2) {
                     state.counters.increment("depression", 1);
                     state.counters.increment("depression_criterion_1", 1);
                     state.counters.increment("depression_criterion_3", 1);
                 }
             },
-            next_item_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content === 1 &&
-                    state.getItemById("depression-recent")?.last_changed_answer?.content
-                        ?.content === 1)
+            next_item_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 1 &&
+                    state.getItemById("depression-recent")?.last_changed_answer
+                        ?.selected_option?.content === 1)
                     return "worry";
                 return "depression-sad";
             },
@@ -1662,8 +1704,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 3)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 3)
                     state.counters.increment("depression", 1);
             },
             next_item: "depression-sad-long",
@@ -1683,15 +1725,15 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                const v = last_answer_content;
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                const v = last_changed_answer;
                 if (!v)
                     return;
                 if (v === 2)
                     state.counters.increment("depression", 1);
                 if (v === 2 &&
-                    state.getItemById("depression-sad")?.last_changed_answer?.content
-                        ?.content === 3 &&
+                    state.getItemById("depression-sad")?.last_changed_answer
+                        ?.selected_option?.content === 3 &&
                     state.getItemById("depression-sad-long")?.last_changed_answer
                         ?.content === 2)
                     state.counters.increment("depression_criterion_1", 1);
@@ -1741,8 +1783,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                const v = last_answer_content;
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                const v = last_changed_answer;
                 if (!v)
                     return;
                 if (v >= 2) {
@@ -1768,7 +1810,7 @@ export const _state_properties = {
                     ],
                 },
             ],
-            next_item_fun: (last_answer_content, current_item, state) => {
+            next_item_fun: (last_changed_answer, current_item, state) => {
                 if (state.counters.get("depression", 0) > 0)
                     return "worry";
                 return "depression-detail-time";
@@ -1791,8 +1833,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                const v = last_answer_content;
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                const v = last_changed_answer;
                 if (!v)
                     return;
                 if (v <= 2)
@@ -1816,8 +1858,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 4) {
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 4) {
                     state.counters.set("libido", 1);
                     state.counters.increment("depression_criterion_3", 1);
                 }
@@ -1836,8 +1878,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2)
                     state.counters.set("PSYCHMOT", 2);
             },
             next_item: "depression-detail-slow",
@@ -1854,8 +1896,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2)
                     state.counters.set("PSYCHMOT", 1);
                 if ([1, 2].includes(state.counters.get("PSYCHMOT", 0))) {
                     state.counters.increment("depression_criterion_2", 1);
@@ -1878,8 +1920,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                const v = last_answer_content;
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                const v = last_changed_answer;
                 if (!v)
                     return;
                 if (v >= 3) {
@@ -1907,8 +1949,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2) {
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2) {
                     state.counters.increment("depressive_ideas", 1);
                     state.counters.increment("depression_criterion_2", 1);
                 }
@@ -1927,13 +1969,13 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2) {
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2) {
                     state.counters.increment("depressive_ideas", 1);
                     state.counters.increment("suicide", 1);
                 }
             },
-            next_item_fun: (last_answer_content, current_item, state) => {
+            next_item_fun: (last_changed_answer, current_item, state) => {
                 if (!state.counters.get("depressive_ideas", 0))
                     return "depression-outro";
                 return "depression-suicide";
@@ -1952,8 +1994,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                const v = last_answer_content;
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                const v = last_changed_answer;
                 if (!v)
                     return;
                 if (v >= 2) {
@@ -1961,8 +2003,8 @@ export const _state_properties = {
                     state.counters.set("suicide", 2);
                 }
             },
-            next_item_fun: (last_answer_content) => {
-                if (last_answer_content.content === 1)
+            next_item_fun: (last_changed_answer) => {
+                if (last_changed_answer?.selected_option?.content === 1)
                     return "depression-outro";
                 return "depression-suicide-thoughts";
             },
@@ -1983,8 +2025,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                const v = last_answer_content;
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                const v = last_changed_answer;
                 if (!v)
                     return;
                 if (v >= 2) {
@@ -1995,10 +2037,10 @@ export const _state_properties = {
                     }
                 }
             },
-            next_item_fun: (last_answer_content) => {
-                if (last_answer_content.content === 1)
+            next_item_fun: (last_changed_answer) => {
+                if (last_changed_answer?.selected_option?.content === 1)
                     return "depression-outro";
-                if (last_answer_content.content === 2)
+                if (last_changed_answer?.selected_option?.content === 2)
                     return "depression-suicide-doctor";
                 return "depression-suicide-method";
             },
@@ -2015,8 +2057,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2)
                     state.counters.set("suicide", 4);
             },
             next_item: "depression-suicide-doctor",
@@ -2034,8 +2076,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            next_item_fun: (last_answer_content) => {
-                if (last_answer_content.content === 1)
+            next_item_fun: (last_changed_answer) => {
+                if (last_changed_answer?.selected_option?.content === 1)
                     return "depression-outro";
                 return "depression-suicide-referral";
             },
@@ -2063,12 +2105,12 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
+            process_answer_fun: (last_changed_answer, current_item, state) => {
                 state.counters.increment("score", state.counters.get("depression", 0));
                 state.counters.increment("score", state.counters.get("depressive_ideas", 0));
             },
-            next_item_fun: (last_answer_content) => {
-                if (last_answer_content.content === 1)
+            next_item_fun: (last_changed_answer) => {
+                if (last_changed_answer?.selected_option?.content === 1)
                     return "worry-any";
                 return "worry-content";
             },
@@ -2085,8 +2127,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            next_item_fun: (last_answer_content) => {
-                if (last_answer_content.content === 1)
+            next_item_fun: (last_changed_answer) => {
+                if (last_changed_answer?.selected_option?.content === 1)
                     return "anxiety";
                 return "worry-content";
             },
@@ -2139,12 +2181,12 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 3)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 3)
                     state.counters.increment("worry", 1);
             },
-            next_item_fun: (last_answer_content) => {
-                if (last_answer_content.content === 1)
+            next_item_fun: (last_changed_answer) => {
+                if (last_changed_answer?.selected_option?.content === 1)
                     return "anxiety";
                 return "worry-excessive";
             },
@@ -2161,8 +2203,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2)
                     state.counters.increment("worry", 1);
             },
             next_item: "worry-valence",
@@ -2181,8 +2223,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                const v = last_answer_content;
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                const v = last_changed_answer;
                 if (!v)
                     return;
                 if (v >= 3)
@@ -2205,8 +2247,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2)
                     state.counters.increment("worry", 1);
             },
             next_item: "worry-duration",
@@ -2241,7 +2283,7 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
+            process_answer_fun: (last_changed_answer, current_item, state) => {
                 state.counters.increment("score", state.counters.get("worry", 0));
             },
             next_item: "anxiety-tense",
@@ -2259,9 +2301,9 @@ export const _state_properties = {
                     ],
                 },
             ],
-            next_item_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content === 1 &&
-                    state.getItemById("anxiety")?.last_changed_answer?.content
+            next_item_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 1 &&
+                    state.getItemById("anxiety")?.last_changed_answer?.selected_option
                         ?.content === 1)
                     return "phobia";
                 return "anxiety-phobia";
@@ -2279,8 +2321,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            next_item_fun: (last_answer_content) => {
-                if (last_answer_content.content === 1)
+            next_item_fun: (last_changed_answer) => {
+                if (last_changed_answer?.selected_option?.content === 1)
                     return "anxiety-frequency";
                 return "anxiety-phobia-only";
             },
@@ -2303,9 +2345,9 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => state.counters.increment("phobia", 1),
-            next_item_fun: (last_answer_content) => {
-                if (last_answer_content.content === 1)
+            process_answer_fun: (last_changed_answer, current_item, state) => state.counters.increment("phobia", 1),
+            next_item_fun: (last_changed_answer) => {
+                if (last_changed_answer?.selected_option?.content === 1)
                     return "phobia_type";
                 return "anxiety-intro";
             },
@@ -2328,12 +2370,12 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 3)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 3)
                     state.counters.increment("anxiety", 1);
             },
-            next_item_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 1) {
+            next_item_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 1) {
                     if (state.counters.get("phobia", 0) === 1)
                         return "phobia_type";
                     return "compulsions";
@@ -2355,8 +2397,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                const v = last_answer_content;
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                const v = last_changed_answer;
                 if (!v)
                     return;
                 if (v >= 3)
@@ -2376,8 +2418,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2)
                     state.counters.increment("AN4", 1);
             },
             next_item: "anxiety-dizzy",
@@ -2394,8 +2436,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2)
                     state.counters.increment("AN4", 1);
             },
             next_item: "anxiety-nausea",
@@ -2412,8 +2454,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2)
                     state.counters.increment("AN4", 1);
             },
             next_item: "anxiety-sweating",
@@ -2430,8 +2472,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2)
                     state.counters.increment("AN4", 1);
             },
             next_item: "anxiety-breathless",
@@ -2448,8 +2490,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2)
                     state.counters.increment("AN4", 1);
             },
             next_item: "anxiety-dry-mouth",
@@ -2466,8 +2508,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2)
                     state.counters.increment("AN4", 1);
             },
             next_item: "anxiety-chest-pain",
@@ -2484,8 +2526,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2)
                     state.counters.increment("AN4", 1);
             },
             next_item: "anxiety-numb",
@@ -2502,8 +2544,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2)
                     state.counters.increment("AN4", 1);
                 if (state.counters.get("AN4", 0))
                     state.counters.increment("anxiety", 1);
@@ -2522,8 +2564,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2)
                     state.counters.increment("anxiety", 1);
             },
             next_item: "anxiety-duration",
@@ -2544,7 +2586,7 @@ export const _state_properties = {
                     ],
                 },
             ],
-            next_item_fun: (last_answer_content, current_item, state) => {
+            next_item_fun: (last_changed_answer, current_item, state) => {
                 if (state.counters.get("phobia", 0) === 1)
                     return "phobia_type";
                 const anx = state.counters.get("anxiety", 0);
@@ -2565,8 +2607,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            next_item_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 1) {
+            next_item_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 1) {
                     const anx = state.counters.get("anxiety", 0);
                     if (anx <= 1)
                         return "compulsions";
@@ -2598,8 +2640,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                const v = last_answer_content;
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                const v = last_changed_answer;
                 if (!v)
                     return;
                 let type = 0;
@@ -2628,12 +2670,12 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 3)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 3)
                     state.counters.increment("phobia", 1);
             },
-            next_item_fun: (last_answer_content) => {
-                if (last_answer_content.content === 1)
+            next_item_fun: (last_changed_answer) => {
+                if (last_changed_answer?.selected_option?.content === 1)
                     return "phobia-avoid";
                 return "phobia-heart";
             },
@@ -2650,8 +2692,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2)
                     state.counters.increment("PHO2", 1);
             },
             next_item: "phobia-dizzy",
@@ -2668,8 +2710,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2)
                     state.counters.increment("PHO2", 1);
             },
             next_item: "phobia-nausea",
@@ -2686,8 +2728,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2)
                     state.counters.increment("PHO2", 1);
             },
             next_item: "phobia-sweating",
@@ -2704,8 +2746,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2)
                     state.counters.increment("PHO2", 1);
             },
             next_item: "phobia-breathless",
@@ -2722,8 +2764,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2)
                     state.counters.increment("PHO2", 1);
             },
             next_item: "phobia-dry-mouth",
@@ -2740,8 +2782,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2)
                     state.counters.increment("PHO2", 1);
             },
             next_item: "phobia-chest-pain",
@@ -2758,8 +2800,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2)
                     state.counters.increment("PHO2", 1);
             },
             next_item: "phobia-numb",
@@ -2776,8 +2818,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2)
                     state.counters.increment("PHO2", 1);
                 if (state.counters.get("PHO2", 0))
                     state.counters.increment("phobia", 1);
@@ -2796,8 +2838,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            next_item_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 1) {
+            next_item_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 1) {
                     const anx = state.counters.get("anxiety", 0);
                     const pho = state.counters.get("phobia", 0);
                     if (anx <= 1 && !pho)
@@ -2821,16 +2863,16 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2)
                     state.counters.increment("phobia", 1);
-                if (last_answer_content.content === 3)
+                if (last_changed_answer?.selected_option?.content === 3)
                     state.counters.increment("phobia", 2);
             },
-            next_item_fun: (last_answer_content, current_item, state) => {
+            next_item_fun: (last_changed_answer, current_item, state) => {
                 const anx = state.counters.get("anxiety", 0);
-                if (state.getItemById("phobia-frequency")?.last_changed_answer?.content
-                    ?.content === 1 &&
+                if (state.getItemById("phobia-frequency")?.last_changed_answer
+                    ?.selected_option?.content === 1 &&
                     anx <= 1)
                     return "anxiety-outro";
                 return "phobia-duration";
@@ -2867,8 +2909,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            next_item_fun: (last_answer_content) => {
-                if (last_answer_content.content === 1)
+            next_item_fun: (last_changed_answer) => {
+                if (last_changed_answer?.selected_option?.content === 1)
                     return "anxiety-outro";
                 return "panic-frequency";
             },
@@ -2886,14 +2928,14 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2)
                     state.counters.increment("panic", 1);
-                if (last_answer_content.content === 3)
+                if (last_changed_answer?.selected_option?.content === 3)
                     state.counters.increment("panic", 2);
             },
-            next_item_fun: (last_answer_content) => {
-                if (last_answer_content.content === 1)
+            next_item_fun: (last_changed_answer) => {
+                if (last_changed_answer?.selected_option?.content === 1)
                     return "anxiety-outro";
                 return "panic-valence";
             },
@@ -2911,8 +2953,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 3)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 3)
                     state.counters.increment("panic", 1);
             },
             next_item: "panic-long",
@@ -2929,8 +2971,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2)
                     state.counters.increment("panic", 1);
             },
             next_item: "panic-sudden",
@@ -2961,8 +3003,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2)
                     state.counters.increment("panic-symptoms", 1);
             },
             next_item: "panic-sweat",
@@ -2979,8 +3021,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2)
                     state.counters.increment("panic-symptoms", 1);
             },
             next_item: "panic-shake",
@@ -2997,8 +3039,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2)
                     state.counters.increment("panic-symptoms", 1);
             },
             next_item: "panic-breathless",
@@ -3015,8 +3057,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2)
                     state.counters.increment("panic-symptoms", 1);
             },
             next_item: "panic-choke",
@@ -3033,8 +3075,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2)
                     state.counters.increment("panic-symptoms", 1);
             },
             next_item: "panic-chest-pain",
@@ -3051,8 +3093,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2)
                     state.counters.increment("panic-symptoms", 1);
             },
             next_item: "panic-nausea",
@@ -3069,8 +3111,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2)
                     state.counters.increment("panic-symptoms", 1);
             },
             next_item: "panic-dizzy",
@@ -3087,8 +3129,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2)
                     state.counters.increment("panic-symptoms", 1);
             },
             next_item: "panic-derealization",
@@ -3105,8 +3147,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2)
                     state.counters.increment("panic-symptoms", 1);
             },
             next_item: "panic-crazy",
@@ -3123,8 +3165,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2)
                     state.counters.increment("panic-symptoms", 1);
             },
             next_item: "panic-dying",
@@ -3141,8 +3183,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2)
                     state.counters.increment("panic-symptoms", 1);
             },
             next_item: "panic-tingling",
@@ -3159,8 +3201,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2)
                     state.counters.increment("panic-symptoms", 1);
             },
             next_item: "panic-chills",
@@ -3177,11 +3219,13 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2)
                     state.counters.increment("panic-symptoms", 1);
             },
-            next_item_fun: (last_answer_content) => last_answer_content === 1 ? "panic-duration" : "panic-specific",
+            next_item_fun: (last_changed_answer) => last_changed_answer?.selected_option?.content === 1
+                ? "panic-duration"
+                : "panic-specific",
         }),
         new Item({
             id: "panic-specific",
@@ -3233,12 +3277,14 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
+            process_answer_fun: (last_changed_answer, current_item, state) => {
                 state.counters.increment("score", state.counters.get("anxiety", 0));
                 state.counters.increment("score", state.counters.get("phobia", 0));
                 state.counters.increment("score", state.counters.get("panic", 0));
             },
-            next_item_fun: (last_answer_content) => last_answer_content === 1 ? "obsessions" : "compulsions-frequency",
+            next_item_fun: (last_changed_answer) => last_changed_answer?.selected_option?.content === 1
+                ? "obsessions"
+                : "compulsions-frequency",
         }),
         new Item({
             id: "compulsions-frequency",
@@ -3253,11 +3299,13 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 3)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 3)
                     state.counters.increment("compulsions", 1);
             },
-            next_item_fun: (last_answer_content) => last_answer_content === 1 ? "obsessions" : "compulsions-control",
+            next_item_fun: (last_changed_answer) => last_changed_answer?.selected_option?.content === 1
+                ? "obsessions"
+                : "compulsions-control",
         }),
         new Item({
             id: "compulsions-control",
@@ -3271,8 +3319,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2)
                     state.counters.increment("compulsions", 1);
             },
             next_item: "compulsions-valence",
@@ -3289,8 +3337,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2)
                     state.counters.increment("compulsions", 1);
             },
             next_item: "compulsions-repeats",
@@ -3308,8 +3356,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 3)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 3)
                     state.counters.increment("compulsions", 1);
             },
             next_item: "compulsions-duration",
@@ -3345,10 +3393,10 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
+            process_answer_fun: (last_changed_answer, current_item, state) => {
                 state.counters.increment("score", state.counters.get("compulsions", 0));
             },
-            next_item_fun: (last_answer_content, current_item, state) => last_answer_content === 1
+            next_item_fun: (last_changed_answer, current_item, state) => last_changed_answer?.selected_option?.content === 1
                 ? _overall_navigation(state)
                 : "obsessions-repeat",
         }),
@@ -3367,7 +3415,7 @@ export const _state_properties = {
                     ],
                 },
             ],
-            next_item_fun: (last_answer_content, current_item, state) => last_answer_content === 2
+            next_item_fun: (last_changed_answer, current_item, state) => last_changed_answer?.selected_option?.content === 2
                 ? _overall_navigation(state)
                 : "obsessions-frequency",
         }),
@@ -3384,11 +3432,11 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 3)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 3)
                     state.counters.increment("obsessions", 1);
             },
-            next_item_fun: (last_answer_content, current_item, state) => last_answer_content === 2
+            next_item_fun: (last_changed_answer, current_item, state) => last_changed_answer?.selected_option?.content === 2
                 ? _overall_navigation(state)
                 : "obsessions-control",
         }),
@@ -3407,8 +3455,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2)
                     state.counters.increment("obsessions", 1);
             },
             next_item: "obsessions-valence",
@@ -3428,8 +3476,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2)
                     state.counters.increment("obsessions", 1);
             },
             next_item: "obsessions-long",
@@ -3446,8 +3494,8 @@ export const _state_properties = {
                     ],
                 },
             ],
-            process_answer_fun: (last_answer_content, current_item, state) => {
-                if (last_answer_content.content === 2)
+            process_answer_fun: (last_changed_answer, current_item, state) => {
+                if (last_changed_answer?.selected_option?.content === 2)
                     state.counters.increment("obsessions", 1);
                 state.counters.increment("score", state.counters.get("obsessions", 0));
             },
@@ -3554,17 +3602,17 @@ export const _state_properties = {
             worry: state.counters.get("worry", 0),
         };
         // Generalized anxiety
-        const anx_dur = state.getItemById("anxiety-duration")?.last_changed_answer?.content
-            ?.content || 0;
+        const anx_dur = state.getItemById("anxiety-duration")?.last_changed_answer
+            ?.selected_option?.content || 0;
         if (counters.anxiety >= 2 && counters.AN4 >= 2 && anx_dur >= 3)
             outputs.GAD = 1;
         // Panic
-        const pan = state.getItemById("panic-sudden")?.last_changed_answer?.content
+        const pan = state.getItemById("panic-sudden")?.last_changed_answer?.selected_option
             ?.content || 0;
         if (counters.panic >= 3 && pan === 2)
             outputs.PANICD = 1;
         // Phobias
-        const pho = state.getItemById("phobia-avoid")?.last_changed_answer?.content
+        const pho = state.getItemById("phobia-avoid")?.last_changed_answer?.selected_option
             ?.content || 0;
         if (pho === 2 && counters.phobia >= 2) {
             if (counters["phobia_type"] === 1)
@@ -3577,16 +3625,16 @@ export const _state_properties = {
                 outputs.PHOBSPEC = 1;
         }
         // Obsessive-compulsions
-        const ob = state.getItemById("obsessions-control")?.last_changed_answer?.content
-            ?.content || 0;
-        const co = state.getItemById("compulsions-control")?.last_changed_answer?.content
-            ?.content || 0;
-        const ob_dur = state.getItemById("obsessions-duration")?.last_changed_answer?.content
-            ?.content || 0;
-        const co_dur = state.getItemById("compulsions-duration")?.last_changed_answer?.content
-            ?.content || 0;
-        const imp = state.getItemById("overall-follow-up")?.last_changed_answer?.content
-            ?.content || 0;
+        const ob = state.getItemById("obsessions-control")?.last_changed_answer
+            ?.selected_option?.content || 0;
+        const co = state.getItemById("compulsions-control")?.last_changed_answer
+            ?.selected_option?.content || 0;
+        const ob_dur = state.getItemById("obsessions-duration")?.last_changed_answer
+            ?.selected_option?.content || 0;
+        const co_dur = state.getItemById("compulsions-duration")?.last_changed_answer
+            ?.selected_option?.content || 0;
+        const imp = state.getItemById("overall-follow-up")?.last_changed_answer
+            ?.selected_option?.content || 0;
         if (imp >= 2) {
             if (ob === 2 && ob_dur >= 2) {
                 if (counters.obsessions + counters.compulsions >= 6 ||
@@ -3600,8 +3648,8 @@ export const _state_properties = {
             }
         }
         // Depression
-        const dep_dur = state.getItemById("depression-duration")?.last_changed_answer?.content
-            ?.content || 0;
+        const dep_dur = state.getItemById("depression-duration")?.last_changed_answer
+            ?.selected_option?.content || 0;
         if (dep_dur >= 2) {
             if (counters["depression_criterion_1"] > 1 &&
                 counters["depression_criterion_1"] +
@@ -3790,4 +3838,13 @@ export const _state_properties = {
         };
     },
 };
+_state_properties.items
+    .filter(i => i.answers?.length === 1)
+    // @ts-ignore
+    .map((i) => i.answer)
+    .forEach((a) => 
+// @ts-ignore
+(a.check_answer_fun = (a) => typeof a.content === "undefined"
+    ? ["This question requires an answer"]
+    : []));
 export const questionnaire = () => new Questionnaire(_state_properties);

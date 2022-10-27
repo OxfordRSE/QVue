@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import AnswerSet from "@/components/AnswerSet.vue";
+import ItemLabel from "@/components/ItemLabel.vue";
 import { storeToRefs } from "pinia";
 import { useQuestionnaireStore } from "@/stores/questionnaire";
 import { computed } from "vue";
@@ -10,7 +10,7 @@ const { questionnaire } = storeToRefs(questionnaireStore);
 
 export interface Props {
   id: string;
-  base: Answer | null;
+  base?: Answer | null;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -26,29 +26,35 @@ const answer = computed(() => {
 </script>
 
 <template>
-  <div class="d-flex">
-    <label v-if="answer.label" :for="props.id" class="flex-grow-1 w-100 pe-2">
-      {{ answer.label }}
-      <AnswerSet
-        v-if="answer.extra_answers && answer.extra_answers.length"
-        :base="answer.extra_answers"
+  <div class="answer-wrapper d-flex" :class="answer.class_wrapper">
+    <ItemLabel :id="props.id" :base="props.base" />
+    <div class="input-group">
+      <span
+        v-if="answer.label_left"
+        v-html="answer.label_left"
+        class="input-group-text"
       />
-    </label>
-    <input
-      class="form-control flex-shrink-1"
-      :id="props.id"
-      name="answer"
-      type="number"
-      aria-label="Please type your answer"
-      v-model="answer.content"
-      autofocus
-    />
+      <input
+        class="form-control flex-shrink-1"
+        :id="props.id"
+        name="answer"
+        type="number"
+        aria-label="Please type your answer"
+        v-model="answer.content"
+        autofocus
+      />
+      <span
+        v-if="answer.label_right"
+        v-html="answer.label_right"
+        class="input-group-text"
+      />
+    </div>
   </div>
 </template>
 
 <style scoped lang="scss">
-input.form-control {
-  width: 4em;
+input.form-control,
+span.input-group-text {
   height: unset;
   align-self: end;
 }
