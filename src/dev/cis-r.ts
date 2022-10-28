@@ -4622,15 +4622,14 @@ export const _state_properties: QuestionnaireProperties = {
         .filter((i) => i.answers.length === 1)
         .filter((i) => typeof i.answer.raw_content !== "undefined")
         .map((i) => {
-          const a: any = i.answer.raw_content;
-          const ans: { content: any; label?: string } =
-            typeof a === "number"
-              ? { content: a }
-              : { content: a.content, label: a.label };
+          const answer_content: any =
+            i.answer.type === AnswerType.RADIO
+              ? i.answer.selected_option
+              : i.answer.raw_content;
           return {
             id: i.id,
             question: i.question,
-            answer: ans,
+            answer: answer_content,
           };
         }),
       datetime: now.toUTCString(),
@@ -4639,7 +4638,7 @@ export const _state_properties: QuestionnaireProperties = {
 };
 
 _state_properties.items
-  .filter(i => i.answers?.length === 1)
+  .filter((i) => i.answers?.length === 1)
   // @ts-ignore
   .map((i) => i.answer)
   .forEach((a) => a.validators.push(Validators.REQUIRED));
