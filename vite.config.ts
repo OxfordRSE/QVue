@@ -19,7 +19,7 @@ export default defineConfig({
       manualChunks: {
         questionnaire: ["questionnaire-core"],
         cis_r: ["questionnaire-cis-r"],
-        pecunia: ["questionnaire-pecunia"],
+        // pecunia: ["questionnaire-pecunia"],
       },
     },
   },
