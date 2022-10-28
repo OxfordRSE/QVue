@@ -14,7 +14,7 @@ import { computed } from "vue";
 import type { Answer } from "questionnaire-core";
 
 const questionnaireStore = useQuestionnaireStore();
-const { questionnaire } = storeToRefs(questionnaireStore);
+const { questionnaire, inputs_dirty } = storeToRefs(questionnaireStore);
 
 export interface Props {
   id: string;

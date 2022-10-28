@@ -24,6 +24,12 @@ const answer = computed(() => {
     throw `Cannot locate answer ${props.id} in undefined base.`;
   return base.find((a: Answer) => a.id === props.id);
 });
+
+answer.value.check_validation(
+  questionnaire.value.current_item,
+  questionnaire.value,
+  false
+);
 </script>
 
 <template>
@@ -36,15 +42,22 @@ const answer = computed(() => {
       ref="inputs"
     >
       <kbd v-if="/^\d$/.test(o.content.toString())" class="me-2">{{
-          o.content
-        }}</kbd>
+        o.content
+      }}</kbd>
       <input
         class="form-check-input me-1"
         type="radio"
         name="answer"
         :id="`${answer.id}_${i}`"
         :value="i"
-        @change="answer.content = i"
+        @change="
+          answer.content = i;
+          answer.check_validation(
+            questionnaire.current_item,
+            questionnaire,
+            false
+          );
+        "
         :checked="answer?.content === i"
         :data-click-on-key="o.content"
       />

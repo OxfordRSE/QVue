@@ -7,7 +7,7 @@ import type { Answer } from "questionnaire-core";
 import ItemLabel from "@/components/ItemLabel.vue";
 
 const questionnaireStore = useQuestionnaireStore();
-const { questionnaire } = storeToRefs(questionnaireStore);
+const { questionnaire, inputs_dirty } = storeToRefs(questionnaireStore);
 
 export interface Props {
   id: string;
@@ -26,8 +26,7 @@ const answer = computed(() => {
     throw `Cannot locate answer ${props.id} in undefined base.`;
   return base.find((a: Answer) => a.id === props.id);
 });
-const id = computed(() => props.id.replace(/\./, '_'));
-
+const id = computed(() => props.id.replace(/\./, "_"));
 const answer_content = computed(() => answer.value.content || []);
 
 const updateAnswer: (index: number) => void = (i) => {
@@ -37,7 +36,19 @@ const updateAnswer: (index: number) => void = (i) => {
 
   const e = inputRefs.value[i].querySelector(`#${id.value}_${i}`);
   if (e instanceof HTMLInputElement && e.checked) answer.value.content.push(i);
+
+  answer.value.check_validation(
+    questionnaire.value.current_item,
+    questionnaire.value,
+    false
+  );
 };
+
+answer.value.check_validation(
+  questionnaire.value.current_item,
+  questionnaire.value,
+  false
+);
 </script>
 
 <template>

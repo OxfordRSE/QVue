@@ -17,7 +17,7 @@ const store = useURLStore();
 const settings = useSettingsStore();
 const questionnaireStore = useQuestionnaireStore();
 const { auto_continue, auto_continue_delay } = storeToRefs(settings);
-const { questionnaire } = storeToRefs(questionnaireStore);
+const { questionnaire, inputs_dirty } = storeToRefs(questionnaireStore);
 
 if (router.params.questionnaire) {
   // @ts-ignore
@@ -45,9 +45,8 @@ if (router.params.questionnaire) {
 
 const local_storage_key: string = "answers";
 
-// const ready: Ref<boolean> = ref(false);
-// @ts-ignore
-const ready: Ref<boolean> = ref(questionnaire.value !== {});
+const ready: Ref<boolean> = ref(false);
+
 let past_answers: any;
 try {
   const state_str = localStorage.getItem(local_storage_key) || "";

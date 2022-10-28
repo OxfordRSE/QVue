@@ -1,13 +1,13 @@
 <script setup lang="ts">
+import { ValidationIssueLevel} from "questionnaire-core";
 import SettingsMenu from "@/components/SettingsMenu.vue";
 import AnswerSet from "@/components/AnswerSet.vue";
-import { watch, computed, type Ref, ref } from "vue";
+import { computed, type Ref, ref, watch } from "vue";
 import { storeToRefs } from "pinia";
 import { useQuestionnaireStore } from "@/stores/questionnaire";
-import type { Questionnaire } from "questionnaire-core";
 
 const questionnaireStore = useQuestionnaireStore();
-const { questionnaire } = storeToRefs(questionnaireStore);
+const { questionnaire, inputs_dirty } = storeToRefs(questionnaireStore);
 
 export interface Props {
   next_button_label?: string;
@@ -22,15 +22,6 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const item = computed(() => questionnaire.value.current_item);
-// @ts-ignore
-const issues: Ref<string[]> = ref(item.value?.find_issues());
-
-watch(
-  () => item,
-  (new_id) => {
-    console.log(`New item: ${new_id}`);
-  }
-);
 
 const next = () => questionnaire.value.next_q();
 const back = () => questionnaire.value.last_q();
@@ -58,6 +49,7 @@ const back = () => questionnaire.value.last_q();
         "
         :disabled="props.disable_back_button"
         data-click-on-key="arrowleft"
+        data-nav-direction="back"
       >
         <kbd>&larr;</kbd> Back
       </button>
@@ -69,8 +61,9 @@ const back = () => questionnaire.value.last_q();
             if (evt.key === 'Enter' || evt.key === 'Space') next();
           }
         "
-        :disabled="false"
+        :disabled="item.validation_issues.filter(e => e.level === ValidationIssueLevel.ERROR).length > 0"
         :data-click-on-key="props.next_button_key"
+        data-nav-direction="next"
         v-html="props.next_button_label"
       />
     </div>

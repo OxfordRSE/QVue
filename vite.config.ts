@@ -14,4 +14,13 @@ export default defineConfig({
     },
   },
   base: "/",
+  build: {
+    rollupOptions: {
+      manualChunks: {
+        questionnaire: ["questionnaire-core"],
+        cis_r: ["questionnaire-cis-r"],
+        pecunia: ["questionnaire-pecunia"],
+      },
+    },
+  },
 });

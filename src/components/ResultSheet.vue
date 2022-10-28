@@ -7,7 +7,7 @@ import { storeToRefs } from "pinia";
 
 const specification = useURLStore();
 const questionnaireStore = useQuestionnaireStore();
-const { questionnaire } = storeToRefs(questionnaireStore);
+const { questionnaire, inputs_dirty } = storeToRefs(questionnaireStore);
 
 const content = computed(() => questionnaire.value.data);
 const data = computed(() => toRaw(questionnaire.value).data);

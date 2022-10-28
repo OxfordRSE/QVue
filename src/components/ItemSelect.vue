@@ -7,7 +7,7 @@ import { computed } from "vue";
 import type { Answer } from "questionnaire-core";
 
 const questionnaireStore = useQuestionnaireStore();
-const { questionnaire } = storeToRefs(questionnaireStore);
+const { questionnaire, inputs_dirty } = storeToRefs(questionnaireStore);
 
 export interface Props {
   id: string;
@@ -25,15 +25,38 @@ const answer = computed(() => {
   return base.find((a: Answer) => a.id === props.id);
 });
 const selected = computed(() => {
-  try { return answer.value.options[answer.value.content] }
-  catch (e) { return null }
-})
+  try {
+    return answer.value.options[answer.value.content];
+  } catch (e) {
+    return null;
+  }
+});
+
+answer.value.check_validation(
+  questionnaire.value.current_item,
+  questionnaire.value,
+  false
+);
 </script>
 
 <template>
-  <div class="answer-wrapper d-flex justify-content-between align-items-center" :class="answer.class_wrapper">
+  <div
+    class="answer-wrapper d-flex justify-content-between align-items-center"
+    :class="answer.class_wrapper"
+  >
     <ItemLabel :id="props.id" :base="props.base" />
-    <select v-model="answer.content" :id="answer.id" class="form-select">
+    <select
+      v-model="answer.content"
+      :id="answer.id"
+      class="form-select"
+      @change="
+        answer.check_validation(
+          questionnaire.current_item,
+          questionnaire,
+          false
+        )
+      "
+    >
       <option
         v-for="(o, i) in answer.options"
         :key="o.content"

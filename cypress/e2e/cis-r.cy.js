@@ -11,8 +11,8 @@ const answer_qs = (q = 0) => {
         return $body;
       })
       .then(($body) => {
-        if ($body.find("[data-click-on-key='n']").length > 0)
-          $body.find("[data-click-on-key='n']")[0].click();
+        if ($body.find("[data-nav-direction='next']").length > 0)
+          $body.find("[data-nav-direction='next']")[0].click();
       });
   });
   if (q < 32) answer_qs(q + 1);
@@ -20,7 +20,7 @@ const answer_qs = (q = 0) => {
 
 describe("CIS-R", () => {
   it("shows a welcome screen", () => {
-    cy.visit('/')
+    cy.visit('/run/cis-r')
     cy.get("header").should("have.text", "Welcome to the CIS-R");
 
     cy.get("button").should("include.text", "Begin").click();

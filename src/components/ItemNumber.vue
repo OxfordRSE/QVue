@@ -6,7 +6,7 @@ import { computed } from "vue";
 import type { Answer } from "questionnaire-core";
 
 const questionnaireStore = useQuestionnaireStore();
-const { questionnaire } = storeToRefs(questionnaireStore);
+const { questionnaire, inputs_dirty } = storeToRefs(questionnaireStore);
 
 export interface Props {
   id: string;
@@ -23,6 +23,12 @@ const answer = computed(() => {
     throw `Cannot locate answer ${props.id} in undefined base.`;
   return base.find((a: Answer) => a.id === props.id);
 });
+
+answer.value.check_validation(
+  questionnaire.value.current_item,
+  questionnaire.value,
+  false
+);
 </script>
 
 <template>
@@ -41,6 +47,24 @@ const answer = computed(() => {
         type="number"
         aria-label="Please type your answer"
         v-model="answer.content"
+        v-debounce:50ms="
+          () => {
+            if (questionnaire)
+              answer.check_validation(
+                questionnaire.current_item,
+                questionnaire,
+                false
+              );
+          }
+        "
+        debounce-events="keydown"
+        @change="
+          answer.check_validation(
+            questionnaire.current_item,
+            questionnaire,
+            false
+          )
+        "
         autofocus
       />
       <span
