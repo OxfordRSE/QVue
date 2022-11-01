@@ -2,8 +2,28 @@
 // @ts-ignore
 import CogIcon from "vue-material-design-icons/Cog.vue";
 import { useURLStore } from "@/stores/url_settings";
+import md from "markdown-it";
+import attrs from "markdown-it-attrs";
 
-defineProps<{ show_continue: boolean }>();
+import { computed } from "vue";
+const md_instance = md();
+md_instance.use(attrs, { allowedAttributes: ["class"] });
+
+const markdown = computed(() => {
+  if (!url_settings.fetch?.data_policy) return "";
+  try {
+    return md_instance.render(url_settings.fetch?.data_policy);
+  } catch (e) {
+    console.error(e);
+    return "";
+  }
+});
+
+defineProps<{
+  show_continue: boolean;
+  questionnaire_name: string;
+  questionnaire_intro: string;
+}>();
 
 defineEmits<{
   (e: "okay"): void;
@@ -16,29 +36,18 @@ const url_settings = useURLStore();
 <template>
   <main class="container-sm">
     <header class="card-header text-center">
-      <h1>Welcome to the CIS-R</h1>
+      <h1>{{ questionnaire_name }}</h1>
     </header>
+    <hr />
     <div class="card-body">
       <h2>About the tool:</h2>
       <p>
-        This tool will guide you through completing the CIS-R. The CIS-R is a
-        questionnaire used by researchers to characterise mental health
-        difficulties.
-      </p>
-      <h2>Using the tool:</h2>
-      <p>
-        You will be asked a series of questions. You can answer these questions
-        by clicking on the relevant answer, or pressing the key on the keyboard
-        that corresponds to the symbol next to the answer. For example, when you
-        have read this page, you can use the
-        <kbd>B</kbd> key to continue. Some questions require you to type in a
-        response.
-      </p>
-      <p>
-        When you enter a response, the next question will appear after a short
-        delay. You can customise this delay at any time during the questionnaire
+        This tool will guide you through completing a questionnaire. You can
+        customise how the tool behaves at any time during the questionnaire
         using the <CogIcon title="settings" /> icon.
       </p>
+      <h2>About the {{ questionnaire_name }}:</h2>
+      <div v-html="questionnaire_intro"></div>
       <h2>Data collection:</h2>
       <p>
         The tool will not collect any data itself, but it will create some data
@@ -55,6 +64,22 @@ const url_settings = useURLStore();
           address that you got this link from. It should also make sense with
           the banner you see at the top of the page while doing the
           questionnaire.
+        </p>
+        <div v-if="url_settings.fetch?.data_policy">
+          <p>
+            The data controller for
+            {{ url_settings.fetch?.url?.replace(/.+:\/\/([^/]+)\/?.*/, "$1") }}
+            provided the following data policy statement:
+          </p>
+          <div
+            class="border-info border-1 card px-1 pt-2"
+            v-html="markdown"
+          ></div>
+        </div>
+        <p v-else>
+          The data controller for
+          {{ url_settings.fetch?.url?.replace(/.+:\/\/([^/]+)\/?.*/, "$1") }}
+          did not provide any information on their data handling policy.
         </p>
         <p>
           <strong
@@ -115,5 +140,8 @@ const url_settings = useURLStore();
 h3 {
   display: inline-block;
   font-size: calc(0.9rem + 0.6vw);
+}
+.policy {
+  border: 1px solid black;
 }
 </style>

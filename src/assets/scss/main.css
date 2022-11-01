@@ -1,5 +1,7 @@
 @import "base.css";
 
+.page:not(.kbd-nav) kbd {display: none;}
+
 #app {
   width: 100%;
   max-width: 576px;

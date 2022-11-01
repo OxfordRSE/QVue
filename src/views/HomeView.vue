@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { ref, computed, type Ref } from "vue";
+import { computed, ref, type Ref } from "vue";
 import type { Item } from "questionnaire-core";
 import QuestionItem from "@/components/QuestionItem.vue";
 import ResultSheet from "@/components/ResultSheet.vue";
 import WelcomeMessage from "@/components/WelcomeMessage.vue";
-import PetrushkaBanner from "@/components/PetrushkaBanner.vue";
 import FooterCredits from "@/components/FooterCredits.vue";
+import BannerDisplay from "@/views/BannerDisplay.vue";
 import { useSettingsStore } from "@/stores/settings";
 import { storeToRefs } from "pinia";
-import { useURLStore } from "@/stores/url_settings";
+import { useURLStore, SettingState } from "@/stores/url_settings";
 import { useRoute } from "vue-router";
 import { useQuestionnaireStore } from "@/stores/questionnaire";
 
@@ -17,14 +17,16 @@ const store = useURLStore();
 const settings = useSettingsStore();
 const questionnaireStore = useQuestionnaireStore();
 const { auto_continue, auto_continue_delay } = storeToRefs(settings);
-const { questionnaire, inputs_dirty } = storeToRefs(questionnaireStore);
+const { questionnaire } = storeToRefs(questionnaireStore);
 
 if (router.params.questionnaire) {
   // @ts-ignore
   // import(`../../node_modules/questionnaire-${router.params.questionnaire}/index.js`)
   import(`../dev/${router.params.questionnaire}.js`)
     .then((m) => {
-      console.debug(`Loaded module questionnaire-${router.params.questionnaire}/index.js`)
+      console.debug(
+        `Loaded module questionnaire-${router.params.questionnaire}/index.js`
+      );
       questionnaire.value = m.questionnaire();
     })
     .catch((e) => {
@@ -34,13 +36,13 @@ if (router.params.questionnaire) {
       );
     });
 } else {
-  import('../dev/pecunia.js')
-    .then(m => {
+  import("../dev/pecunia.js")
+    .then((m) => {
       console.log(m.questionnaire());
       return m;
     })
-    .then(m => questionnaire.value = m.questionnaire())
-    .then(() => console.log("loaded pecunia"))
+    .then((m) => (questionnaire.value = m.questionnaire()))
+    .then(() => console.log("loaded pecunia"));
 }
 
 const local_storage_key: string = "answers";
@@ -134,7 +136,7 @@ const last = () => {
 </script>
 
 <template>
-  <div class="page" v-if="!ready">
+  <div class="page kbd-nav" v-if="!ready">
     <WelcomeMessage
       @okay="
         ready = true;
@@ -145,39 +147,16 @@ const last = () => {
         scroll();
       "
       :show_continue="past_answers.length > 0"
+      :questionnaire_name="questionnaire.name"
+      :questionnaire_intro="questionnaire.introduction"
     />
   </div>
-  <div class="page d-flex flex-column h-100" v-else>
-    <header>
-      <div v-if="store.display?.banner_img_src" class="navbar">
-        <a v-if="store.display.banner_href" :href="store.display.banner_href">
-          <img
-            :src="store.display.banner_img_src"
-            :alt="store.display.banner_img_alt || ''"
-            :title="
-              store.display.banner_img_title ||
-              store.display.banner_img_alt ||
-              ''
-            "
-          />
-        </a>
-        <img
-          v-else
-          :src="store.display.banner_img_src"
-          :alt="store.display.banner_img_alt || ''"
-          :title="
-            store.display.banner_img_title || store.display.banner_img_alt || ''
-          "
-        />
-      </div>
-      <div v-else-if="store.display?.banner_text" class="navbar">
-        <a v-if="store.display.banner_href" :href="store.display.banner_href">
-          {{ store.display.banner_text }}
-        </a>
-        <span v-else>{{ store.display.banner_text }}</span>
-      </div>
-      <PetrushkaBanner v-else />
-    </header>
+  <div
+    class="page d-flex flex-column h-100"
+    :class="settings.keyboard_shortcuts === SettingState.ON ? 'kbd-nav' : ''"
+    v-else
+  >
+    <BannerDisplay :questionnaire_name="questionnaire.name" />
     <hr />
     <main class="container-sm d-flex flex-column h-100 flex-grow-1">
       <div
@@ -220,7 +199,11 @@ const last = () => {
       <ResultSheet v-else />
     </main>
   </div>
-  <FooterCredits />
+  <hr />
+  <FooterCredits
+    :questionnaire_name="questionnaire.name"
+    :questionnaire_citation="questionnaire.citation"
+  />
 </template>
 <style lang="scss" scoped>
 .page {
@@ -229,25 +212,5 @@ const last = () => {
 .item > *:not(.progress-bar) {
   height: 100%;
   flex-grow: 1;
-}
-header {
-  min-height: 3em;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  .navbar {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: var(--bs-black);
-    font-size: 2em;
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-    img {
-      max-width: 90vw;
-    }
-  }
 }
 </style>

@@ -21,7 +21,7 @@ const answer_qs = (q = 0) => {
 describe("CIS-R", () => {
   it("shows a welcome screen", () => {
     cy.visit('/run/cis-r')
-    cy.get("header").should("have.text", "Welcome to the CIS-R");
+    cy.get("h2").should("include.text", "About the tool");
 
     cy.get("button").should("include.text", "Begin").click();
   });

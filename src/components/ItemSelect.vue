@@ -7,7 +7,7 @@ import { computed } from "vue";
 import type { Answer } from "questionnaire-core";
 
 const questionnaireStore = useQuestionnaireStore();
-const { questionnaire, inputs_dirty } = storeToRefs(questionnaireStore);
+const { questionnaire } = storeToRefs(questionnaireStore);
 
 export interface Props {
   id: string;
@@ -32,11 +32,11 @@ const selected = computed(() => {
   }
 });
 
-answer.value.check_validation(
-  questionnaire.value.current_item,
-  questionnaire.value,
-  false
-);
+// answer.value.check_validation(
+//   questionnaire.value.current_item,
+//   questionnaire.value,
+//   false
+// );
 </script>
 
 <template>

@@ -36,6 +36,14 @@ export const _overall_navigation = (state) => {
 };
 // Questionnaire definition
 export const _state_properties = {
+    name: "CIS-R",
+    introduction: `
+  <p>The Clinical Instrument Schedule (Revised) is a tool to allow
+  mental health clinicians and researchers to assess a person's 
+  mental health condition. It should take around 30 minutes to complete.</p> 
+  `,
+    citation: `[Lewis G, Pelosi AJ, Araya R, et al. Measuring psychiatric disorders in the community: a standardised assessment for use by lay interviewers. *Psychological Medicine.* 1992;22:465–486](https://doi.org/10.1017/S0033291700030415)`,
+    reset_items_on_back: true,
     items: [
         new Item({
             id: "demo-intro",
@@ -3824,14 +3832,13 @@ export const _state_properties = {
                 .filter((i) => i.answers.length === 1)
                 .filter((i) => typeof i.answer.raw_content !== "undefined")
                 .map((i) => {
-                const a = i.answer.raw_content;
-                const ans = typeof a === "number"
-                    ? { content: a }
-                    : { content: a.content, label: a.label };
+                const answer_content = i.answer.type === AnswerType.RADIO
+                    ? i.answer.selected_option
+                    : i.answer.raw_content;
                 return {
                     id: i.id,
                     question: i.question,
-                    answer: ans,
+                    answer: answer_content,
                 };
             }),
             datetime: now.toUTCString(),
@@ -3839,7 +3846,7 @@ export const _state_properties = {
     },
 };
 _state_properties.items
-    .filter(i => i.answers?.length === 1)
+    .filter((i) => i.answers?.length === 1)
     // @ts-ignore
     .map((i) => i.answer)
     .forEach((a) => a.validators.push(Validators.REQUIRED));

@@ -1,12 +1,21 @@
 <script setup lang="ts">
+import {SettingState} from "@/stores/url_settings";
 import { useSettingsStore } from "@/stores/settings";
 // @ts-ignore
 import CogIcon from "vue-material-design-icons/Cog.vue";
+import {
+  computed
+} from "vue";
 const settings = useSettingsStore();
+
+const enabled = computed(() => {
+  return settings.keyboard_shortcuts !== SettingState.DISABLED ||
+    settings.auto_continue !== SettingState.DISABLED
+})
 </script>
 
 <template>
-  <div class="dropstart ps-2 pb-2 d-none">
+  <div class="dropstart ps-2 pb-2" :class="enabled ? '' : 'd-none'">
     <button
       class="btn btn-light"
       type="button"
@@ -17,7 +26,21 @@ const settings = useSettingsStore();
       <CogIcon title="Settings" />
     </button>
     <ul class="dropdown-menu menu">
-      <li>
+      <li v-if="settings.keyboard_shortcuts !== SettingState.DISABLED">
+        <div class="form-check form-switch">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            role="switch"
+            id="keyboard-shortcuts"
+            v-model="settings.keyboard_shortcuts"
+          />
+          <label class="form-check-label" for="keyboard-shortcuts"
+            >Keyboard shortcuts</label
+          >
+        </div>
+      </li>
+      <li v-if="settings.auto_continue !== SettingState.DISABLED">
         <div class="form-check form-switch">
           <input
             class="form-check-input"
@@ -31,8 +54,8 @@ const settings = useSettingsStore();
           >
         </div>
       </li>
-      <li>
-        <div v-if="settings.auto_continue" class="d-flex align-content-center">
+      <li v-if="settings.auto_continue">
+        <div class="d-flex align-content-center">
           Wait
           <input
             type="range"
@@ -53,6 +76,9 @@ const settings = useSettingsStore();
 </template>
 
 <style scoped lang="scss">
+.dropstart {
+  z-index: 10;
+}
 .menu {
   min-width: 200px;
   padding: 1em;

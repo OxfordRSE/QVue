@@ -2,12 +2,16 @@
 import AnswerSet from "@/components/AnswerSet.vue";
 import { storeToRefs } from "pinia";
 import { useQuestionnaireStore } from "@/stores/questionnaire";
+const settings = useSettingsStore();
 import { computed, type Ref, ref } from "vue";
 import type { Answer } from "questionnaire-core";
 import ItemLabel from "@/components/ItemLabel.vue";
+import {
+  useSettingsStore
+} from "@/stores/settings";
 
 const questionnaireStore = useQuestionnaireStore();
-const { questionnaire, inputs_dirty } = storeToRefs(questionnaireStore);
+const { questionnaire } = storeToRefs(questionnaireStore);
 
 export interface Props {
   id: string;
@@ -44,11 +48,11 @@ const updateAnswer: (index: number) => void = (i) => {
   );
 };
 
-answer.value.check_validation(
-  questionnaire.value.current_item,
-  questionnaire.value,
-  false
-);
+// answer.value.check_validation(
+//   questionnaire.value.current_item,
+//   questionnaire.value,
+//   false
+// );
 </script>
 
 <template>
@@ -56,15 +60,17 @@ answer.value.check_validation(
     <ItemLabel :id="props.id" :base="props.base" />
     <div
       class="answer-option d-flex p-1 my-2"
+      :class="answer.own_validation_issues.length ? 'is-invalid' : ''"
       v-for="(o, i) in answer.options"
       :key="o.content"
       ref="inputRefs"
     >
-      <kbd v-if="/^\d$/.test(o.content.toString())" class="me-2">{{
+      <kbd v-if="/^\d$/.test(o.content.toString()) && settings.keyboard_shortcuts" class="me-2">{{
         o.content
       }}</kbd>
       <input
         class="form-check-input me-1"
+        :class="answer.own_validation_issues.length ? 'is-invalid' : ''"
         type="checkbox"
         name="answer"
         :id="`${id}_${i}`"
@@ -78,6 +84,17 @@ answer.value.check_validation(
         <AnswerSet v-if="o.extra_answers.length" :base="o.extra_answers" />
       </label>
     </div>
+    <div
+      v-if="answer.own_validation_issues.length"
+      class="invalid-feedback"
+      :class="Math.max(...answer.own_validation_issues.map(i => i.level)) === 0
+            ? 'txt-info'
+            : Math.max(...answer.own_validation_issues.map(i => i.level)) === 1
+            ? 'txt-warning'
+            : ''
+        "
+      v-html="answer.own_validation_issues.map(i => i.issue).join('<br/>')"
+    ></div>
   </div>
 </template>
 

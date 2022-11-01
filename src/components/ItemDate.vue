@@ -7,7 +7,7 @@ import type { Answer } from "questionnaire-core";
 import ItemLabel from "@/components/ItemLabel.vue";
 
 const questionnaireStore = useQuestionnaireStore();
-const { questionnaire, inputs_dirty } = storeToRefs(questionnaireStore);
+const { questionnaire } = storeToRefs(questionnaireStore);
 
 export interface Props {
   id: string;
@@ -25,11 +25,11 @@ const answer = computed(() => {
   return base.find((a: Answer) => a.id === props.id);
 });
 
-answer.value.check_validation(
-  questionnaire.value.current_item,
-  questionnaire.value,
-  false
-);
+// answer.value.check_validation(
+//   questionnaire.value.current_item,
+//   questionnaire.value,
+//   false
+// );
 </script>
 
 <template>

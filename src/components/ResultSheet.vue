@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import VueMarkdown from "vue-markdown-render";
 import { computed, markRaw, ref, type Ref, toRaw } from "vue";
 import { useURLStore } from "@/stores/url_settings";
 import { useQuestionnaireStore } from "@/stores/questionnaire";
 import { storeToRefs } from "pinia";
+import md from "markdown-it";
+import attrs from "markdown-it-attrs";
 
 const specification = useURLStore();
 const questionnaireStore = useQuestionnaireStore();
-const { questionnaire, inputs_dirty } = storeToRefs(questionnaireStore);
+const { questionnaire } = storeToRefs(questionnaireStore);
 
 const content = computed(() => questionnaire.value.data);
 const data = computed(() => toRaw(questionnaire.value).data);
@@ -49,11 +50,26 @@ if (typeof specification?.fetch?.url === "string" && content) {
 }
 
 let data_url: string = "";
-if (specification?.content?.download) {
+if (specification?.output?.download) {
   const blob_part = JSON.stringify(data.value, null, 2);
   const blob = new Blob([blob_part], { type: "application/json" });
   data_url = window.URL.createObjectURL(blob);
 }
+
+const md_instance = md();
+md_instance.use(attrs, { allowedAttributes: ["class"] });
+
+const markdown = computed(() => {
+  //@ts-ignore
+  if (!specification.output.custom) return "";
+  try {
+    //@ts-ignore
+    return md_instance.render(specification.output.custom);
+  } catch (e) {
+    console.error(e);
+    return "";
+  }
+});
 </script>
 
 <template>
@@ -81,29 +97,27 @@ if (specification?.content?.download) {
   </div>
   <div
     v-if="
-      specification?.content === null ||
-      specification?.content?.thank_you ||
-      typeof specification?.content !== 'object' ||
-      Object.keys(specification.content).length === 0
+      specification?.output === null ||
+      specification?.output?.thank_you ||
+      typeof specification?.output !== 'object' ||
+      Object.keys(specification.output).length === 0
     "
     class="blank mb-2"
   >
-    <p>Thank you for answering those questions.</p>
-    <p>This is the end of the computerised interview.</p>
-    <p>Please tell the researcher or clinician you have finished.</p>
+    <p>Thank you for completing the {{ questionnaire.name }}.</p>
   </div>
-  <VueMarkdown
-    v-if="specification?.content?.custom"
+  <div
+    v-if="specification?.output?.custom"
     class="custom mb-2"
-    :source="specification?.content?.custom"
+    v-html="markdown"
   />
   <div
-    v-if="specification?.content?.summary"
+    v-if="specification?.output?.summary"
     class="summary mb-2"
     v-html="content.summary"
   />
   <a
-    v-if="specification?.content?.download"
+    v-if="specification?.output?.download"
     class="download"
     download="questionnaire-data.json"
     :href="data_url"

@@ -1,37 +1,55 @@
 import { defineStore } from "pinia";
 import { ref, type Ref } from "vue";
-type Header = { [key: string]: string };
+
+export enum SettingState {
+  DISABLED = -1,
+  OFF,
+  ON,
+}
+
+type Headers = { [key: string]: string };
 type FetchOptions = {
   url: string;
-  headers?: Header;
+  headers?: Headers;
   display?: string;
   silent?: boolean;
+  data_policy?: string;
 };
-type ContentOptions = {
+type OutputOptions = {
   custom?: string;
   summary?: boolean;
   download?: boolean;
 };
-type DisplayOptions =
+type BrandingOptions =
+  | {
+      banner_markdown: string;
+    }
+  | {
+      banner_text: string;
+      banner_href?: string;
+    }
   | {
       banner_img_src: string;
       banner_href?: string;
       banner_img_alt?: string;
       banner_img_title?: string;
-    }
-  | {
-      banner_text: string;
-      banner_href?: string;
     };
+type SettingsOptions = {
+  keyboard_shortcuts: SettingState;
+  auto_continue: SettingState;
+  auto_continue_delay: Number;
+};
 export type URLOptions = {
+  settings?: SettingsOptions;
   fetch?: FetchOptions;
-  content?: ContentOptions;
-  display?: DisplayOptions;
+  output?: OutputOptions;
+  branding?: BrandingOptions;
 };
 
 export const useURLStore = defineStore("url-settings", () => {
   const fetch: Ref<FetchOptions | null> = ref(null);
-  const content: Ref<ContentOptions | null> = ref(null);
-  const display: Ref<DisplayOptions | null> = ref(null);
-  return { fetch, content, display };
+  const output: Ref<OutputOptions | null> = ref(null);
+  const branding: Ref<BrandingOptions | null> = ref(null);
+  const settings: Ref<SettingsOptions | null> = ref(null);
+  return { fetch, output, branding, settings };
 });

@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { ValidationIssueLevel} from "questionnaire-core";
+import { ValidationIssueLevel } from "questionnaire-core";
 import SettingsMenu from "@/components/SettingsMenu.vue";
 import AnswerSet from "@/components/AnswerSet.vue";
-import { computed, type Ref, ref, watch } from "vue";
+import { computed, onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import { useQuestionnaireStore } from "@/stores/questionnaire";
 
 const questionnaireStore = useQuestionnaireStore();
-const { questionnaire, inputs_dirty } = storeToRefs(questionnaireStore);
+const { questionnaire } = storeToRefs(questionnaireStore);
 
 export interface Props {
   next_button_label?: string;
@@ -23,8 +23,30 @@ const props = withDefaults(defineProps<Props>(), {
 
 const item = computed(() => questionnaire.value.current_item);
 
-const next = () => questionnaire.value.next_q();
-const back = () => questionnaire.value.last_q();
+const scroll = () => {
+  const invalid = document?.querySelector(".is-invalid");
+  if (invalid) invalid.scrollIntoView();
+  else document?.querySelector("hr")?.scrollIntoView();
+};
+
+const next = () => {
+  questionnaire.value.next_q();
+  scroll();
+};
+const back = () => {
+  questionnaire.value.last_q();
+  scroll();
+};
+//
+// onMounted(() => {
+//   setInterval(() => {
+//     // @ts-ignore
+//     console.log(`Check item ${item.value.id}`)
+//     // @ts-ignore
+//     item.value.check_validation(questionnaire.value);
+//   }, 5000);
+// });
+
 </script>
 
 <template>
@@ -61,7 +83,11 @@ const back = () => questionnaire.value.last_q();
             if (evt.key === 'Enter' || evt.key === 'Space') next();
           }
         "
-        :disabled="item.validation_issues.filter(e => e.level === ValidationIssueLevel.ERROR).length > 0"
+        :disabled="
+          item.validation_issues.filter(
+            (e) => e.level === ValidationIssueLevel.ERROR
+          ).length > 0
+        "
         :data-click-on-key="props.next_button_key"
         data-nav-direction="next"
         v-html="props.next_button_label"

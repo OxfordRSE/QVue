@@ -14,6 +14,6 @@ describe("WelcomeMessage", () => {
       },
       props: { show_continue: false },
     });
-    expect(wrapper.text()).toContain("Welcome to the CIS-R");
+    expect(wrapper.text()).toContain("About the tool");
   });
 });

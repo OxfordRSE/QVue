@@ -3,8 +3,10 @@ import AnswerSet from "@/components/AnswerSet.vue";
 import ItemLabel from "@/components/ItemLabel.vue";
 import { storeToRefs } from "pinia";
 import { useQuestionnaireStore } from "@/stores/questionnaire";
+const settings = useSettingsStore();
 import { computed } from "vue";
 import type { Answer } from "questionnaire-core";
+import { useSettingsStore } from "@/stores/settings";
 
 const questionnaireStore = useQuestionnaireStore();
 const { questionnaire } = storeToRefs(questionnaireStore);
@@ -25,11 +27,11 @@ const answer = computed(() => {
   return base.find((a: Answer) => a.id === props.id);
 });
 
-answer.value.check_validation(
-  questionnaire.value.current_item,
-  questionnaire.value,
-  false
-);
+// answer.value.check_validation(
+//   questionnaire.value.current_item,
+//   questionnaire.value,
+//   false
+// );
 </script>
 
 <template>
@@ -37,15 +39,19 @@ answer.value.check_validation(
     <ItemLabel :id="props.id" :base="props.base" />
     <div
       class="answer-option d-flex p-1 my-2"
+      :class="answer.own_validation_issues.length ? 'is-invalid' : ''"
       v-for="(o, i) in answer.options"
       :key="o.content"
       ref="inputs"
     >
-      <kbd v-if="/^\d$/.test(o.content.toString())" class="me-2">{{
-        o.content
-      }}</kbd>
+      <kbd
+        v-if="/^\d$/.test(o.content.toString()) && settings.keyboard_shortcuts"
+        class="me-2"
+        >{{ o.content }}</kbd
+      >
       <input
         class="form-check-input me-1"
+        :class="answer.own_validation_issues.length ? 'is-invalid' : ''"
         type="radio"
         name="answer"
         :id="`${answer.id}_${i}`"
@@ -61,14 +67,25 @@ answer.value.check_validation(
         :checked="answer?.content === i"
         :data-click-on-key="o.content"
       />
-      <label class="flex-grow-1" :for="`${answer.id}_${i}`">
+      <label class="flex-grow-1 form-check-label" :for="`${answer.id}_${i}`">
         {{ o.label || o.content }}
         <AnswerSet
-          v-if="o.extra_answers && o.extra_answers.length"
+          v-if="answer.selected_option === o && o.extra_answers.length"
           :base="o.extra_answers"
         />
       </label>
     </div>
+    <div
+      v-if="answer.own_validation_issues.length"
+      class="invalid-feedback"
+      :class="Math.max(...answer.own_validation_issues.map(i => i.level)) === 0
+            ? 'txt-info'
+            : Math.max(...answer.own_validation_issues.map(i => i.level)) === 1
+            ? 'txt-warning'
+            : ''
+        "
+      v-html="answer.own_validation_issues.map(i => i.issue).join('<br/>')"
+    ></div>
   </div>
 </template>
 
