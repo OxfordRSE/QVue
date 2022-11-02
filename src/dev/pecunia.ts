@@ -20,7 +20,10 @@ const required_if: (
 ) => AnswerValidator = (expr) =>
   Validator((ans, item, state) => {
     console.log(`${ans.id}: required_if`);
-    if (expr(ans, item, state) && !ans.content)
+    if (
+      expr(ans, item, state) &&
+      (typeof ans.content === "undefined" || ans.content === "")
+    )
       return `More information is required`;
     return null;
   });
@@ -109,11 +112,15 @@ dose if known.</p>`,
           {
             id: `${id}_frequency`,
             type: AnswerType.NUMBER,
-            min: 0,
-            default_content: 0,
+            min: 1,
             validators: [
-              ValidatorsWithProps.GTE(1),
-              required_if((ans, item) => item.answers[0].content),
+              Validator((ans, item) => {
+                if (!item.answers[0].content) return null;
+                if (typeof ans.content === "undefined")
+                  return `An answer is required`
+                if (ans.content < 1) return `Answer must be 1 or larger`
+                return null
+              })
             ],
             label_right: "times",
           },
@@ -187,6 +194,8 @@ export const _state_properties: QuestionnaireProperties = {
   asks about various impacts of your health.
   </p> 
   `,
+  citation: `[PECUNIA Group (2021): PECUNIA Resource Use Measurement Instrument (PECUNIA RUM) (Version 1.0/2021).](https://www.pecunia-project.eu/tools/rum-instrument)  
+  [DOI 10.5281/zenodo.5036941](https://doi.org/10.5281/zenodo.5036941)`,
   items: [
     new Item({
       id: "welcome",
@@ -251,8 +260,8 @@ export const _state_properties: QuestionnaireProperties = {
       question: `
       <p class="fw-bold">Where have you lived or stayed overnight 
       (e.g. in hospital) in the past 3 months?</p>
-      <p class="fst-italic">Please tick all answers that apply and 
-      indicate the number of nights that you spent in each place. 
+      <p class="fst-italic">Please indicate the number of nights that you 
+      spent in each place. 
       If you are unsure, please use ‘Other’ and provide details.</p>`,
       answers: [
         {
@@ -934,7 +943,7 @@ health or other life problems in the past 3 months?
 regarding health or other life problems in the past 3 months?</p>
 <p class="fst-italic">Please indicate the number of contacts you had with a 
 given service for all answers that apply. 
-If you are unsure, please tick ‘Other’ and provide details.
+If you are unsure, please select ‘Other’ and provide details.
 </p>`,
       answers: [
         {
@@ -2023,7 +2032,7 @@ consultation or a phone call with someone working in legal services.</p>`,
             { label: "I don’t know/I would rather not say" },
           ],
           validators: [
-            Validator((ans, item) => {
+            Validator((ans) => {
               if (!(ans.content instanceof Array) || !ans.content.length)
                 return `An answer is required`;
               if (ans.content.includes(2) && ans.content.length !== 1)
