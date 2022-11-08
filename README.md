@@ -17,6 +17,7 @@ type URLOptions = {
   fetch?: { 
     url: string;
     headers?: {[key: string]: string};
+    extra_body_content?: object;
     display?: string;
     silent?: boolean;
   } | null;
@@ -43,6 +44,7 @@ A detailed description of those parameters is given here for reference:
 * `fetch`: if present, results are sent to the `fetch.url` address in JSON format, with `fetch.headers` as the headers.
   * `fetch.url` is your endpoint for handling the data. **Required** if `fetch` is specified.
   * `fetch.headers` should be used for authorisation and user identification. Unless overridden, "Content-Type" is specified as "application/json".
+  * `fetch.extra_body_content` will write the contents of the object into the fetch request body. If used, the data from the questionnaire will be in the `data` property. By default, the questionnaire data simply _is_ the request body.
   * `fetch.display` is a human-readable name for your endpoint to display to the user.
   * `silent` will suppress upload feedback if set to `true`
     * Note: this will not suppress the confirmation dialogue before dispatch

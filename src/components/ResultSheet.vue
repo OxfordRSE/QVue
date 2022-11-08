@@ -27,13 +27,17 @@ if (typeof specification?.fetch?.url === "string" && content) {
       )}`
     )
   ) {
+    let body = data.value;
+    if (specification?.fetch?.extra_body_content)
+      body = { ...specification.fetch.extra_body_content, data: data.value };
     fetch(specification?.fetch?.url, {
       method: "POST",
+      mode: "cors",
       headers: {
         "Content-Type": "application/json",
         ...specification?.fetch?.headers,
       },
-      body: JSON.stringify(data.value),
+      body: JSON.stringify(body),
     })
       .then((r) => {
         uploadComplete.value = true;

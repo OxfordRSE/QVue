@@ -11,6 +11,7 @@ type Headers = { [key: string]: string };
 type FetchOptions = {
   url: string;
   headers?: Headers;
+  extra_body_content?: object;
   display?: string;
   silent?: boolean;
   data_policy?: string;

@@ -9,6 +9,7 @@ const required_if = (expr) => Validator((ans, item, state) => {
     return null;
 });
 const new_medication_item = (id) => {
+    const n = id[id.length - 1];
     return new Item({
         id: id,
         question: `
@@ -24,10 +25,12 @@ dose if known.</p>`,
             {
                 type: AnswerType.TEXT,
                 label: "Medication name",
+                id: `medication_${n}_name`,
             },
             {
                 type: AnswerType.SELECT,
                 label: "Medication type",
+                id: `medication_${n}_type`,
                 validators: [required_if((ans, item) => item.answers[0].content)],
                 options: [
                     { label: "tablet/capsule" },
@@ -39,6 +42,7 @@ dose if known.</p>`,
                         extra_answers: [
                             {
                                 type: AnswerType.TEXT,
+                                id: `medication_${n}_type_other`,
                                 placeholder: "please specify",
                                 validators: [
                                     required_if((ans, item) => item.answers[1].content === 4),
@@ -53,12 +57,13 @@ dose if known.</p>`,
                 label: "Dose",
                 extra_answers: [
                     {
-                        id: `${id}_dose`,
+                        id: `medication_${n}_dose`,
                         type: AnswerType.NUMBER,
                         validators: [required_if((ans, item) => item.answers[0].content)],
                     },
                     {
                         type: AnswerType.SELECT,
+                        id: `medication_${n}_dose_unit`,
                         validators: [required_if((ans, item) => item.answers[0].content)],
                         options: [
                             { label: "mg" },
@@ -69,6 +74,7 @@ dose if known.</p>`,
                                 extra_answers: [
                                     {
                                         type: AnswerType.TEXT,
+                                        id: `medication_${n}_dose_unit_other`,
                                         placeholder: "please specify",
                                         validators: [
                                             required_if((ans, item) => item.answers[2].extra_answers[1].content === 3),
@@ -85,7 +91,7 @@ dose if known.</p>`,
                 label: "How often have you taken the given medication?",
                 extra_answers: [
                     {
-                        id: `${id}_frequency`,
+                        id: `medication_${n}_frequency`,
                         type: AnswerType.NUMBER,
                         min: 1,
                         validators: [
@@ -97,12 +103,13 @@ dose if known.</p>`,
                                 if (ans.content < 1)
                                     return `Answer must be 1 or larger`;
                                 return null;
-                            })
+                            }),
                         ],
                         label_right: "times",
                     },
                     {
                         type: AnswerType.SELECT,
+                        id: `medication_${n}_frequency_unit`,
                         validators: [required_if((ans, item) => item.answers[0].content)],
                         options: [
                             { label: "per day" },
@@ -113,7 +120,7 @@ dose if known.</p>`,
                                 label: "other",
                                 extra_answers: [
                                     {
-                                        id: `${id}_frequency_other`,
+                                        id: `medication_${n}_frequency_other`,
                                         type: AnswerType.TEXT,
                                         placeholder: "please specify",
                                         validators: [
@@ -131,12 +138,13 @@ dose if known.</p>`,
                 label: "For how long have you taken the given medication in the past 3 months?",
                 extra_answers: [
                     {
-                        id: `${id}_duration`,
+                        id: `medication_${n}_duration`,
                         type: AnswerType.NUMBER,
                         validators: [required_if((ans, item) => item.answers[0].content)],
                     },
                     {
                         type: AnswerType.SELECT,
+                        id: `medication_${n}_duration_unit`,
                         validators: [required_if((ans, item) => item.answers[0].content)],
                         options: [
                             { label: "day(s)" },
@@ -168,6 +176,7 @@ export const _state_properties = {
   `,
     citation: `[PECUNIA Group (2021): PECUNIA Resource Use Measurement Instrument (PECUNIA RUM) (Version 1.0/2021).](https://www.pecunia-project.eu/tools/rum-instrument)  
   [DOI 10.5281/zenodo.5036941](https://doi.org/10.5281/zenodo.5036941)`,
+    version: '0.0.1',
     items: [
         new Item({
             id: "welcome",
@@ -238,6 +247,7 @@ export const _state_properties = {
             answers: [
                 {
                     type: AnswerType.NUMBER,
+                    id: `accommodation_own`,
                     min: 0,
                     default_content: 0,
                     validators: [ValidatorsWithProps.GTE(0)],
@@ -246,6 +256,7 @@ export const _state_properties = {
                 },
                 {
                     type: AnswerType.NUMBER,
+                    id: `accommodation_family`,
                     min: 0,
                     default_content: 0,
                     validators: [ValidatorsWithProps.GTE(0)],
@@ -254,6 +265,7 @@ export const _state_properties = {
                 },
                 {
                     type: AnswerType.NUMBER,
+                    id: `accommodation_dormitory`,
                     min: 0,
                     default_content: 0,
                     validators: [ValidatorsWithProps.GTE(0)],
@@ -262,6 +274,7 @@ export const _state_properties = {
                 },
                 {
                     type: AnswerType.NUMBER,
+                    id: `accommodation_paid`,
                     min: 0,
                     default_content: 0,
                     validators: [ValidatorsWithProps.GTE(0)],
@@ -270,6 +283,7 @@ export const _state_properties = {
                 },
                 {
                     type: AnswerType.NUMBER,
+                    id: `accommodation_emergency`,
                     min: 0,
                     default_content: 0,
                     validators: [ValidatorsWithProps.GTE(0)],
@@ -278,6 +292,7 @@ export const _state_properties = {
                 },
                 {
                     type: AnswerType.NUMBER,
+                    id: `accommodation_sheltered`,
                     min: 0,
                     default_content: 0,
                     validators: [ValidatorsWithProps.GTE(0)],
@@ -286,6 +301,7 @@ export const _state_properties = {
                 },
                 {
                     type: AnswerType.NUMBER,
+                    id: `accommodation_nursing`,
                     min: 0,
                     default_content: 0,
                     validators: [ValidatorsWithProps.GTE(0)],
@@ -294,6 +310,7 @@ export const _state_properties = {
                 },
                 {
                     type: AnswerType.NUMBER,
+                    id: `accommodation_residential`,
                     min: 0,
                     default_content: 0,
                     validators: [ValidatorsWithProps.GTE(0)],
@@ -302,6 +319,7 @@ export const _state_properties = {
                 },
                 {
                     type: AnswerType.NUMBER,
+                    id: `accommodation_theraputic`,
                     min: 0,
                     default_content: 0,
                     validators: [ValidatorsWithProps.GTE(0)],
@@ -317,15 +335,15 @@ export const _state_properties = {
           you stayed there.</p>`,
                 },
                 {
-                    id: "A1_hospital_0",
                     type: AnswerType.NUMBER,
+                    id: `accommodation_hospital_0`,
                     min: 0,
                     default_content: 0,
                     validators: [ValidatorsWithProps.GTE(0)],
                     label_right: "nights",
                     extra_answers: [
                         {
-                            id: "A1_hospital_0_detail",
+                            id: `accommodation_hospital_0_detail`,
                             type: AnswerType.TEXT,
                             placeholder: "please specify",
                             validators: [
@@ -335,7 +353,7 @@ export const _state_properties = {
                     ],
                 },
                 {
-                    id: "A1_hospital_1",
+                    id: `accommodation_hospital_1`,
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
@@ -343,7 +361,7 @@ export const _state_properties = {
                     label_right: "nights",
                     extra_answers: [
                         {
-                            id: "A1_hospital_1_detail",
+                            id: `accommodation_hospital_1_detail`,
                             type: AnswerType.TEXT,
                             placeholder: "please specify",
                             validators: [
@@ -353,7 +371,7 @@ export const _state_properties = {
                     ],
                 },
                 {
-                    id: "A1_hospital_2",
+                    id: `accommodation_hospital_2`,
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
@@ -361,7 +379,7 @@ export const _state_properties = {
                     label_right: "nights",
                     extra_answers: [
                         {
-                            id: "A1_hospital_2_detail",
+                            id: `accommodation_hospital_2_detail`,
                             type: AnswerType.TEXT,
                             placeholder: "please specify",
                             validators: [
@@ -372,6 +390,7 @@ export const _state_properties = {
                 },
                 {
                     type: AnswerType.NUMBER,
+                    id: `accommodation_palliative`,
                     min: 0,
                     default_content: 0,
                     validators: [ValidatorsWithProps.GTE(0)],
@@ -380,6 +399,7 @@ export const _state_properties = {
                 },
                 {
                     type: AnswerType.NUMBER,
+                    id: `accommodation_detention`,
                     min: 0,
                     default_content: 0,
                     validators: [ValidatorsWithProps.GTE(0)],
@@ -388,6 +408,7 @@ export const _state_properties = {
                 },
                 {
                     type: AnswerType.NUMBER,
+                    id: `accommodation_street`,
                     min: 0,
                     default_content: 0,
                     validators: [ValidatorsWithProps.GTE(0)],
@@ -396,6 +417,7 @@ export const _state_properties = {
                 },
                 {
                     type: AnswerType.NUMBER,
+                    id: `accommodation_other`,
                     min: 0,
                     default_content: 0,
                     validators: [ValidatorsWithProps.GTE(0)],
@@ -403,7 +425,7 @@ export const _state_properties = {
                     label_right: "nights",
                     extra_answers: [
                         {
-                            id: "A1_other_detail",
+                            id: `accommodation_other_detail`,
                             type: AnswerType.TEXT,
                             placeholder: "please specify",
                             validators: [
@@ -413,6 +435,7 @@ export const _state_properties = {
                     ],
                 },
             ],
+            next_item: false,
         }),
         {
             id: "B_intro",
@@ -446,6 +469,7 @@ export const _state_properties = {
             answers: [
                 {
                     type: AnswerType.RADIO,
+                    id: `outpatient_use`,
                     validators: [Validators.REQUIRED],
                     options: [
                         { label: "Yes" },
@@ -471,6 +495,7 @@ export const _state_properties = {
             answers: [
                 {
                     type: AnswerType.NUMBER,
+                    id: `outpatient_use_gp`,
                     min: 0,
                     default_content: 0,
                     validators: [ValidatorsWithProps.GTE(0)],
@@ -479,6 +504,7 @@ export const _state_properties = {
                 },
                 {
                     type: AnswerType.NUMBER,
+                    id: `outpatient_use_dental`,
                     min: 0,
                     default_content: 0,
                     validators: [ValidatorsWithProps.GTE(0)],
@@ -487,6 +513,7 @@ export const _state_properties = {
                 },
                 {
                     type: AnswerType.NUMBER,
+                    id: `outpatient_use_specialist`,
                     label: "Specialist medical care (e.g. orthopaedist, psychiatrist, gynaecologist)",
                     min: 0,
                     default_content: 0,
@@ -494,7 +521,7 @@ export const _state_properties = {
                     label_right: "times",
                     extra_answers: [
                         {
-                            id: "B1.2_specialist_text",
+                            id: `outpatient_use_specialist_detail`,
                             type: AnswerType.TEXT,
                             placeholder: "please specify",
                             validators: [
@@ -506,13 +533,14 @@ export const _state_properties = {
                 {
                     label: "Diagnostic imaging services (e.g. MRI, CT scan)",
                     type: AnswerType.NUMBER,
+                    id: `outpatient_use_imaging`,
                     min: 0,
                     default_content: 0,
                     validators: [ValidatorsWithProps.GTE(0)],
                     label_right: "times",
                     extra_answers: [
                         {
-                            id: "B1.2_imaging_text",
+                            id: `outpatient_use_imaging_detail`,
                             type: AnswerType.TEXT,
                             placeholder: "please specify",
                             validators: [
@@ -524,13 +552,14 @@ export const _state_properties = {
                 {
                     label: "Diagnostic laboratory services (e.g. genetic testing, blood tests)",
                     type: AnswerType.NUMBER,
+                    id: `outpatient_use_diagnostic`,
                     min: 0,
                     default_content: 0,
                     validators: [ValidatorsWithProps.GTE(0)],
                     label_right: "times",
                     extra_answers: [
                         {
-                            id: "B1.2_lab_text",
+                            id: `outpatient_use_diagnostic_detail`,
                             type: AnswerType.TEXT,
                             placeholder: "please specify",
                             validators: [
@@ -542,13 +571,14 @@ export const _state_properties = {
                 {
                     label: "Other health care (e.g. psychologist, physiotherapist, dietician)",
                     type: AnswerType.NUMBER,
+                    id: `outpatient_use_health`,
                     min: 0,
                     default_content: 0,
                     validators: [ValidatorsWithProps.GTE(0)],
                     label_right: "times",
                     extra_answers: [
                         {
-                            id: "B1.2_other-healthcare_text",
+                            id: `outpatient_use_health_detail`,
                             type: AnswerType.TEXT,
                             placeholder: "please specify",
                             validators: [
@@ -560,13 +590,14 @@ export const _state_properties = {
                 {
                     label: "Social care (e.g. social worker)",
                     type: AnswerType.NUMBER,
+                    id: `outpatient_use_social`,
                     min: 0,
                     default_content: 0,
                     validators: [ValidatorsWithProps.GTE(0)],
                     label_right: "times",
                     extra_answers: [
                         {
-                            id: "B1.2_social_text",
+                            id: `outpatient_use_social_detail`,
                             type: AnswerType.TEXT,
                             placeholder: "please specify",
                             validators: [
@@ -578,13 +609,14 @@ export const _state_properties = {
                 {
                     label: "Holistic health care (e.g. acupuncturist, homeopathist, Traditional Chinese Medicine (TCM), osteopath)",
                     type: AnswerType.NUMBER,
+                    id: `outpatient_use_holistic`,
                     min: 0,
                     default_content: 0,
                     validators: [ValidatorsWithProps.GTE(0)],
                     label_right: "times",
                     extra_answers: [
                         {
-                            id: "B1.2_alternative_text",
+                            id: `outpatient_use_holistic_detail`,
                             type: AnswerType.TEXT,
                             placeholder: "please specify",
                             validators: [
@@ -596,13 +628,14 @@ export const _state_properties = {
                 {
                     label: "Other",
                     type: AnswerType.NUMBER,
+                    id: `outpatient_use_other`,
                     min: 0,
                     default_content: 0,
                     validators: [ValidatorsWithProps.GTE(0)],
                     label_right: "times",
                     extra_answers: [
                         {
-                            id: "B1.2_other_text",
+                            id: `outpatient_use_other_detail`,
                             type: AnswerType.TEXT,
                             placeholder: "please specify",
                             validators: [
@@ -623,6 +656,7 @@ day and do not involve an overnight stay.
             answers: [
                 {
                     type: AnswerType.RADIO,
+                    id: `daycare_use`,
                     validators: [Validators.REQUIRED],
                     options: [
                         { label: "Yes" },
@@ -649,6 +683,7 @@ services in the past 3 months?</p>
             answers: [
                 {
                     type: AnswerType.NUMBER,
+                    id: `daycare_use_medical`,
                     min: 0,
                     default_content: 0,
                     validators: [ValidatorsWithProps.GTE(0)],
@@ -657,6 +692,7 @@ services in the past 3 months?</p>
                 },
                 {
                     type: AnswerType.NUMBER,
+                    id: `daycare_use_nonmedical`,
                     min: 0,
                     default_content: 0,
                     validators: [ValidatorsWithProps.GTE(0)],
@@ -665,6 +701,7 @@ services in the past 3 months?</p>
                 },
                 {
                     type: AnswerType.NUMBER,
+                    id: `daycare_use_other`,
                     min: 0,
                     default_content: 0,
                     validators: [ValidatorsWithProps.GTE(0)],
@@ -672,7 +709,7 @@ services in the past 3 months?</p>
                     label_right: "days",
                     extra_answers: [
                         {
-                            id: "B2.2_other",
+                            id: `daycare_use_other_detail`,
                             type: AnswerType.TEXT,
                             placeholder: "please specify",
                             validators: [
@@ -695,13 +732,14 @@ or advice.
             answers: [
                 {
                     type: AnswerType.RADIO,
+                    id: `selfhelp_use`,
                     validators: [Validators.REQUIRED],
                     options: [
                         {
                             label: "Yes, I participated in a support/self-help group",
                             extra_answers: [
                                 {
-                                    id: "B3.1_number",
+                                    id: `selfhelp_use_number`,
                                     type: AnswerType.NUMBER,
                                     min: 0,
                                     default_content: 0,
@@ -735,6 +773,7 @@ a visit from paramedics, or contact with an emergency doctor on call.
             answers: [
                 {
                     type: AnswerType.RADIO,
+                    id: `emergency_use`,
                     validators: [Validators.REQUIRED],
                     options: [
                         { label: "Yes" },
@@ -764,7 +803,7 @@ If you are unsure, please use ‘Other’ and provide details.
                     label: "Emergency ambulance (e.g. paramedics)",
                 },
                 {
-                    id: "B4.2_ambulance_face",
+                    id: `emergency_use_ambulance_face`,
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
@@ -773,7 +812,7 @@ If you are unsure, please use ‘Other’ and provide details.
                     label_right: "contacts",
                 },
                 {
-                    id: "B4.2_ambulance_remote",
+                    id: `emergency_use_ambulance_remote`,
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
@@ -786,7 +825,7 @@ If you are unsure, please use ‘Other’ and provide details.
                     label: "Out-of-hours medical service (e.g. night care)",
                 },
                 {
-                    id: "B4.2_out-of-hours_face",
+                    id: "B4.2_ooh_face",
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
@@ -795,7 +834,7 @@ If you are unsure, please use ‘Other’ and provide details.
                     label_right: "contacts",
                 },
                 {
-                    id: "B4.2_out-of-hours_remote",
+                    id: "B4.2_ooh_remote",
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
@@ -808,7 +847,7 @@ If you are unsure, please use ‘Other’ and provide details.
                     label: "Accident and Emergency (A&E) department",
                 },
                 {
-                    id: "B4.2_a-and-e_face",
+                    id: "B4.2_ae_face",
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
@@ -817,7 +856,7 @@ If you are unsure, please use ‘Other’ and provide details.
                     label_right: "contacts",
                 },
                 {
-                    id: "B4.2_a-and-e_remote",
+                    id: "B4.2_ae_remote",
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
@@ -830,7 +869,7 @@ If you are unsure, please use ‘Other’ and provide details.
                     label: "Fire brigade",
                 },
                 {
-                    id: "B4.2_fire_face",
+                    id: `emergency_use_fire_face`,
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
@@ -839,7 +878,7 @@ If you are unsure, please use ‘Other’ and provide details.
                     label_right: "contacts",
                 },
                 {
-                    id: "B4.2_fire_remote",
+                    id: `emergency_use_fire_remote`,
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
@@ -852,7 +891,7 @@ If you are unsure, please use ‘Other’ and provide details.
                     label: "Other rescue services (e.g. mountain rescue)",
                 },
                 {
-                    id: "B4.2_other_type",
+                    id: `emergency_use_other_detail`,
                     type: AnswerType.TEXT,
                     placeholder: "please specify",
                     validators: [
@@ -863,7 +902,7 @@ If you are unsure, please use ‘Other’ and provide details.
                     ],
                 },
                 {
-                    id: "B4.2_other_face",
+                    id: `emergency_use_other_face`,
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
@@ -872,7 +911,7 @@ If you are unsure, please use ‘Other’ and provide details.
                     label_right: "contacts",
                 },
                 {
-                    id: "B4.2_other_remote",
+                    id: `emergency_use_other_remote`,
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
@@ -891,6 +930,7 @@ health or other life problems in the past 3 months?
             answers: [
                 {
                     type: AnswerType.RADIO,
+                    id: `helpline_use`,
                     validators: [Validators.REQUIRED],
                     options: [
                         { label: "Yes" },
@@ -917,6 +957,7 @@ If you are unsure, please select ‘Other’ and provide details.
             answers: [
                 {
                     type: AnswerType.NUMBER,
+                    id: `helpline_use_info`,
                     min: 0,
                     default_content: 0,
                     validators: [ValidatorsWithProps.GTE(0)],
@@ -925,6 +966,7 @@ If you are unsure, please select ‘Other’ and provide details.
                 },
                 {
                     type: AnswerType.NUMBER,
+                    id: `helpline_use_support`,
                     min: 0,
                     default_content: 0,
                     validators: [ValidatorsWithProps.GTE(0)],
@@ -933,6 +975,7 @@ If you are unsure, please select ‘Other’ and provide details.
                 },
                 {
                     type: AnswerType.NUMBER,
+                    id: `helpline_use_other`,
                     min: 0,
                     default_content: 0,
                     validators: [ValidatorsWithProps.GTE(0)],
@@ -940,7 +983,7 @@ If you are unsure, please select ‘Other’ and provide details.
                     label_right: "contacts",
                     extra_answers: [
                         {
-                            id: "B5.2_other",
+                            id: `helpline_use_other_detail`,
                             type: AnswerType.TEXT,
                             placeholder: "please specify",
                             validators: [
@@ -963,6 +1006,7 @@ people with disabilities to develop work-related skills
             answers: [
                 {
                     type: AnswerType.RADIO,
+                    id: `vocational_use`,
                     validators: [Validators.REQUIRED],
                     options: [
                         { label: "Yes" },
@@ -989,6 +1033,7 @@ If you are unsure, please use ‘Other’ and provide details.
             answers: [
                 {
                     type: AnswerType.NUMBER,
+                    id: `vocational_use_training`,
                     min: 0,
                     default_content: 0,
                     validators: [ValidatorsWithProps.GTE(0)],
@@ -1003,6 +1048,7 @@ If you are unsure, please use ‘Other’ and provide details.
                 },
                 {
                     type: AnswerType.NUMBER,
+                    id: `vocational_use_sheltered`,
                     min: 0,
                     default_content: 0,
                     validators: [ValidatorsWithProps.GTE(0)],
@@ -1016,6 +1062,7 @@ If you are unsure, please use ‘Other’ and provide details.
                 },
                 {
                     type: AnswerType.NUMBER,
+                    id: `vocational_use_integration`,
                     min: 0,
                     default_content: 0,
                     validators: [ValidatorsWithProps.GTE(0)],
@@ -1029,6 +1076,7 @@ If you are unsure, please use ‘Other’ and provide details.
                 },
                 {
                     type: AnswerType.NUMBER,
+                    id: `vocational_use_supported`,
                     min: 0,
                     default_content: 0,
                     validators: [ValidatorsWithProps.GTE(0)],
@@ -1041,6 +1089,7 @@ If you are unsure, please use ‘Other’ and provide details.
                 },
                 {
                     type: AnswerType.NUMBER,
+                    id: `vocational_use_other`,
                     min: 0,
                     default_content: 0,
                     validators: [ValidatorsWithProps.GTE(0)],
@@ -1048,7 +1097,7 @@ If you are unsure, please use ‘Other’ and provide details.
                     label_right: "days",
                     extra_answers: [
                         {
-                            id: "B6.2_other",
+                            id: `vocational_use_other_detail`,
                             type: AnswerType.TEXT,
                             placeholder: "please specify",
                             validators: [

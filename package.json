@@ -21,7 +21,7 @@
     "markdown-it-attrs": "^4.1.4",
     "pinia": "^2.0.22",
     "questionnaire-cis-r": "^0.2.1",
-    "questionnaire-core": "^0.2.27",
+    "questionnaire-core": "^0.2.28",
     "vue": "^3.2.38",
     "vue-debounce": "^4.0.0",
     "vue-material-design-icons": "^5.1.2",
