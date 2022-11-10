@@ -2026,7 +2026,7 @@ export const _state_properties = {
                     type: AnswerType.RADIO,
                     options: [
                         { content: 1, label: "No" },
-                        { content: 2, label: "Yes, but I would never commit suicide" },
+                        { content: 2, label: "Yes, but I would not actually carry it out" },
                         {
                             content: 3,
                             label: "Yes, I have had thoughts about it in the past week",

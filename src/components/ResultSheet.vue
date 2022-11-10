@@ -15,6 +15,7 @@ const data = computed(() => toRaw(questionnaire.value).data);
 
 let uploadComplete: Ref<boolean> = ref(false);
 let uploadStatus: Ref<number | undefined> = ref();
+let uploadReply: Ref<string | undefined> = ref();
 
 if (typeof specification?.fetch?.url === "string" && content) {
   if (
@@ -42,7 +43,9 @@ if (typeof specification?.fetch?.url === "string" && content) {
       .then((r) => {
         uploadComplete.value = true;
         uploadStatus.value = r.status;
+        return r.json();
       })
+      .then((r) => (uploadReply.value = r.error_message || r.message))
       .catch((e) => {
         console.error(e);
         uploadComplete.value = true;
@@ -91,9 +94,12 @@ const markdown = computed(() => {
     </p>
     <p v-else-if="uploadStatus !== 200" class="text-bg-danger">
       Error uploading results to
-      {{ specification.fetch.display || specification.fetch.url }}.<br />
+      {{ specification.fetch.display || specification.fetch.url }}.
+      <span v-if="uploadReply" class="server-reply"
+        ><br />{{ uploadReply }}</span
+      >
       <span v-if="specification.content?.download"
-        >You may wish to try downloading your results and sending them
+        ><br />You may wish to try downloading your results and sending them
         yourself.</span
       >
     </p>
