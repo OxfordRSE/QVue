@@ -435,7 +435,6 @@ export const _state_properties = {
                     ],
                 },
             ],
-            next_item: false,
         }),
         {
             id: "B_intro",
