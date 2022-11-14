@@ -464,7 +464,6 @@ export const _state_properties: QuestionnaireProperties = {
           ],
         },
       ],
-      next_item: false,
     }),
     {
       id: "B_intro",
