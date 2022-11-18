@@ -10,9 +10,9 @@ const settings = storeToRefs(useSettingsStore());
 let spec_error = false;
 try {
   const query = parseQuery(window.location.search);
-  const spec_64 = query?.spec;
-  if (typeof spec_64 === "string") {
-    const spec = atob(spec_64);
+  const spec = query?.spec;
+  if (typeof spec === "string") {
+    // const spec = atob(spec);
     const safe = decodeURI(spec);
     const json: URLOptions = JSON.parse(safe);
     console.log(json);
