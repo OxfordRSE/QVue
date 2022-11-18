@@ -54,7 +54,7 @@ const enabled = computed(() => {
           >
         </div>
       </li>
-      <li v-if="settings.auto_continue">
+      <li v-if="settings.auto_continue === SettingState.ON || settings.auto_continue === true">
         <div class="d-flex align-content-center">
           Wait
           <input

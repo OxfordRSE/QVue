@@ -23,10 +23,10 @@ try {
     if (json.settings) {
       if (json.settings.keyboard_shortcuts in SettingState)
         settings.keyboard_shortcuts.value = json.settings.keyboard_shortcuts;
-      if (json.settings.auto_continue in SettingState)
-        settings.auto_continue.value = json.settings.auto_continue;
-      if (typeof json.settings.auto_continue_delay === "number")
-        settings.auto_continue_delay.value = json.settings.auto_continue_delay;
+      // if (json.settings.auto_continue in SettingState)
+      //   settings.auto_continue.value = json.settings.auto_continue;
+      // if (typeof json.settings.auto_continue_delay === "number")
+      //   settings.auto_continue_delay.value = json.settings.auto_continue_delay;
     }
   }
 } catch (e) {

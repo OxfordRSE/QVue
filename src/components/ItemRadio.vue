@@ -3,10 +3,10 @@ import AnswerSet from "@/components/AnswerSet.vue";
 import ItemLabel from "@/components/ItemLabel.vue";
 import { storeToRefs } from "pinia";
 import { useQuestionnaireStore } from "@/stores/questionnaire";
+import { useSettingsStore } from "@/stores/settings";
 const settings = useSettingsStore();
 import { computed } from "vue";
 import type { Answer } from "questionnaire-core";
-import { useSettingsStore } from "@/stores/settings";
 
 const questionnaireStore = useQuestionnaireStore();
 const { questionnaire } = storeToRefs(questionnaireStore);

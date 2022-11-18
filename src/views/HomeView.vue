@@ -16,7 +16,7 @@ const router = useRoute();
 const store = useURLStore();
 const settings = useSettingsStore();
 const questionnaireStore = useQuestionnaireStore();
-const { auto_continue, auto_continue_delay } = storeToRefs(settings);
+const { auto_continue, auto_continue_delay, keyboard_shortcuts } = storeToRefs(settings);
 const { questionnaire } = storeToRefs(questionnaireStore);
 
 if (router.params.questionnaire) {
@@ -153,7 +153,11 @@ const last = () => {
   </div>
   <div
     class="page d-flex flex-column h-100"
-    :class="settings.keyboard_shortcuts === SettingState.ON ? 'kbd-nav' : ''"
+    :class="
+      keyboard_shortcuts === SettingState.ON || keyboard_shortcuts === true
+        ? 'kbd-nav'
+        : ''
+    "
     v-else
   >
     <BannerDisplay :questionnaire_name="questionnaire.name" />
