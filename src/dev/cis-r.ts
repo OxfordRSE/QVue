@@ -3,7 +3,7 @@ import {
   Item,
   Questionnaire,
   type QuestionnaireProperties,
-  Validators,
+  AnswerValidators,
 } from "questionnaire-core";
 
 export * from "questionnaire-core";
@@ -4650,7 +4650,7 @@ _state_properties.items
   .filter((i) => i.answers?.length === 1)
   // @ts-ignore
   .map((i) => i.answer)
-  .forEach((a) => a.validators.push(Validators.REQUIRED));
+  .forEach((a) => a.validators.push(AnswerValidators.REQUIRED));
 
 export const questionnaire: () => Questionnaire = () =>
   new Questionnaire(_state_properties);

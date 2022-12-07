@@ -37,15 +37,11 @@ const back = () => {
   questionnaire.value.last_q();
   scroll();
 };
-//
-// onMounted(() => {
-//   setInterval(() => {
-//     // @ts-ignore
-//     console.log(`Check item ${item.value.id}`)
-//     // @ts-ignore
-//     item.value.check_validation(questionnaire.value);
-//   }, 5000);
-// });
+
+const answerChanged = () => {
+  // @ts-ignore
+  item.value?.check_validation(questionnaire.value, false);
+};
 
 </script>
 
@@ -57,8 +53,15 @@ const back = () => {
       </aside>
       <div v-html="item.question"></div>
     </div>
+    <div v-if="item.own_validation_issues.length > 0" class="item-validation-issues">
+      <div v-for="(issue, i) in item.own_validation_issues" :key="i">
+        <p v-if="issue.level === ValidationIssueLevel.INFO" class="p-2 text-bg-info">{{issue.issue}}</p>
+        <p v-if="issue.level === ValidationIssueLevel.WARNING" class="p-2 text-bg-warning">{{issue.issue}}</p>
+        <p v-if="issue.level === ValidationIssueLevel.ERROR" class="p-2 text-bg-danger">{{issue.issue}}</p>
+      </div>
+    </div>
     <div class="answers flex-grow-1 my-4" v-if="item.answers.length">
-      <AnswerSet />
+      <AnswerSet @change="answerChanged"/>
     </div>
     <div class="buttons">
       <button

@@ -1,4 +1,4 @@
-import { AnswerType, Item, Questionnaire, Validators, } from "questionnaire-core";
+import { AnswerType, Item, Questionnaire, AnswerValidators, } from "questionnaire-core";
 export * from "questionnaire-core";
 // Utility navigation functions
 const panic_navigation = (state) => {
@@ -3850,5 +3850,5 @@ _state_properties.items
     .filter((i) => i.answers?.length === 1)
     // @ts-ignore
     .map((i) => i.answer)
-    .forEach((a) => a.validators.push(Validators.REQUIRED));
+    .forEach((a) => a.validators.push(AnswerValidators.REQUIRED));
 export const questionnaire = () => new Questionnaire(_state_properties);

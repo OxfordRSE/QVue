@@ -1,7 +1,7 @@
-import { Answer, AnswerType, Item, Questionnaire, Validator, Validators, ValidatorsWithProps, } from "questionnaire-core";
+import { Answer, AnswerType, Item, Questionnaire, answer_validator, AnswerValidators, AnswerValidatorsWithProps, ItemValidators } from "questionnaire-core";
 export * from "questionnaire-core";
 const currency_symbol = "&pound;";
-const required_if = (expr) => Validator((ans, item, state) => {
+const required_if = (expr) => answer_validator((ans, item, state) => {
     console.log(`${ans.id}: required_if`);
     if (expr(ans, item, state) &&
         (typeof ans.content === "undefined" || ans.content === ""))
@@ -95,7 +95,7 @@ dose if known.</p>`,
                         type: AnswerType.NUMBER,
                         min: 1,
                         validators: [
-                            Validator((ans, item) => {
+                            answer_validator((ans, item) => {
                                 if (!item.answers[0].content)
                                     return null;
                                 if (typeof ans.content === "undefined")
@@ -168,15 +168,32 @@ for (let i = 0; i < 8; i++)
 export const _state_properties = {
     name: "PECUNIA RUM",
     introduction: `
+  <a href="https://www.pecunia-project.eu/" target="_blank" style="background-color: transparent">
+    <img src="https://www.pecunia-project.eu/user/themes/pecunia/images/dist/logo.8d1d3b47.svg"/>
+  </a>
   <p>The ProgrammE in Costing, resource use measurement and outcome valuation 
   for Use in multi-sectoral National and International health economic 
   evaluAtions (PECUNIA) Resource Use Measurement (RUM) questionnaire
   asks about various impacts of your health.
   </p> 
+  <p>
+  The questionnaire was developed by the <a href="https://www.pecunia-project.eu/about/team" target="_blank">PECUNIA Group</a>.
+  If you have questions, please contact:
+  <dl>
+    <dt>Project coordinator</dt><dd><a href="https://www.pecunia-project.eu/contact" target="_blank">Prof. Judit Simon</a></dd>
+    <dt>Task leader</dt><dd><a href="https://www.pecunia-project.eu/about/consortium/um" target="_blank">Prof. Silvia Evers</a></dd>
+    <dt>Task co-leader</dt><dd><a href="https://www.pecunia-project.eu/about/consortium/univbris" target="_blank">Prof. Will Hollingworth</a></dd>
+    <dt>Contact Section F (Employment and productivity)</dt><dd><a href="https://www.pecunia-project.eu/about/consortium/eur" target="_blank">Dr. Leona Hakkaart-van Roijen</a></dd>
+  </dl>
+  </p>
   `,
-    citation: `[PECUNIA Group (2021): PECUNIA Resource Use Measurement Instrument (PECUNIA RUM) (Version 1.0/2021).](https://www.pecunia-project.eu/tools/rum-instrument)  
-  [DOI 10.5281/zenodo.5036941](https://doi.org/10.5281/zenodo.5036941)`,
-    version: '0.0.1',
+    citation: `© PECUNIA Consortium, 2021
+  
+  [PECUNIA Group (2021): PECUNIA Resource Use Measurement Instrument (PECUNIA RUM) (Version 1.0/2021).](https://www.pecunia-project.eu/tools/rum-instrument)  
+  [DOI 10.5281/zenodo.5036941](https://doi.org/10.5281/zenodo.5036941)
+  
+  The PECUNIA project has received funding from the European Union’s Horizon 2020 research and innovation programme under grant agreement No 779292.`,
+    version: "0.0.2",
     items: [
         new Item({
             id: "welcome",
@@ -244,13 +261,14 @@ export const _state_properties = {
       <p class="fst-italic">Please indicate the number of nights that you 
       spent in each place. 
       If you are unsure, please use ‘Other’ and provide details.</p>`,
+            validators: [ItemValidators.REQUIRED],
             answers: [
                 {
                     type: AnswerType.NUMBER,
                     id: `accommodation_own`,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: "Individual or shared flat or house",
                     label_right: "nights",
                 },
@@ -259,7 +277,7 @@ export const _state_properties = {
                     id: `accommodation_family`,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: "Family or friend’s flat or house ",
                     label_right: "nights",
                 },
@@ -268,7 +286,7 @@ export const _state_properties = {
                     id: `accommodation_dormitory`,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: "Dormitory (e.g. boarding school, university residence)",
                     label_right: "nights",
                 },
@@ -277,7 +295,7 @@ export const _state_properties = {
                     id: `accommodation_paid`,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: "Paid temporary accommodation (e.g. hotel)",
                     label_right: "nights",
                 },
@@ -286,7 +304,7 @@ export const _state_properties = {
                     id: `accommodation_emergency`,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: "Emergency shelter (e.g. temporary shelter for homeless)",
                     label_right: "nights",
                 },
@@ -295,7 +313,7 @@ export const _state_properties = {
                     id: `accommodation_sheltered`,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: "Sheltered housing (e.g. housing with assistance)",
                     label_right: "nights",
                 },
@@ -304,7 +322,7 @@ export const _state_properties = {
                     id: `accommodation_nursing`,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: "Nursing home (e.g. residential care home with nursing)",
                     label_right: "nights",
                 },
@@ -313,7 +331,7 @@ export const _state_properties = {
                     id: `accommodation_residential`,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: "Other long-term residential care home",
                     label_right: "nights",
                 },
@@ -322,7 +340,7 @@ export const _state_properties = {
                     id: `accommodation_theraputic`,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: "Therapeutic community home (e.g. temporary group residence for therapeutic purposes)",
                     label_right: "nights",
                 },
@@ -339,7 +357,7 @@ export const _state_properties = {
                     id: `accommodation_hospital_0`,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label_right: "nights",
                     extra_answers: [
                         {
@@ -357,7 +375,7 @@ export const _state_properties = {
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label_right: "nights",
                     extra_answers: [
                         {
@@ -375,7 +393,7 @@ export const _state_properties = {
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label_right: "nights",
                     extra_answers: [
                         {
@@ -393,7 +411,7 @@ export const _state_properties = {
                     id: `accommodation_palliative`,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: "Palliative care (e.g. hospice)",
                     label_right: "nights",
                 },
@@ -402,7 +420,7 @@ export const _state_properties = {
                     id: `accommodation_detention`,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: "Place of detention (e.g. prison)",
                     label_right: "nights",
                 },
@@ -411,7 +429,7 @@ export const _state_properties = {
                     id: `accommodation_street`,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: "On the street",
                     label_right: "nights",
                 },
@@ -420,7 +438,7 @@ export const _state_properties = {
                     id: `accommodation_other`,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: "Other",
                     label_right: "nights",
                     extra_answers: [
@@ -469,7 +487,7 @@ export const _state_properties = {
                 {
                     type: AnswerType.RADIO,
                     id: `outpatient_use`,
-                    validators: [Validators.REQUIRED],
+                    validators: [AnswerValidators.NOT_BLANK],
                     options: [
                         { label: "Yes" },
                         { label: "No" },
@@ -491,13 +509,14 @@ export const _state_properties = {
       <p class="fst-italic">Please indicate the number of times you have used 
       a given service for all answers that apply. 
       If you are unsure, please use ‘Other’ and provide details.</p>`,
+            validators: [ItemValidators.REQUIRED],
             answers: [
                 {
                     type: AnswerType.NUMBER,
                     id: `outpatient_use_gp`,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: "General practitioner (GP)/family doctor",
                     label_right: "times",
                 },
@@ -506,7 +525,7 @@ export const _state_properties = {
                     id: `outpatient_use_dental`,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: "Dental care",
                     label_right: "times",
                 },
@@ -516,7 +535,7 @@ export const _state_properties = {
                     label: "Specialist medical care (e.g. orthopaedist, psychiatrist, gynaecologist)",
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label_right: "times",
                     extra_answers: [
                         {
@@ -535,7 +554,7 @@ export const _state_properties = {
                     id: `outpatient_use_imaging`,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label_right: "times",
                     extra_answers: [
                         {
@@ -554,7 +573,7 @@ export const _state_properties = {
                     id: `outpatient_use_diagnostic`,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label_right: "times",
                     extra_answers: [
                         {
@@ -573,7 +592,7 @@ export const _state_properties = {
                     id: `outpatient_use_health`,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label_right: "times",
                     extra_answers: [
                         {
@@ -592,7 +611,7 @@ export const _state_properties = {
                     id: `outpatient_use_social`,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label_right: "times",
                     extra_answers: [
                         {
@@ -611,7 +630,7 @@ export const _state_properties = {
                     id: `outpatient_use_holistic`,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label_right: "times",
                     extra_answers: [
                         {
@@ -630,7 +649,7 @@ export const _state_properties = {
                     id: `outpatient_use_other`,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label_right: "times",
                     extra_answers: [
                         {
@@ -656,7 +675,7 @@ day and do not involve an overnight stay.
                 {
                     type: AnswerType.RADIO,
                     id: `daycare_use`,
-                    validators: [Validators.REQUIRED],
+                    validators: [AnswerValidators.NOT_BLANK],
                     options: [
                         { label: "Yes" },
                         { label: "No" },
@@ -679,13 +698,14 @@ services in the past 3 months?</p>
       a given service for all answers that apply. 
       If you are unsure, please use ‘Other’ and provide details.
 </p>`,
+            validators: [ItemValidators.REQUIRED],
             answers: [
                 {
                     type: AnswerType.NUMBER,
                     id: `daycare_use_medical`,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: "Medical day care (e.g. day patient in hospital)",
                     label_right: "days",
                 },
@@ -694,7 +714,7 @@ services in the past 3 months?</p>
                     id: `daycare_use_nonmedical`,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: "Non-medical day care (e.g. day care centre)",
                     label_right: "days",
                 },
@@ -703,7 +723,7 @@ services in the past 3 months?</p>
                     id: `daycare_use_other`,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: "Other",
                     label_right: "days",
                     extra_answers: [
@@ -732,7 +752,7 @@ or advice.
                 {
                     type: AnswerType.RADIO,
                     id: `selfhelp_use`,
-                    validators: [Validators.REQUIRED],
+                    validators: [AnswerValidators.NOT_BLANK],
                     options: [
                         {
                             label: "Yes, I participated in a support/self-help group",
@@ -743,7 +763,7 @@ or advice.
                                     min: 0,
                                     default_content: 0,
                                     validators: [
-                                        Validator((ans, item) => {
+                                        answer_validator((ans, item) => {
                                             if (item.answer.content === 0 && ans.content <= 0)
                                                 return `Answer must be 1 or larger`;
                                             return null;
@@ -773,7 +793,7 @@ a visit from paramedics, or contact with an emergency doctor on call.
                 {
                     type: AnswerType.RADIO,
                     id: `emergency_use`,
-                    validators: [Validators.REQUIRED],
+                    validators: [AnswerValidators.NOT_BLANK],
                     options: [
                         { label: "Yes" },
                         { label: "No" },
@@ -796,6 +816,7 @@ care services for yourself in the past 3 months?</p>
 given service for all answers that apply. 
 If you are unsure, please use ‘Other’ and provide details.
 </p>`,
+            validators: [ItemValidators.REQUIRED],
             answers: [
                 {
                     type: AnswerType.NONE,
@@ -806,7 +827,7 @@ If you are unsure, please use ‘Other’ and provide details.
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: "Face-to-face",
                     label_right: "contacts",
                 },
@@ -815,7 +836,7 @@ If you are unsure, please use ‘Other’ and provide details.
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: "Online/telephone",
                     label_right: "contacts",
                 },
@@ -828,7 +849,7 @@ If you are unsure, please use ‘Other’ and provide details.
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: "Face-to-face",
                     label_right: "contacts",
                 },
@@ -837,7 +858,7 @@ If you are unsure, please use ‘Other’ and provide details.
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: "Online/telephone",
                     label_right: "contacts",
                 },
@@ -850,7 +871,7 @@ If you are unsure, please use ‘Other’ and provide details.
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: "Face-to-face",
                     label_right: "contacts",
                 },
@@ -859,7 +880,7 @@ If you are unsure, please use ‘Other’ and provide details.
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: "Online/telephone",
                     label_right: "contacts",
                 },
@@ -872,7 +893,7 @@ If you are unsure, please use ‘Other’ and provide details.
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: "Face-to-face",
                     label_right: "contacts",
                 },
@@ -881,7 +902,7 @@ If you are unsure, please use ‘Other’ and provide details.
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: "Online/telephone",
                     label_right: "contacts",
                 },
@@ -905,7 +926,7 @@ If you are unsure, please use ‘Other’ and provide details.
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: "Face-to-face",
                     label_right: "contacts",
                 },
@@ -914,7 +935,7 @@ If you are unsure, please use ‘Other’ and provide details.
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: "Online/telephone",
                     label_right: "contacts",
                 },
@@ -930,7 +951,7 @@ health or other life problems in the past 3 months?
                 {
                     type: AnswerType.RADIO,
                     id: `helpline_use`,
-                    validators: [Validators.REQUIRED],
+                    validators: [AnswerValidators.NOT_BLANK],
                     options: [
                         { label: "Yes" },
                         { label: "No" },
@@ -953,13 +974,14 @@ regarding health or other life problems in the past 3 months?</p>
 given service for all answers that apply. 
 If you are unsure, please select ‘Other’ and provide details.
 </p>`,
+            validators: [ItemValidators.REQUIRED],
             answers: [
                 {
                     type: AnswerType.NUMBER,
                     id: `helpline_use_info`,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: "For information (e.g. pharmacy, health hotline)",
                     label_right: "contacts",
                 },
@@ -968,7 +990,7 @@ If you are unsure, please select ‘Other’ and provide details.
                     id: `helpline_use_support`,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: "For support (e.g. mental health support hotline)",
                     label_right: "contacts",
                 },
@@ -977,7 +999,7 @@ If you are unsure, please select ‘Other’ and provide details.
                     id: `helpline_use_other`,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: "Other",
                     label_right: "contacts",
                     extra_answers: [
@@ -1006,7 +1028,7 @@ people with disabilities to develop work-related skills
                 {
                     type: AnswerType.RADIO,
                     id: `vocational_use`,
-                    validators: [Validators.REQUIRED],
+                    validators: [AnswerValidators.NOT_BLANK],
                     options: [
                         { label: "Yes" },
                         { label: "No" },
@@ -1029,13 +1051,14 @@ vocational services in the past 3 months?</p>
 service for all answers that apply. 
 If you are unsure, please use ‘Other’ and provide details.
 </p>`,
+            validators: [ItemValidators.REQUIRED],
             answers: [
                 {
                     type: AnswerType.NUMBER,
                     id: `vocational_use_training`,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: `
           <p>Vocational training</p>
           <p class="small">(training for a specific type of job that provides 
@@ -1050,7 +1073,7 @@ If you are unsure, please use ‘Other’ and provide details.
                     id: `vocational_use_sheltered`,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: `
           <p>Sheltered workshop</p>
           <p class="small">(place of work specially designed to provide a safe 
@@ -1064,7 +1087,7 @@ If you are unsure, please use ‘Other’ and provide details.
                     id: `vocational_use_integration`,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: `
           <p>Integration workplace</p>
           <p class="small">(place of work promoting the integration and 
@@ -1078,7 +1101,7 @@ If you are unsure, please use ‘Other’ and provide details.
                     id: `vocational_use_supported`,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: `
           <p>Supported employment programmes</p>
           <p class="small">(supporting people with some (mental) disability to 
@@ -1091,7 +1114,7 @@ If you are unsure, please use ‘Other’ and provide details.
                     id: `vocational_use_other`,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: "Other",
                     label_right: "days",
                     extra_answers: [
@@ -1120,7 +1143,7 @@ or a specially equipped taxi.
             answers: [
                 {
                     type: AnswerType.RADIO,
-                    validators: [Validators.REQUIRED],
+                    validators: [AnswerValidators.NOT_BLANK],
                     options: [
                         { label: "Yes" },
                         { label: "No" },
@@ -1143,12 +1166,13 @@ for your health and social care needs in the past 3 months?</p>
 service for all answers that apply. 
 If you are unsure, please use ‘Other’ and provide details.
 </p>`,
+            validators: [ItemValidators.REQUIRED],
             answers: [
                 {
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: "Non-emergency ambulance ride",
                     label_right: "times",
                 },
@@ -1156,7 +1180,7 @@ If you are unsure, please use ‘Other’ and provide details.
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: "Taxi service",
                     label_right: "times",
                 },
@@ -1164,7 +1188,7 @@ If you are unsure, please use ‘Other’ and provide details.
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: "Other",
                     label_right: "times",
                     extra_answers: [
@@ -1198,7 +1222,7 @@ If you are unsure, please use ‘Other’ and provide details.
             answers: [
                 {
                     type: AnswerType.RADIO,
-                    validators: [Validators.REQUIRED],
+                    validators: [AnswerValidators.NOT_BLANK],
                     options: [
                         { label: "Yes" },
                         { label: "No" },
@@ -1250,8 +1274,19 @@ received because of your health in the past 3 months?</p>`,
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label_right: "hours per week",
+                },
+                {
+                    type: AnswerType.CHECKBOX,
+                    options: [{ label: "I don't know/I would rather not say" }],
+                    validators: [
+                        answer_validator((ans, item) => {
+                            if (ans.content?.length && item.answers[0].content > 0)
+                                return "Please answer only one of the questions";
+                            return null;
+                        }),
+                    ],
                 },
             ],
         }),
@@ -1276,7 +1311,7 @@ received because of your health in the past 3 months?</p>`,
             answers: [
                 {
                     type: AnswerType.RADIO,
-                    validators: [Validators.REQUIRED],
+                    validators: [AnswerValidators.NOT_BLANK],
                     options: [
                         { label: "Primary education or lower" },
                         { label: "Lower secondary education" },
@@ -1319,7 +1354,7 @@ students in a way that addresses their individual needs
             answers: [
                 {
                     type: AnswerType.RADIO,
-                    validators: [Validators.REQUIRED],
+                    validators: [AnswerValidators.NOT_BLANK],
                     options: [
                         { label: "Yes, in a special education day school" },
                         { label: "Yes, in a day school" },
@@ -1397,7 +1432,7 @@ participate in classes.
             answers: [
                 {
                     type: AnswerType.RADIO,
-                    validators: [Validators.REQUIRED],
+                    validators: [AnswerValidators.NOT_BLANK],
                     options: [
                         {
                             label: "Yes, I have missed school",
@@ -1408,7 +1443,7 @@ participate in classes.
                                     min: 0,
                                     default_content: 0,
                                     validators: [
-                                        Validator((ans, item) => {
+                                        answer_validator((ans, item) => {
                                             if (item.answer.content === 0 && ans.content < 1)
                                                 return `Answer must be 1 or larger`;
                                             return null;
@@ -1434,7 +1469,7 @@ mental health problems at school in the past 3 months?
             answers: [
                 {
                     type: AnswerType.RADIO,
-                    validators: [Validators.REQUIRED],
+                    validators: [AnswerValidators.NOT_BLANK],
                     options: [
                         {
                             label: "Yes",
@@ -1445,7 +1480,7 @@ mental health problems at school in the past 3 months?
                                     min: 0,
                                     default_content: 0,
                                     validators: [
-                                        Validator((ans, item) => {
+                                        answer_validator((ans, item) => {
                                             if (item.answer.content === 0 && ans.content < 1)
                                                 return `Answer must be 1 or larger`;
                                             return null;
@@ -1473,7 +1508,7 @@ have received, such as tutoring, additional lessons, etc.
             answers: [
                 {
                     type: AnswerType.RADIO,
-                    validators: [Validators.REQUIRED],
+                    validators: [AnswerValidators.NOT_BLANK],
                     options: [
                         { label: "Yes" },
                         { label: "No" },
@@ -1500,7 +1535,7 @@ that you used the service for each service that applies.</p>`,
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: "Education support at your place of study",
                     label_right: "hours per week",
                 },
@@ -1508,7 +1543,7 @@ that you used the service for each service that applies.</p>`,
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: "Education support in a private setting (e.g. private tutoring)",
                     label_right: "hours per week",
                 },
@@ -1516,7 +1551,7 @@ that you used the service for each service that applies.</p>`,
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: "Other",
                     label_right: "hours per week",
                     extra_answers: [
@@ -1543,7 +1578,7 @@ instance a ride in a specially equipped taxi.
             answers: [
                 {
                     type: AnswerType.RADIO,
-                    validators: [Validators.REQUIRED],
+                    validators: [AnswerValidators.NOT_BLANK],
                     options: [
                         { label: "Yes" },
                         { label: "No" },
@@ -1571,7 +1606,7 @@ and provide details.
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: "Specialized taxi service",
                     label_right: "times",
                 },
@@ -1579,7 +1614,7 @@ and provide details.
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: "Other",
                     label_right: "times",
                     extra_answers: [
@@ -1614,7 +1649,7 @@ are about the <strong>past 3 months</strong>.
             answers: [
                 {
                     type: AnswerType.RADIO,
-                    validators: [Validators.REQUIRED],
+                    validators: [AnswerValidators.NOT_BLANK],
                     options: [
                         { label: "I go to school, I am studying" },
                         { label: "I am employed (part-time or full-time)" },
@@ -1661,7 +1696,7 @@ are about the <strong>past 3 months</strong>.
             answers: [
                 {
                     type: AnswerType.RADIO,
-                    validators: [Validators.REQUIRED],
+                    validators: [AnswerValidators.NOT_BLANK],
                     options: [{ label: "Yes" }, { label: "No" }],
                 },
             ],
@@ -1689,7 +1724,7 @@ are about the <strong>past 3 months</strong>.
                 {
                     type: AnswerType.NUMBER,
                     min: 0,
-                    validators: [ValidatorsWithProps.GTE(1)],
+                    validators: [AnswerValidatorsWithProps.GTE(1)],
                     label_right: "hours",
                 },
             ],
@@ -1704,7 +1739,7 @@ are about the <strong>past 3 months</strong>.
                 {
                     type: AnswerType.NUMBER,
                     min: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label_right: "days",
                 },
             ],
@@ -1719,7 +1754,7 @@ mental health problems.</p>`,
             answers: [
                 {
                     type: AnswerType.RADIO,
-                    validators: [Validators.REQUIRED],
+                    validators: [AnswerValidators.NOT_BLANK],
                     options: [
                         {
                             label: "Yes, I have missed work days in the past 3 months",
@@ -1730,7 +1765,7 @@ mental health problems.</p>`,
                                     min: 0,
                                     default_content: 0,
                                     validators: [
-                                        Validator((ans, item) => {
+                                        answer_validator((ans, item) => {
                                             if (item.answer.content === 0 && ans.content < 1)
                                                 return `Answer must be 1 or larger`;
                                             return null;
@@ -1763,7 +1798,7 @@ work as a result of being sick.
             answers: [
                 {
                     type: AnswerType.RADIO,
-                    validators: [Validators.REQUIRED],
+                    validators: [AnswerValidators.NOT_BLANK],
                     options: [{ label: "Yes" }, { label: "No" }],
                 },
             ],
@@ -1790,7 +1825,7 @@ physical or mental health problems during the past 3 months?
             answers: [
                 {
                     type: AnswerType.RADIO,
-                    validators: [Validators.REQUIRED],
+                    validators: [AnswerValidators.NOT_BLANK],
                     options: [{ label: "Yes" }, { label: "No" }],
                 },
             ],
@@ -1812,7 +1847,7 @@ mental health problems? Only count the days at work in the past 3 months.</p>
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(1)],
+                    validators: [AnswerValidatorsWithProps.GTE(1)],
                     label_right: "working days",
                 },
             ],
@@ -1826,7 +1861,7 @@ On these days, how much work could you do on average?</p>`,
             answers: [
                 {
                     type: AnswerType.RADIO,
-                    validators: [Validators.REQUIRED],
+                    validators: [AnswerValidators.NOT_BLANK],
                     options: [
                         { content: 0, label: "0 - On these days I could not do anything" },
                         { content: 1 },
@@ -1868,7 +1903,7 @@ of your health?</p>
             answers: [
                 {
                     type: AnswerType.RADIO,
-                    validators: [Validators.REQUIRED],
+                    validators: [AnswerValidators.NOT_BLANK],
                     options: [{ label: "Yes" }, { label: "No" }],
                 },
             ],
@@ -1888,7 +1923,7 @@ of your health?</p>
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(1)],
+                    validators: [AnswerValidatorsWithProps.GTE(1)],
                     label_right: "days",
                 },
             ],
@@ -1905,7 +1940,7 @@ spend doing this on those days?</p>`,
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(1)],
+                    validators: [AnswerValidatorsWithProps.GTE(1)],
                     label_right: "hours per day",
                 },
             ],
@@ -1931,7 +1966,7 @@ excluded.</p>`,
             answers: [
                 {
                     type: AnswerType.RADIO,
-                    validators: [Validators.REQUIRED],
+                    validators: [AnswerValidators.NOT_BLANK],
                     options: [
                         {
                             label: "Yes",
@@ -1942,7 +1977,7 @@ excluded.</p>`,
                                     min: 0,
                                     default_content: 0,
                                     validators: [
-                                        Validator((ans, item) => {
+                                        answer_validator((ans, item) => {
                                             if (item.answer.content === 0 && ans.content < 1)
                                                 return `Answer must be 1 or larger`;
                                             return null;
@@ -1968,7 +2003,7 @@ consultation or a phone call with someone working in legal services.</p>`,
             answers: [
                 {
                     type: AnswerType.RADIO,
-                    validators: [Validators.REQUIRED],
+                    validators: [AnswerValidators.NOT_BLANK],
                     options: [
                         {
                             label: "Yes",
@@ -1979,7 +2014,7 @@ consultation or a phone call with someone working in legal services.</p>`,
                                     min: 0,
                                     default_content: 0,
                                     validators: [
-                                        Validator((ans, item) => {
+                                        answer_validator((ans, item) => {
                                             if (item.answer.content === 0 && ans.content < 1)
                                                 return `Answer must be 1 or larger`;
                                             return null;
@@ -2014,7 +2049,7 @@ consultation or a phone call with someone working in legal services.</p>`,
                                     min: 0,
                                     default_content: 0,
                                     validators: [
-                                        Validator((ans, item) => {
+                                        answer_validator((ans, item) => {
                                             if (item.answer.content &&
                                                 item.answer.content.includes(0) &&
                                                 ans.content < 1)
@@ -2035,7 +2070,7 @@ consultation or a phone call with someone working in legal services.</p>`,
                                     min: 0,
                                     default_content: 0,
                                     validators: [
-                                        Validator((ans, item) => {
+                                        answer_validator((ans, item) => {
                                             if (item.answer.content &&
                                                 item.answer.content.includes(0) &&
                                                 ans.content < 1)
@@ -2051,7 +2086,7 @@ consultation or a phone call with someone working in legal services.</p>`,
                         { label: "I don’t know/I would rather not say" },
                     ],
                     validators: [
-                        Validator((ans) => {
+                        answer_validator((ans) => {
                             if (!(ans.content instanceof Array) || !ans.content.length)
                                 return `An answer is required`;
                             if (ans.content.includes(2) && ans.content.length !== 1)
@@ -2074,7 +2109,7 @@ past 3 months?</p>
             answers: [
                 {
                     type: AnswerType.RADIO,
-                    validators: [Validators.REQUIRED],
+                    validators: [AnswerValidators.NOT_BLANK],
                     options: [
                         { label: "Yes" },
                         { label: "No" },
@@ -2098,7 +2133,7 @@ past 3 months?</p>
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: "Police station/place of detention (e.g. prison)",
                     label_right: "nights",
                 },
@@ -2106,7 +2141,7 @@ past 3 months?</p>
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: "Secure hospital/secure psychiatric institution",
                     label_right: "nights",
                 },
@@ -2114,7 +2149,7 @@ past 3 months?</p>
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: "Other",
                     label_right: "nights",
                     extra_answers: [
@@ -2143,7 +2178,7 @@ were confined and then released on the same day.</p>`,
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: "Police station/place of detention (e.g. prison)",
                     label_right: "hours",
                 },
@@ -2151,7 +2186,7 @@ were confined and then released on the same day.</p>`,
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: "Other",
                     label_right: "hours",
                     extra_answers: [
@@ -2182,7 +2217,7 @@ past 3 months?</p>`,
             answers: [
                 {
                     type: AnswerType.RADIO,
-                    validators: [Validators.REQUIRED],
+                    validators: [AnswerValidators.NOT_BLANK],
                     options: [
                         { label: "Yes" },
                         { label: "No" },
@@ -2203,7 +2238,7 @@ past 3 months?</p>`,
             answers: [
                 {
                     type: AnswerType.RADIO,
-                    validators: [Validators.REQUIRED],
+                    validators: [AnswerValidators.NOT_BLANK],
                     label: "Stealing without violence (e.g. theft, pickpocketing)",
                     options: [
                         { label: "Victim" },
@@ -2218,13 +2253,13 @@ past 3 months?</p>`,
                             type: AnswerType.NUMBER,
                             min: 0,
                             default_content: 0,
-                            validators: [ValidatorsWithProps.GTE(0)],
+                            validators: [AnswerValidatorsWithProps.GTE(0)],
                         },
                     ],
                 },
                 {
                     type: AnswerType.RADIO,
-                    validators: [Validators.REQUIRED],
+                    validators: [AnswerValidators.NOT_BLANK],
                     label: "Stealing with violence (e.g. robbery)",
                     options: [
                         { label: "Victim" },
@@ -2239,7 +2274,7 @@ past 3 months?</p>`,
                             type: AnswerType.NUMBER,
                             min: 0,
                             default_content: 0,
-                            validators: [ValidatorsWithProps.GTE(0)],
+                            validators: [AnswerValidatorsWithProps.GTE(0)],
                         },
                     ],
                 },
@@ -2253,7 +2288,7 @@ in the past 3 months?</p>`,
             answers: [
                 {
                     type: AnswerType.RADIO,
-                    validators: [Validators.REQUIRED],
+                    validators: [AnswerValidators.NOT_BLANK],
                     options: [
                         { label: "Yes" },
                         { label: "No" },
@@ -2275,7 +2310,7 @@ property damage in the past 3 months?</p>`,
             answers: [
                 {
                     type: AnswerType.RADIO,
-                    validators: [Validators.REQUIRED],
+                    validators: [AnswerValidators.NOT_BLANK],
                     label: "Damage to a car (e.g. it was scraped with a key or the windows were smashed)",
                     options: [
                         { label: "Victim" },
@@ -2290,13 +2325,13 @@ property damage in the past 3 months?</p>`,
                             type: AnswerType.NUMBER,
                             min: 0,
                             default_content: 0,
-                            validators: [ValidatorsWithProps.GTE(0)],
+                            validators: [AnswerValidatorsWithProps.GTE(0)],
                         },
                     ],
                 },
                 {
                     type: AnswerType.RADIO,
-                    validators: [Validators.REQUIRED],
+                    validators: [AnswerValidators.NOT_BLANK],
                     label: "Minor damage to a home (e.g. graffiti)",
                     options: [
                         { label: "Victim" },
@@ -2311,13 +2346,13 @@ property damage in the past 3 months?</p>`,
                             type: AnswerType.NUMBER,
                             min: 0,
                             default_content: 0,
-                            validators: [ValidatorsWithProps.GTE(0)],
+                            validators: [AnswerValidatorsWithProps.GTE(0)],
                         },
                     ],
                 },
                 {
                     type: AnswerType.RADIO,
-                    validators: [Validators.REQUIRED],
+                    validators: [AnswerValidators.NOT_BLANK],
                     label: "Major damage to a home (e.g. it was burned down)",
                     options: [
                         { label: "Victim" },
@@ -2332,13 +2367,13 @@ property damage in the past 3 months?</p>`,
                             type: AnswerType.NUMBER,
                             min: 0,
                             default_content: 0,
-                            validators: [ValidatorsWithProps.GTE(0)],
+                            validators: [AnswerValidatorsWithProps.GTE(0)],
                         },
                     ],
                 },
                 {
                     type: AnswerType.RADIO,
-                    validators: [Validators.REQUIRED],
+                    validators: [AnswerValidators.NOT_BLANK],
                     label: "Other",
                     options: [
                         { label: "Victim" },
@@ -2361,7 +2396,7 @@ property damage in the past 3 months?</p>`,
                             type: AnswerType.NUMBER,
                             min: 0,
                             default_content: 0,
-                            validators: [ValidatorsWithProps.GTE(0)],
+                            validators: [AnswerValidatorsWithProps.GTE(0)],
                         },
                     ],
                 },
@@ -2378,7 +2413,7 @@ include for instance a ride in a specially equipped taxi.</p>`,
             answers: [
                 {
                     type: AnswerType.RADIO,
-                    validators: [Validators.REQUIRED],
+                    validators: [AnswerValidators.NOT_BLANK],
                     options: [
                         { label: "Yes" },
                         { label: "No" },
@@ -2406,7 +2441,7 @@ provide details.
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: "Ride in a police car",
                     label_right: "times",
                 },
@@ -2414,7 +2449,7 @@ provide details.
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: "Inmate transport",
                     label_right: "times",
                 },
@@ -2422,7 +2457,7 @@ provide details.
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: "Other",
                     label_right: "times",
                     extra_answers: [
@@ -2479,7 +2514,7 @@ If you are unsure, please tick ‘Other’ and provide details.</p>`,
                         { label: "I don’t know/I would rather not say" },
                     ],
                     validators: [
-                        Validator((ans) => {
+                        answer_validator((ans) => {
                             if (!(ans.content instanceof Array) || !ans.content.length)
                                 return `Please select at least one option`;
                             if (ans.content.includes(5) && ans.content.length !== 1)
@@ -2504,7 +2539,7 @@ using your own funds and where you have not been and will not be reimbursed.</p>
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: "Private health insurance",
                     label_left: currency_symbol,
                 },
@@ -2512,7 +2547,7 @@ using your own funds and where you have not been and will not be reimbursed.</p>
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: "Residential health and social care services",
                     label_left: currency_symbol,
                 },
@@ -2520,7 +2555,7 @@ using your own funds and where you have not been and will not be reimbursed.</p>
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: "Non-residential health and social care services",
                     label_left: currency_symbol,
                 },
@@ -2528,7 +2563,7 @@ using your own funds and where you have not been and will not be reimbursed.</p>
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: "Prescription medication",
                     label_left: currency_symbol,
                 },
@@ -2536,7 +2571,7 @@ using your own funds and where you have not been and will not be reimbursed.</p>
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: "Education services",
                     label_left: currency_symbol,
                 },
@@ -2544,7 +2579,7 @@ using your own funds and where you have not been and will not be reimbursed.</p>
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: "Safety and justice system",
                     label_left: currency_symbol,
                 },
@@ -2565,7 +2600,7 @@ using your own funds and where you have not been and will not be reimbursed.</p>
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: "Cleaning or housekeeping assistance required because of your illness",
                     label_left: currency_symbol,
                     class_wrapper: "flex-wrap",
@@ -2574,7 +2609,7 @@ using your own funds and where you have not been and will not be reimbursed.</p>
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: "Paid childcare while you are attending appointments or temporarily away due to your health",
                     label_left: currency_symbol,
                     class_wrapper: "flex-wrap",
@@ -2583,7 +2618,7 @@ using your own funds and where you have not been and will not be reimbursed.</p>
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: `
           Complementary approaches to healthcare, such as
           <ul>
@@ -2599,7 +2634,7 @@ using your own funds and where you have not been and will not be reimbursed.</p>
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: `
           Other (holistic) healing activities from someone other than a qualified healthcare professional, such as
           <ul>
@@ -2615,7 +2650,7 @@ using your own funds and where you have not been and will not be reimbursed.</p>
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: `
           Durable goods such as
           <ul>
@@ -2633,7 +2668,7 @@ using your own funds and where you have not been and will not be reimbursed.</p>
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label: `
           Non-durable goods (intended to be used for a short period of time), such as
           <ul>
@@ -2661,7 +2696,7 @@ using your own funds and where you have not been and will not be reimbursed.</p>
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label_left: currency_symbol,
                     class_wrapper: "flex-wrap",
                 },
@@ -2670,7 +2705,7 @@ using your own funds and where you have not been and will not be reimbursed.</p>
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label_left: currency_symbol,
                     class_wrapper: "flex-wrap",
                 },
@@ -2679,7 +2714,7 @@ using your own funds and where you have not been and will not be reimbursed.</p>
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label_left: currency_symbol,
                     class_wrapper: "flex-wrap",
                 },
@@ -2688,7 +2723,7 @@ using your own funds and where you have not been and will not be reimbursed.</p>
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label_left: currency_symbol,
                     class_wrapper: "flex-wrap",
                 },
@@ -2697,7 +2732,7 @@ using your own funds and where you have not been and will not be reimbursed.</p>
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label_left: currency_symbol,
                     class_wrapper: "flex-wrap",
                 },
@@ -2706,7 +2741,7 @@ using your own funds and where you have not been and will not be reimbursed.</p>
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label_left: currency_symbol,
                     class_wrapper: "flex-wrap",
                 },
@@ -2716,7 +2751,7 @@ using your own funds and where you have not been and will not be reimbursed.</p>
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label_left: currency_symbol,
                     class_wrapper: "flex-wrap",
                 },
@@ -2725,7 +2760,7 @@ using your own funds and where you have not been and will not be reimbursed.</p>
                     type: AnswerType.NUMBER,
                     min: 0,
                     default_content: 0,
-                    validators: [ValidatorsWithProps.GTE(0)],
+                    validators: [AnswerValidatorsWithProps.GTE(0)],
                     label_left: currency_symbol,
                     class_wrapper: "flex-wrap",
                     extra_answers: {
@@ -2748,7 +2783,7 @@ Please tell us how easy it has been for you to complete.</p>`,
             answers: [
                 {
                     type: AnswerType.RADIO,
-                    validators: [Validators.REQUIRED],
+                    validators: [AnswerValidators.NOT_BLANK],
                     options: [
                         { content: 1, label: "1 - Very easy" },
                         { content: 2 },
