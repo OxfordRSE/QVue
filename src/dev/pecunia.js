@@ -1,4 +1,4 @@
-import { Answer, AnswerType, Item, Questionnaire, answer_validator, AnswerValidators, AnswerValidatorsWithProps, ItemValidators } from "questionnaire-core";
+import { Answer, AnswerType, Item, Questionnaire, answer_validator, AnswerValidators, AnswerValidatorsWithProps, ItemValidators, } from "questionnaire-core";
 export * from "questionnaire-core";
 const currency_symbol = "&pound;";
 const required_if = (expr) => answer_validator((ans, item, state) => {
@@ -26,6 +26,19 @@ dose if known.</p>`,
                 type: AnswerType.TEXT,
                 label: "Medication name",
                 id: `medication_${n}_name`,
+                validators: [
+                    answer_validator((ans, item, state) => {
+                        console.log(`${ans.id}: recalculate others`);
+                        if (ans.content_changed && ans.content === "") {
+                            item.answers.forEach((a, i) => {
+                                if (i === 0)
+                                    return;
+                                a.check_validation(item, state, true);
+                            });
+                        }
+                        return null;
+                    }),
+                ],
             },
             {
                 type: AnswerType.SELECT,
@@ -140,7 +153,17 @@ dose if known.</p>`,
                     {
                         id: `medication_${n}_duration`,
                         type: AnswerType.NUMBER,
-                        validators: [required_if((ans, item) => item.answers[0].content)],
+                        validators: [
+                            answer_validator((ans, item) => {
+                                if (!item.answers[0].content)
+                                    return null;
+                                if (typeof ans.content === "undefined")
+                                    return `An answer is required`;
+                                if (ans.content < 1)
+                                    return `Answer must be 1 or larger`;
+                                return null;
+                            }),
+                        ],
                     },
                     {
                         type: AnswerType.SELECT,
@@ -156,7 +179,8 @@ dose if known.</p>`,
             },
         ],
         next_item_fun: (last_changed_answer, current_item, state) => {
-            if (typeof current_item.answers[0].content === "undefined")
+            if (typeof current_item.answers[0].content === "undefined" ||
+                current_item.answers[0].content === "")
                 return "D1";
             return state.next_item_in_sequence_id;
         },
@@ -1418,6 +1442,17 @@ of your health in the past 3 months?</p>
                             ],
                         },
                     ],
+                    validators: [
+                        answer_validator((ans) => {
+                            if (!(ans.content instanceof Array) || !ans.content.length)
+                                return `An answer is required`;
+                            if (ans.content.includes(3) && ans.content.length !== 1)
+                                return `You cannot check 'No' and another answer`;
+                            if (ans.content.includes(4) && ans.content.length !== 1)
+                                return `You cannot check 'unsure' and another answer`;
+                            return null;
+                        }),
+                    ],
                 },
             ],
         }),
@@ -1712,7 +1747,9 @@ are about the <strong>past 3 months</strong>.
 <p class="fw-bold">What is your occupation?</p>
 <p class="fst-italic">Please indicate the occupation for which you get paid.
 </p>`,
-            answers: [{ type: AnswerType.TEXT }],
+            answers: [
+                { type: AnswerType.TEXT, validators: [AnswerValidators.NOT_BLANK] },
+            ],
         },
         {
             id: "F4",
@@ -2072,7 +2109,7 @@ consultation or a phone call with someone working in legal services.</p>`,
                                     validators: [
                                         answer_validator((ans, item) => {
                                             if (item.answer.content &&
-                                                item.answer.content.includes(0) &&
+                                                item.answer.content.includes(1) &&
                                                 ans.content < 1)
                                                 return `Answer must be 1 or larger`;
                                             return null;
@@ -2235,12 +2272,24 @@ past 3 months?</p>`,
             id: "G5.2",
             question: `
 <p class="fw-bold">How often did the following happen in the past 3 months?</p>`,
+            validators: [ItemValidators.REQUIRED],
             answers: [
                 {
                     type: AnswerType.RADIO,
-                    validators: [AnswerValidators.NOT_BLANK],
+                    validators: [
+                        answer_validator((ans) => {
+                            if (ans.extra_answers[0].content > 0) {
+                                if (typeof ans.content !== "number")
+                                    return `A role is required if you select a number of times.`;
+                                if (ans.content === 0)
+                                    return `You cannot select 'not involved' and a number of times.`;
+                            }
+                            return null;
+                        }),
+                    ],
                     label: "Stealing without violence (e.g. theft, pickpocketing)",
                     options: [
+                        { label: "I was not involved in this" },
                         { label: "Victim" },
                         { label: "Perpetrator" },
                         { label: "Both" },
@@ -2253,15 +2302,35 @@ past 3 months?</p>`,
                             type: AnswerType.NUMBER,
                             min: 0,
                             default_content: 0,
-                            validators: [AnswerValidatorsWithProps.GTE(0)],
+                            validators: [
+                                answer_validator((ans, item) => {
+                                    if (item.answers[0].content !== 3 &&
+                                        item.answers[0].content !== 0) {
+                                        if (ans.content < 1)
+                                            return `Number must be 1 or greater`;
+                                    }
+                                    return null;
+                                }),
+                            ],
                         },
                     ],
                 },
                 {
                     type: AnswerType.RADIO,
-                    validators: [AnswerValidators.NOT_BLANK],
+                    validators: [
+                        answer_validator((ans) => {
+                            if (ans.extra_answers[0].content > 0) {
+                                if (typeof ans.content !== "number")
+                                    return `A role is required if you select a number of times.`;
+                                if (ans.content === 0)
+                                    return `You cannot select 'not involved' and a number of times.`;
+                            }
+                            return null;
+                        }),
+                    ],
                     label: "Stealing with violence (e.g. robbery)",
                     options: [
+                        { label: "I was not involved in this" },
                         { label: "Victim" },
                         { label: "Perpetrator" },
                         { label: "Both" },
@@ -2274,7 +2343,16 @@ past 3 months?</p>`,
                             type: AnswerType.NUMBER,
                             min: 0,
                             default_content: 0,
-                            validators: [AnswerValidatorsWithProps.GTE(0)],
+                            validators: [
+                                answer_validator((ans, item) => {
+                                    if (item.answers[1].content !== 3 &&
+                                        item.answers[1].content !== 0) {
+                                        if (ans.content < 1)
+                                            return `Number must be 1 or greater`;
+                                    }
+                                    return null;
+                                }),
+                            ],
                         },
                     ],
                 },
@@ -2307,12 +2385,24 @@ in the past 3 months?</p>`,
             question: `
 <p class="fw-bold">How often have you been affected by the following acts of 
 property damage in the past 3 months?</p>`,
+            validators: [ItemValidators.REQUIRED],
             answers: [
                 {
                     type: AnswerType.RADIO,
-                    validators: [AnswerValidators.NOT_BLANK],
+                    validators: [
+                        answer_validator((ans) => {
+                            if (ans.extra_answers[0].content > 0) {
+                                if (typeof ans.content !== "number")
+                                    return `A role is required if you select a number of times.`;
+                                if (ans.content === 0)
+                                    return `You cannot select 'not involved' and a number of times.`;
+                            }
+                            return null;
+                        }),
+                    ],
                     label: "Damage to a car (e.g. it was scraped with a key or the windows were smashed)",
                     options: [
+                        { label: "I was not involved in this" },
                         { label: "Victim" },
                         { label: "Perpetrator" },
                         { label: "Both" },
@@ -2325,15 +2415,34 @@ property damage in the past 3 months?</p>`,
                             type: AnswerType.NUMBER,
                             min: 0,
                             default_content: 0,
-                            validators: [AnswerValidatorsWithProps.GTE(0)],
+                            validators: [
+                                answer_validator((ans, item) => {
+                                    if (item.answers[0].content !== 3 && item.answers[0].content !== 0) {
+                                        if (ans.content < 1)
+                                            return `Number must be 1 or greater`;
+                                    }
+                                    return null;
+                                }),
+                            ],
                         },
                     ],
                 },
                 {
                     type: AnswerType.RADIO,
-                    validators: [AnswerValidators.NOT_BLANK],
+                    validators: [
+                        answer_validator((ans) => {
+                            if (ans.extra_answers[0].content > 0) {
+                                if (typeof ans.content !== "number")
+                                    return `A role is required if you select a number of times.`;
+                                if (ans.content === 0)
+                                    return `You cannot select 'not involved' and a number of times.`;
+                            }
+                            return null;
+                        }),
+                    ],
                     label: "Minor damage to a home (e.g. graffiti)",
                     options: [
+                        { label: "I was not involved in this" },
                         { label: "Victim" },
                         { label: "Perpetrator" },
                         { label: "Both" },
@@ -2346,15 +2455,34 @@ property damage in the past 3 months?</p>`,
                             type: AnswerType.NUMBER,
                             min: 0,
                             default_content: 0,
-                            validators: [AnswerValidatorsWithProps.GTE(0)],
+                            validators: [
+                                answer_validator((ans, item) => {
+                                    if (item.answers[1].content !== 3 && item.answers[1].content !== 0) {
+                                        if (ans.content < 1)
+                                            return `Number must be 1 or greater`;
+                                    }
+                                    return null;
+                                }),
+                            ],
                         },
                     ],
                 },
                 {
                     type: AnswerType.RADIO,
-                    validators: [AnswerValidators.NOT_BLANK],
+                    validators: [
+                        answer_validator((ans) => {
+                            if (ans.extra_answers[0].content > 0) {
+                                if (typeof ans.content !== "number")
+                                    return `A role is required if you select a number of times.`;
+                                if (ans.content === 0)
+                                    return `You cannot select 'not involved' and a number of times.`;
+                            }
+                            return null;
+                        }),
+                    ],
                     label: "Major damage to a home (e.g. it was burned down)",
                     options: [
+                        { label: "I was not involved in this" },
                         { label: "Victim" },
                         { label: "Perpetrator" },
                         { label: "Both" },
@@ -2367,15 +2495,34 @@ property damage in the past 3 months?</p>`,
                             type: AnswerType.NUMBER,
                             min: 0,
                             default_content: 0,
-                            validators: [AnswerValidatorsWithProps.GTE(0)],
+                            validators: [
+                                answer_validator((ans, item) => {
+                                    if (item.answers[2].content !== 3 && item.answers[2].content !== 0) {
+                                        if (ans.content < 1)
+                                            return `Number must be 1 or greater`;
+                                    }
+                                    return null;
+                                }),
+                            ],
                         },
                     ],
                 },
                 {
                     type: AnswerType.RADIO,
-                    validators: [AnswerValidators.NOT_BLANK],
+                    validators: [
+                        answer_validator((ans) => {
+                            if (ans.extra_answers[1].content > 0) {
+                                if (typeof ans.content !== "number")
+                                    return `A role is required if you select a number of times.`;
+                                if (ans.content === 0)
+                                    return `You cannot select 'not involved' and a number of times.`;
+                            }
+                            return null;
+                        }),
+                    ],
                     label: "Other",
                     options: [
+                        { label: "I was not involved in this" },
                         { label: "Victim" },
                         { label: "Perpetrator" },
                         { label: "Both" },
@@ -2396,7 +2543,15 @@ property damage in the past 3 months?</p>`,
                             type: AnswerType.NUMBER,
                             min: 0,
                             default_content: 0,
-                            validators: [AnswerValidatorsWithProps.GTE(0)],
+                            validators: [
+                                answer_validator((ans, item) => {
+                                    if (item.answers[3].content !== 3 && item.answers[3].content !== 0) {
+                                        if (ans.content < 1)
+                                            return `Number must be 1 or greater`;
+                                    }
+                                    return null;
+                                }),
+                            ],
                         },
                     ],
                 },
@@ -2506,7 +2661,8 @@ If you are unsure, please tick ‘Other’ and provide details.</p>`,
                                     type: AnswerType.TEXT,
                                     placeholder: "please specify",
                                     validators: [
-                                        required_if((ans, item) => item.answer.content === 4),
+                                        required_if((ans, item) => (item.answer.content instanceof Array) &&
+                                            item.answer.content.includes(4)),
                                     ],
                                 },
                             ],

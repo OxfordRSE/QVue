@@ -53,7 +53,7 @@ const answer = computed(() => {
         class="form-check-input me-1"
         :class="answer.own_validation_issues.length ? 'is-invalid' : ''"
         type="radio"
-        name="answer"
+        :name="`${answer.id}_answer`"
         :id="`${answer.id}_${i}`"
         :value="i"
         @change="

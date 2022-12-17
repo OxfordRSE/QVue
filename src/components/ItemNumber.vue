@@ -42,9 +42,9 @@ const answer = computed(() => {
       />
       <input
         class="form-control flex-shrink-1"
-        :class="answer.own_validation_issues.length && answer.content_changed ? 'is-invalid' : ''"
+        :class="answer.own_validation_issues.length ? 'is-invalid' : ''"
         :id="props.id"
-        name="answer"
+        :name="`${props.id}_answer`"
         type="number"
         aria-label="Please type your answer"
         :min="answer.min"

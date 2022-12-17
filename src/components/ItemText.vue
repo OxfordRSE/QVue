@@ -39,7 +39,7 @@ const answer = computed(() => {
         class="form-control flex-grow-1"
         :class="answer.own_validation_issues.length ? 'is-invalid' : ''"
         :id="props.id"
-        name="answer"
+        :name="`${props.id}_answer`"
         type="text"
         :placeholder="answer.placeholder"
         aria-label="Please type your answer"

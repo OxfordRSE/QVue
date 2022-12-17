@@ -37,7 +37,7 @@ const answer = computed(() => {
     <textarea
       class="form-control"
       :id="props.id"
-      name="answer"
+      :name="`${props.id}_answer`"
       aria-label="Please type your answer"
       v-model="answer.content"
       v-debounce:50ms="

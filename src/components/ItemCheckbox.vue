@@ -72,7 +72,7 @@ const updateAnswer: (index: number) => void = (i) => {
         class="form-check-input me-1"
         :class="answer.own_validation_issues.length ? 'is-invalid' : ''"
         type="checkbox"
-        name="answer"
+        :name="`${id}_answer`"
         :id="`${id}_${i}`"
         :value="i"
         @change="updateAnswer(i)"
