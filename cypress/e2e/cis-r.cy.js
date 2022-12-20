@@ -3,10 +3,10 @@ const answer_qs = (q = 0) => {
   it(`answers question ${q}`, () => {
     cy.get("body")
       .then(async ($body) => {
-        if ($body.find("input[type='radio'][name='answer']").length > 0) {
-          $body.find("input[type='radio'][name='answer']")[0].click();
-        } else if ($body.find("input[name='answer']").length > 0) {
-          await cy.get("input[name='answer']").type("42");
+        if ($body.find(".answer-wrapper input[type='radio']").length > 0) {
+          $body.find(".answer-wrapper input[type='radio']")[0].click();
+        } else if ($body.find(".answer-wrapper input").length > 0) {
+          await cy.get(".answer-wrapper input").type("42");
         }
         return $body;
       })
