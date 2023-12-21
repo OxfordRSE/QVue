@@ -1,10 +1,12 @@
 {
   "en": {
     "general_about_tool": "About the tool",
-    "cis_intro": "The Clinical Instrument Schedule (Revised) is a tool to allow\n  mental health clinicians and researchers to assess a person's \n  mental health condition. It should take around 30 minutes to complete."
+    "cis_intro": "The Clinical Instrument Schedule (Revised) is a tool to allow\n  mental health clinicians and researchers to assess a person's \n  mental health condition. It should take around 30 minutes to complete.",
+    "cis_demo-intro": "To begin with, I would like to ask you about yourself and your background"
   },
   "pt-br": {
     "general_about_tool": "To Be Translated [TBT]",
-    "cis_intro": "TBT"
+    "cis_intro": "TBT",
+    "cis_demo-intro": "TBT"
   }
 }

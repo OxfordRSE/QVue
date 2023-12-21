@@ -53,7 +53,7 @@ export const _state_properties = {
     items: [
         new Item({
             id: "demo-intro",
-            question: "To begin with, I would like to ask you about yourself and your background",
+            question: i18n.t("cis_demo-intro"),
             next_item: "demo-sex",
         }),
         new Item({
