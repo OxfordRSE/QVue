@@ -4,6 +4,15 @@ import CogIcon from "vue-material-design-icons/Cog.vue";
 import { useURLStore } from "@/stores/url_settings";
 import md from "markdown-it";
 import attrs from "markdown-it-attrs";
+// Code below goes in any file that needs to use the i18n library
+import queryString from "query-string";
+import { I18n } from "i18n-js";
+import translations from "../i18n.json"; // adapt as necessary for src/i18n.json
+
+const i18n = new I18n(translations);
+const parsed = queryString.parse(location.search);
+if (parsed?.locale) i18n.locale = String(parsed.locale).toLowerCase();
+// End of i18n setup
 
 import { computed } from "vue";
 const md_instance = md();
@@ -40,7 +49,7 @@ const url_settings = useURLStore();
     </header>
     <hr />
     <div class="card-body">
-      <h2>About the tool:</h2>
+      <h2>{{ i18n.t("general_about_tool") }}:</h2>
       <p>
         This tool will guide you through completing a questionnaire. You can
         customise how the tool behaves at any time during the questionnaire
