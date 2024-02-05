@@ -78,13 +78,14 @@ const answer = computed(() => {
     <div
       v-if="answer.own_validation_issues.length"
       class="invalid-feedback"
-      :class="Math.max(...answer.own_validation_issues.map(i => i.level)) === 0
-            ? 'txt-info'
-            : Math.max(...answer.own_validation_issues.map(i => i.level)) === 1
-            ? 'txt-warning'
-            : ''
-        "
-      v-html="answer.own_validation_issues.map(i => i.issue).join('<br/>')"
+      :class="
+        Math.max(...answer.own_validation_issues.map((i) => i.level)) === 0
+          ? 'txt-info'
+          : Math.max(...answer.own_validation_issues.map((i) => i.level)) === 1
+          ? 'txt-warning'
+          : ''
+      "
+      v-html="answer.own_validation_issues.map((i) => i.issue).join('<br/>')"
     ></div>
   </div>
 </template>
