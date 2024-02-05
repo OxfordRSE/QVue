@@ -119,7 +119,7 @@ const url_settings = useURLStore();
       <button
         class="btn"
         :class="show_continue ? 'btn-outline-primary' : 'btn-primary'"
-        data-click-on-key="b"
+        :data-click-on-key="i18n.t('qvue_base-begin1').toLowerCase()"
         @click="$emit('okay')"
       >
         <kbd>{{ i18n.t("qvue_base-begin1") }}</kbd>{{ i18n.t("qvue_base-begin2") }}
@@ -127,7 +127,7 @@ const url_settings = useURLStore();
       <button
         v-if="show_continue"
         class="btn btn-primary"
-        data-click-on-key="r"
+        :data-click-on-key="i18n.t('qvue_base-resume1').toLowerCase()"
         @click="$emit('resume')"
       >
         <kbd>{{ i18n.t("qvue_base-resume1") }}</kbd>{{ i18n.t("qvue_base-resume2") }}
