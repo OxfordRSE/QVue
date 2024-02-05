@@ -25,6 +25,7 @@ export interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   disable_back_button: false,
+  next_button_label: i18n.t("qvue_base-next"),
   next_button_key: "arrowright",
 });
 
