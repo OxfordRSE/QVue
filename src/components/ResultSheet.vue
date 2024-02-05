@@ -94,25 +94,24 @@ const markdown = computed(() => {
     class="sticky-top text-center"
   >
     <p v-if="!uploadComplete" class="text-bg-info">
-      Uploading to
+      {{ i18n.t("qvue_base-uploading") }}
       {{ specification.fetch.display || specification.fetch.url }}...
     </p>
     <p v-else-if="uploadStatus === -1" class="text-bg-warning">
-      You refused permission to upload data to
+      {{ i18n.t("qvue_base-upload-reject") }}
       {{ specification.fetch.display || specification.fetch.url }}.
     </p>
     <p v-else-if="uploadStatus !== 200" class="text-bg-danger">
-      Error uploading results to
+      {{ i18n.t("qvue_base-upload-error") }}
       {{ specification.fetch.display || specification.fetch.url }}.
       <span v-if="uploadReply" class="server-reply"
         ><br />{{ uploadReply }}</span
       >
       <span v-if="specification.content?.download"
-        ><br />You may wish to try downloading your results and sending them
-        yourself.</span
+        ><br />{{ i18n.t("qvue_base-upload-send") }}</span
       >
     </p>
-    <p v-else class="text-bg-success">Upload complete!</p>
+    <p v-else class="text-bg-success">{{ i18n.t("qvue_base-upload-complete") }}</p>
   </div>
   <div
     v-if="

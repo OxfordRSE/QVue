@@ -26,7 +26,7 @@ export interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   disable_back_button: false,
-  next_button_label: "Next <kbd>&rarr;</kbd>",
+  next_button_label: i18n.t("qvue_base-next"),
   next_button_key: "arrowright",
 });
 
@@ -85,7 +85,8 @@ const answerChanged = () => {
         data-click-on-key="arrowleft"
         data-nav-direction="back"
       >
-        <kbd>&larr;</kbd> Back
+        <kbd>&larr;</kbd>
+        {{ i18n.t("qvue_base-back") }}
       </button>
       <button
         class="btn btn-primary flex-grow-1 ms-2"

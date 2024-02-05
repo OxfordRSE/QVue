@@ -39,7 +39,8 @@ const markdown = computed(() => {
       <div class="p-2">{{ questionnaire_name }}:</div>
       <div class="px-4" v-html="markdown" />
     </div>
-    <div class="p-2">Web application developed by:</div>
+    <div class="p-2">
+      {{ i18n.t("qvue_base-developed-by") }}</div>
     <div
       class="d-flex mb-2 justify-content-evenly align-content-center text-center"
     >

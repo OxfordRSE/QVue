@@ -45,7 +45,7 @@ const enabled = computed(() => {
             v-model="settings.keyboard_shortcuts"
           />
           <label class="form-check-label" for="keyboard-shortcuts"
-            >Keyboard shortcuts</label
+            >{{ i18n.t("qvue_base-keyboard-shortcuts") }}</label
           >
         </div>
       </li>
@@ -59,13 +59,13 @@ const enabled = computed(() => {
             v-model="settings.auto_continue"
           />
           <label class="form-check-label" for="auto-continue"
-            >Auto-continue</label
+            >{{ i18n.t("qvue_base-auto-continue") }}</label
           >
         </div>
       </li>
       <li v-if="settings.auto_continue === SettingState.ON || settings.auto_continue === true">
         <div class="d-flex align-content-center">
-          Wait
+          {{ i18n.t("qvue_base-wait") }}
           <input
             type="range"
             class="form-range px-2"
