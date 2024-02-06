@@ -6,9 +6,7 @@ const settings = useSettingsStore();
 import { computed, type Ref, ref } from "vue";
 import type { Answer } from "questionnaire-core";
 import ItemLabel from "@/components/ItemLabel.vue";
-import {
-  useSettingsStore
-} from "@/stores/settings";
+import { useSettingsStore } from "@/stores/settings";
 
 const questionnaireStore = useQuestionnaireStore();
 const { questionnaire } = storeToRefs(questionnaireStore);
@@ -65,9 +63,11 @@ const updateAnswer: (index: number) => void = (i) => {
       :key="o.content"
       ref="inputRefs"
     >
-      <kbd v-if="/^\d$/.test(o.content.toString()) && settings.keyboard_shortcuts" class="me-2">{{
-        o.content
-      }}</kbd>
+      <kbd
+        v-if="/^\d$/.test(o.content.toString()) && settings.keyboard_shortcuts"
+        class="me-2"
+        >{{ o.content }}</kbd
+      >
       <input
         class="form-check-input me-1"
         :class="answer.own_validation_issues.length ? 'is-invalid' : ''"
@@ -87,13 +87,14 @@ const updateAnswer: (index: number) => void = (i) => {
     <div
       v-if="answer.own_validation_issues.length"
       class="invalid-feedback"
-      :class="Math.max(...answer.own_validation_issues.map(i => i.level)) === 0
-            ? 'txt-info'
-            : Math.max(...answer.own_validation_issues.map(i => i.level)) === 1
-            ? 'txt-warning'
-            : ''
-        "
-      v-html="answer.own_validation_issues.map(i => i.issue).join('<br/>')"
+      :class="
+        Math.max(...answer.own_validation_issues.map((i) => i.level)) === 0
+          ? 'txt-info'
+          : Math.max(...answer.own_validation_issues.map((i) => i.level)) === 1
+          ? 'txt-warning'
+          : ''
+      "
+      v-html="answer.own_validation_issues.map((i) => i.issue).join('<br/>')"
     ></div>
   </div>
 </template>

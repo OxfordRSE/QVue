@@ -1,4 +1,11 @@
 import { AnswerType, Item, Questionnaire, AnswerValidators, } from "questionnaire-core";
+import queryString from "query-string";
+import { I18n } from "i18n-js";
+import translations from "../i18n.json";
+const i18n = new I18n(translations);
+const parsed = queryString.parse(location.search);
+if (parsed?.locale)
+    i18n.locale = String(parsed.locale).toLowerCase();
 export * from "questionnaire-core";
 // Utility navigation functions
 const panic_navigation = (state) => {
@@ -38,28 +45,26 @@ export const _overall_navigation = (state) => {
 export const _state_properties = {
     name: "CIS-R",
     introduction: `
-  <p>The Clinical Instrument Schedule (Revised) is a tool to allow
-  mental health clinicians and researchers to assess a person's 
-  mental health condition. It should take around 30 minutes to complete.</p> 
+  <p>${i18n.t("cis_intro")}</p> 
   `,
     citation: `[Lewis G, Pelosi AJ, Araya R, et al. Measuring psychiatric disorders in the community: a standardised assessment for use by lay interviewers. *Psychological Medicine.* 1992;22:465–486](https://doi.org/10.1017/S0033291700030415)`,
-    version: '0.0.1',
+    version: "0.0.1",
     reset_items_on_back: true,
     items: [
         new Item({
             id: "demo-intro",
-            question: "To begin with, I would like to ask you about yourself and your background",
+            question: i18n.t("cis_demo-intro"),
             next_item: "demo-sex",
         }),
         new Item({
             id: "demo-sex",
-            question: "Are you male or female?",
+            question: i18n.t("cis_demo-sex"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "Male" },
-                        { content: 2, label: "Female" },
+                        { content: 1, label: i18n.t("cis_demo-sex-a1") },
+                        { content: 2, label: i18n.t("cis_demo-sex-a2") },
                     ],
                 },
             ],
@@ -67,22 +72,22 @@ export const _state_properties = {
         }),
         new Item({
             id: "demo-age",
-            question: "How old are you?",
+            question: i18n.t("cis_demo-age"),
             answers: [{ type: AnswerType.NUMBER }],
             next_item: "demo-marital",
         }),
         new Item({
             id: "demo-marital",
-            question: "What is your marital status?",
+            question: i18n.t("cis_demo-marital"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "Married/Living as married" },
-                        { content: 2, label: "Single" },
-                        { content: 3, label: "Separated" },
-                        { content: 4, label: "Divorced" },
-                        { content: 5, label: "Widowed" },
+                        { content: 1, label: i18n.t("cis_demo-marital-a1") },
+                        { content: 2, label: i18n.t("cis_demo-marital-a2") },
+                        { content: 3, label: i18n.t("cis_demo-marital-a3") },
+                        { content: 4, label: i18n.t("cis_demo-marital-a4") },
+                        { content: 5, label: i18n.t("cis_demo-marital-a5") },
                     ],
                 },
             ],
@@ -90,21 +95,21 @@ export const _state_properties = {
         }),
         new Item({
             id: "demo-employment",
-            question: "What is your current employment status?",
+            question: i18n.t("cis_demo-employment"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "Employed full-time" },
-                        { content: 2, label: "Employed part-time" },
-                        { content: 3, label: "Studying at school, college or university" },
-                        { content: 4, label: "Retired" },
-                        { content: 5, label: "Houseperson" },
-                        { content: 6, label: "Unemployed job seeker" },
-                        { content: 7, label: "Unemployed due to ill-health" },
+                        { content: 1, label: i18n.t("cis_demo-employment-a1") },
+                        { content: 2, label: i18n.t("cis_demo-employment-a2") },
+                        { content: 3, label: i18n.t("cis_demo-employment-a3") },
+                        { content: 4, label: i18n.t("cis_demo-employment-a4") },
+                        { content: 5, label: i18n.t("cis_demo-employment-a5") },
+                        { content: 6, label: i18n.t("cis_demo-employment-a6") },
+                        { content: 7, label: i18n.t("cis_demo-employment-a7") },
                         {
                             content: 8,
-                            label: "On a government or other employment training scheme",
+                            label: i18n.t("cis_demo-employment-a8"),
                         },
                     ],
                 },
@@ -113,17 +118,17 @@ export const _state_properties = {
         }),
         new Item({
             id: "demo-housing",
-            question: "What is your housing situation?",
+            question: i18n.t("cis_demo-housing"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "Home owner" },
-                        { content: 2, label: "Renting" },
-                        { content: 3, label: "Living with relative or friend" },
-                        { content: 4, label: "Hostel or care home" },
-                        { content: 5, label: "Homeless" },
-                        { content: 6, label: "Other" },
+                        { content: 1, label: i18n.t("cis_demo-housing-a1") },
+                        { content: 2, label: i18n.t("cis_demo-housing-a2") },
+                        { content: 3, label: i18n.t("cis_demo-housing-a3") },
+                        { content: 4, label: i18n.t("cis_demo-housing-a4") },
+                        { content: 5, label: i18n.t("cis_demo-housing-a5") },
+                        { content: 6, label: i18n.t("cis_demo-housing-a6") },
                     ],
                 },
             ],
@@ -131,18 +136,18 @@ export const _state_properties = {
         }),
         new Item({
             id: "health-intro",
-            question: "I would now like to ask you about your health and well-being",
+            question: i18n.t("cis_demo-health-intro"),
             next_item: "health-appetite-loss",
         }),
         new Item({
             id: "health-appetite-loss",
-            question: "Have you noticed a marked LOSS in your appetite in the PAST MONTH?",
+            question: i18n.t("cis_demo-appetite-loss"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-yes-a1") },
                     ],
                 },
             ],
@@ -158,13 +163,13 @@ export const _state_properties = {
         }),
         new Item({
             id: "health-weight-loss",
-            question: "Have you lost any weight in the PAST MONTH?",
+            question: i18n.t("cis_demo-health-weight-loss"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-yes-a1") },
                     ],
                 },
             ],
@@ -174,13 +179,19 @@ export const _state_properties = {
         }),
         new Item({
             id: "health-weight-loss-diet",
-            question: "Were you trying to lose weight or on a diet?",
+            question: i18n.t("cis_demo-health-weight-loss-diet"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No, I was not trying to lose weight" },
-                        { content: 2, label: "Yes, I have been trying to lose weight" },
+                        {
+                            content: 1,
+                            label: i18n.t("cis_demo-health-weight-loss-diet-a1"),
+                        },
+                        {
+                            content: 2,
+                            label: i18n.t("cis_demo-health-weight-loss-diet-a2"),
+                        },
                     ],
                 },
             ],
@@ -195,13 +206,19 @@ export const _state_properties = {
         }),
         new Item({
             id: "health-weight-loss-amount",
-            question: "Did you lose half a stone or more, or did you lose less than this (in the PAST MONTH)?\n\n(NOTE: Half a stone = 7 pounds or 3 kg)",
+            question: i18n.t("cis_demo-health-weight-loss-amount"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "I lost half a stone or more" },
-                        { content: 2, label: "I lost less than half a stone" },
+                        {
+                            content: 1,
+                            label: i18n.t("cis_demo-health-weight-loss-amount-a1"),
+                        },
+                        {
+                            content: 2,
+                            label: i18n.t("cis_demo-health-weight-loss-amount-a2"),
+                        },
                     ],
                 },
             ],
@@ -215,13 +232,13 @@ export const _state_properties = {
         }),
         new Item({
             id: "health-appetite-gain",
-            question: "Have you noticed a marked INCREASE in your appetite in the PAST MONTH?",
+            question: i18n.t("cis_demo-health-appetite-gain"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-yes-a1") },
                     ],
                 },
             ],
@@ -241,13 +258,13 @@ export const _state_properties = {
         }),
         new Item({
             id: "health-weight-gain-male",
-            question: "Have you gained any weight in the PAST MONTH?",
+            question: i18n.t("cis_demo-health-weight-gain-male"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-yes-a1") },
                     ],
                 },
             ],
@@ -262,14 +279,17 @@ export const _state_properties = {
         }),
         new Item({
             id: "health-weight-gain-female",
-            question: "Have you gained any weight in the PAST MONTH?",
+            question: i18n.t("cis_demo-health-weight-gain-female"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes" },
-                        { content: 3, label: "Yes, but I am pregnant" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-yes-a1") },
+                        {
+                            content: 3,
+                            label: i18n.t("cis_demo-health-weight-gain-female-a3"),
+                        },
                     ],
                 },
             ],
@@ -284,13 +304,19 @@ export const _state_properties = {
         }),
         new Item({
             id: "health-weight-gain-amount",
-            question: "Did you gain half a stone or more, or did you gain less than this (in the PAST MONTH)?\n\n(NOTE: Half a stone = 7 pounds or 3 kg)",
+            question: i18n.t("cis_demo-health-weight-gain-amount"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "I gained half a stone or more" },
-                        { content: 2, label: "I gained less than half a stone" },
+                        {
+                            content: 1,
+                            label: i18n.t("cis_demo-health-weight-gain-amount-a1"),
+                        },
+                        {
+                            content: 2,
+                            label: i18n.t("cis_demo-health-weight-gain-amount-a2"),
+                        },
                     ],
                 },
             ],
@@ -304,16 +330,16 @@ export const _state_properties = {
         }),
         new Item({
             id: "health-gp-visits",
-            question: "In the PAST YEAR, approximately how many times have you talked to or visited a GP or family doctor about your OWN health? Do NOT include any visits to hospital.",
+            question: i18n.t("cis_demo-health-gp-visits"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 0, label: "None" },
-                        { content: 1, label: "1 or 2 times" },
-                        { content: 2, label: "3 to 5 times" },
-                        { content: 3, label: "6 to 10 times" },
-                        { content: 4, label: "More than 10 times" },
+                        { content: 0, label: i18n.t("cis_demo-generic-freq-a1") },
+                        { content: 1, label: i18n.t("cis_demo-generic-freq-a2") },
+                        { content: 2, label: i18n.t("cis_demo-generic-freq-a3") },
+                        { content: 3, label: i18n.t("cis_demo-generic-freq-a4") },
+                        { content: 4, label: i18n.t("cis_demo-generic-freq-a5") },
                     ],
                 },
             ],
@@ -331,13 +357,13 @@ export const _state_properties = {
         }),
         new Item({
             id: "health-disability",
-            question: "Do you have any long-standing illness, disability or infirmity?\n\nLong-standing means anything that has troubled you over a period of time or that is likely to affect you over a period of time",
+            question: i18n.t("cis_demo-health-disability"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-yes1") },
                     ],
                 },
             ],
@@ -345,20 +371,20 @@ export const _state_properties = {
         }),
         new Item({
             id: "health-illness",
-            question: "Do you have any of the following conditions? If you have more than one condition answer for the most serious condition.",
+            question: i18n.t("cis_demo-health-illness"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "Diabetes" },
-                        { content: 2, label: "Asthma or COPD" },
-                        { content: 3, label: "Arthritis" },
-                        { content: 4, label: "Heart disease or heart problems" },
-                        { content: 5, label: "Stroke" },
-                        { content: 6, label: "Cancer" },
-                        { content: 7, label: "Kidney disease" },
-                        { content: 8, label: "Mental health problems" },
-                        { content: 9, label: "None of the above" },
+                        { content: 1, label: i18n.t("cis_demo-health-illness-a1") },
+                        { content: 2, label: i18n.t("cis_demo-health-illness-a2") },
+                        { content: 3, label: i18n.t("cis_demo-health-illness-a3") },
+                        { content: 4, label: i18n.t("cis_demo-health-illness-a4") },
+                        { content: 5, label: i18n.t("cis_demo-health-illness-a5") },
+                        { content: 6, label: i18n.t("cis_demo-health-illness-a6") },
+                        { content: 7, label: i18n.t("cis_demo-health-illness-a7") },
+                        { content: 8, label: i18n.t("cis_demo-health-illness-a8") },
+                        { content: 9, label: i18n.t("cis_demo-health-illness-a9") },
                     ],
                 },
             ],
@@ -366,13 +392,13 @@ export const _state_properties = {
         }),
         new Item({
             id: "somatic-pain",
-            question: "Have you had ANY sort of aches or pains in the PAST MONTH, including headaches or indigestion?",
+            question: i18n.t("cis_demo-somatic-pain"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-yes1") },
                     ],
                 },
             ],
@@ -382,14 +408,14 @@ export const _state_properties = {
         }),
         new Item({
             id: "somatic-stress",
-            question: "Was this pain or ache BROUGHT ON or MADE WORSE because you were feeling low, anxious or stressed?",
+            question: i18n.t("cis_demo-somatic-stress"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "Never" },
-                        { content: 2, label: "Sometimes" },
-                        { content: 3, label: "Always" },
+                        { content: 1, label: i18n.t("cis_demo-generic-freq-a6") },
+                        { content: 2, label: i18n.t("cis_demo-generic-freq-a7") },
+                        { content: 3, label: i18n.t("cis_demo-generic-freq-a8") },
                     ],
                 },
             ],
@@ -399,14 +425,14 @@ export const _state_properties = {
         }),
         new Item({
             id: "somatic-pain-frequency",
-            question: "On how many days have you noticed this pain during the PAST SEVEN DAYS?",
+            question: i18n.t("cis_demo-somatic-pain-frequency"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "None" },
-                        { content: 2, label: "Between one and three days" },
-                        { content: 3, label: "Four days or more" },
+                        { content: 1, label: i18n.t("cis_demo-generic-freq-a9") },
+                        { content: 2, label: i18n.t("cis_demo-generic-freq-a10-day") },
+                        { content: 3, label: i18n.t("cis_demo-generic-freq-a11-day") },
                     ],
                 },
             ],
@@ -420,15 +446,15 @@ export const _state_properties = {
         }),
         new Item({
             id: "somatic-pain-duration",
-            question: "In total, did the pain or ache last for more than 3 hours on ANY day during the PAST SEVEN DAYS?",
+            question: i18n.t("cis_demo-somatic-pain-duration"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No, less than 3 hours" },
+                        { content: 1, label: i18n.t("cis_demo-generic-duration-a1") },
                         {
                             content: 2,
-                            label: "Yes, it has lasted for more than 3 hours on at least one day",
+                            label: i18n.t("cis_demo-generic-duration-a2"),
                         },
                     ],
                 },
@@ -441,15 +467,15 @@ export const _state_properties = {
         }),
         new Item({
             id: "somatic-pain-valence",
-            question: "Has the pain been unpleasant in the PAST SEVEN DAYS?",
+            question: i18n.t("cis_demo-somatic-pain-valence"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "Not at all" },
-                        { content: 2, label: "A little unpleasant" },
-                        { content: 3, label: "Unpleasant" },
-                        { content: 4, label: "Very unpleasant" },
+                        { content: 1, label: i18n.t("cis_demo-generic-distress-a1") },
+                        { content: 2, label: i18n.t("cis_demo-generic-distress-a2") },
+                        { content: 3, label: i18n.t("cis_demo-generic-distress-a3") },
+                        { content: 4, label: i18n.t("cis_demo-generic-distress-a4") },
                     ],
                 },
             ],
@@ -462,19 +488,19 @@ export const _state_properties = {
         }),
         new Item({
             id: "somatic-pain-distress",
-            question: "Has the pain bothered you when you were doing something interesting in the PAST SEVEN DAYS?",
+            question: i18n.t("cis_demo-somatic-pain-distress"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No, pain has not bothered me" },
+                        { content: 1, label: i18n.t("cis_demo-somatic-pain-distress-a1") },
                         {
                             content: 2,
-                            label: "Yes, pain bothered me while doing something interesting",
+                            label: i18n.t("cis_demo-somatic-pain-distress-a2"),
                         },
                         {
                             content: 3,
-                            label: "I haven't done anything interesting in the past week",
+                            label: i18n.t("cis_demo-somatic-pain-distress-a3"),
                         },
                     ],
                 },
@@ -487,13 +513,13 @@ export const _state_properties = {
         }),
         new Item({
             id: "somatic-discomfort",
-            question: "Have you been troubled by any sort of bodily discomfort in THE PAST MONTH?",
+            question: i18n.t("cis_demo-somatic-pain-discomfort"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-yes1") },
                     ],
                 },
             ],
@@ -503,14 +529,14 @@ export const _state_properties = {
         }),
         new Item({
             id: "somatic-discomfort-stress",
-            question: "Was this discomfort BROUGHT ON or MADE WORSE because you were feeling low, anxious or stressed?",
+            question: i18n.t("cis_demo-somatic-discomfort-stress"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "Never" },
-                        { content: 2, label: "Sometimes" },
-                        { content: 3, label: "Always" },
+                        { content: 1, label: i18n.t("cis_demo-generic-freq-a6") },
+                        { content: 2, label: i18n.t("cis_demo-generic-freq-a7") },
+                        { content: 3, label: i18n.t("cis_demo-generic-freq-a8") },
                     ],
                 },
             ],
@@ -520,14 +546,14 @@ export const _state_properties = {
         }),
         new Item({
             id: "somatic-discomfort-frequency",
-            question: "On how many days have you noticed this discomfort during the PAST SEVEN DAYS?",
+            question: i18n.t("cis_demo-somatic-discomfort-frequency"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "None" },
-                        { content: 2, label: "Between one and three days" },
-                        { content: 3, label: "Four days or more" },
+                        { content: 1, label: i18n.t("cis_demo-generic-freq-a9") },
+                        { content: 2, label: i18n.t("cis_demo-generic-freq-a10-day") },
+                        { content: 3, label: i18n.t("cis_demo-generic-freq-a11-day") },
                     ],
                 },
             ],
@@ -541,15 +567,15 @@ export const _state_properties = {
         }),
         new Item({
             id: "somatic-discomfort-long",
-            question: "In total, did the discomfort last for more than 3 hours on ANY day during the PAST SEVEN DAYS?",
+            question: i18n.t("cis_demo-somatic-discomfort-long"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No, less than 3 hours" },
+                        { content: 1, label: i18n.t("cis_demo-generic-duration-a1") },
                         {
                             content: 2,
-                            label: "Yes, it has lasted for more than 3 hours on at least one day",
+                            label: i18n.t("cis_demo-generic-duration-a2"),
                         },
                     ],
                 },
@@ -562,15 +588,15 @@ export const _state_properties = {
         }),
         new Item({
             id: "somatic-discomfort-valence",
-            question: "Has the discomfort been unpleasant in the PAST SEVEN DAYS?",
+            question: i18n.t("cis_demo-somatic-discomfort-valence"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "Not at all" },
-                        { content: 2, label: "A little unpleasant" },
-                        { content: 3, label: "Unpleasant" },
-                        { content: 4, label: "Very unpleasant" },
+                        { content: 1, label: i18n.t("cis_demo-generic-distress-a1") },
+                        { content: 2, label: i18n.t("cis_demo-generic-distress-a2") },
+                        { content: 3, label: i18n.t("cis_demo-generic-distress-a3") },
+                        { content: 4, label: i18n.t("cis_demo-generic-distress-a4") },
                     ],
                 },
             ],
@@ -583,19 +609,22 @@ export const _state_properties = {
         }),
         new Item({
             id: "somatic-discomfort-distress",
-            question: "Has the discomfort bothered you when you were doing something interesting in the PAST SEVEN DAYS?",
+            question: i18n.t("cis_demo-somatic-discomfort-distress"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No, discomfort has not bothered me" },
+                        {
+                            content: 1,
+                            label: i18n.t("cis_demo-somatic-discomfort-distress-a1"),
+                        },
                         {
                             content: 2,
-                            label: "Yes, discomfort bothered me while doing something interesting",
+                            label: i18n.t("cis_demo-somatic-discomfort-distress-a2"),
                         },
                         {
                             content: 3,
-                            label: "I haven't done anything interesting in the past week",
+                            label: i18n.t("cis_demo-somatic-discomfort-distress-a3"),
                         },
                     ],
                 },
@@ -608,17 +637,17 @@ export const _state_properties = {
         }),
         new Item({
             id: "somatic-duration",
-            question: "How long have you been feeling this ache, pain or discomfort as you have just described?",
+            question: i18n.t("cis_demo-somatic-duration"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "Less than 2 weeks" },
-                        { content: 2, label: "Between 2 weeks and 6 months" },
-                        { content: 3, label: "Between 6 months and 1 year" },
-                        { content: 4, label: "Between 1 and 2 years" },
-                        { content: 5, label: "Between 2 and 5 years" },
-                        { content: 6, label: "More than 5 years" },
+                        { content: 1, label: i18n.t("cis_demo-generic-duration-a3") },
+                        { content: 2, label: i18n.t("cis_demo-generic-duration-a4") },
+                        { content: 3, label: i18n.t("cis_demo-generic-duration-a5") },
+                        { content: 4, label: i18n.t("cis_demo-generic-duration-a6") },
+                        { content: 5, label: i18n.t("cis_demo-generic-duration-a7") },
+                        { content: 6, label: i18n.t("cis_demo-generic-duration-a8") },
                     ],
                 },
             ],
@@ -626,13 +655,13 @@ export const _state_properties = {
         }),
         new Item({
             id: "fatigue",
-            question: "Have you noticed that you've been getting tired in the PAST MONTH?",
+            question: i18n.t("cis_demo-fatigue"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-yes1") },
                     ],
                 },
             ],
@@ -645,25 +674,25 @@ export const _state_properties = {
         }),
         new Item({
             id: "fatigue-tired-cause",
-            question: "What do you think is the main reason for feeling tired?",
+            question: i18n.t("cis_demo-fatigue-tired-cause"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "Problems with sleep" },
-                        { content: 2, label: "Tablets or medication" },
-                        { content: 3, label: "Physical illness" },
+                        { content: 1, label: i18n.t("cis_demo-generic-cause-a1") },
+                        { content: 2, label: i18n.t("cis_demo-generic-cause-a2") },
+                        { content: 3, label: i18n.t("cis_demo-generic-cause-a3") },
                         {
                             content: 4,
-                            label: "Working too hard, including looking after children",
+                            label: i18n.t("cis_demo-generic-cause-a4"),
                         },
                         {
                             content: 5,
-                            label: "Stress, worry or other psychological reason",
+                            label: i18n.t("cis_demo-generic-cause-a5"),
                         },
-                        { content: 6, label: "Physical exercise" },
-                        { content: 7, label: "Other cause" },
-                        { content: 8, label: "Don't know" },
+                        { content: 6, label: i18n.t("cis_demo-generic-cause-a6") },
+                        { content: 7, label: i18n.t("cis_demo-generic-cause-a7") },
+                        { content: 8, label: i18n.t("cis_demo-generic-cause-a8") },
                     ],
                 },
             ],
@@ -673,14 +702,14 @@ export const _state_properties = {
         }),
         new Item({
             id: "fatigue-tired-frequency",
-            question: "On how many days have you felt tired during the PAST SEVEN DAYS?",
+            question: i18n.t("cis_demo-fatigue-tired-frequency"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "None" },
-                        { content: 2, label: "Between one and three days" },
-                        { content: 3, label: "Four days or more" },
+                        { content: 1, label: i18n.t("cis_demo-generic-freq-a9") },
+                        { content: 2, label: i18n.t("cis_demo-generic-freq-a10-day") },
+                        { content: 3, label: i18n.t("cis_demo-generic-freq-a11-day") },
                     ],
                 },
             ],
@@ -694,15 +723,15 @@ export const _state_properties = {
         }),
         new Item({
             id: "fatigue-tired-duration",
-            question: "Have you felt tired for more than 3 hours in total on ANY day in the PAST SEVEN DAYS?",
+            question: i18n.t("cis_demo-fatigue-tired-duration"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No, less than 3 hours" },
+                        { content: 1, label: i18n.t("cis_demo-generic-duration-a1") },
                         {
                             content: 2,
-                            label: "Yes, I felt tired for more than 3 hours on at least one day",
+                            label: i18n.t("cis_demo-generic-duration-a2"),
                         },
                     ],
                 },
@@ -715,13 +744,13 @@ export const _state_properties = {
         }),
         new Item({
             id: "fatigue-tired-push",
-            question: "Have you felt so tired that you've had to push yourself to get things done during the PAST SEVEN DAYS?",
+            question: i18n.t("cis_demo-fatigue-tired-push"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes, on one or more occasion" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-yes2") },
                     ],
                 },
             ],
@@ -733,16 +762,16 @@ export const _state_properties = {
         }),
         new Item({
             id: "fatigue-tired-enjoy",
-            question: "Have you felt tired when doing things that you enjoy during the PAST SEVEN DAYS?",
+            question: i18n.t("cis_demo-fatigue-tired-enjoy"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No, not tired during enjoyable activities" },
-                        { content: 2, label: "Yes, tired during an enjoyable activity" },
+                        { content: 1, label: i18n.t("cis_demo-fatigue-tired-enjoy-a1") },
+                        { content: 2, label: i18n.t("cis_demo-fatigue-tired-enjoy-a2") },
                         {
                             content: 3,
-                            label: "I haven't done anything enjoyable in the past week",
+                            label: i18n.t("cis_demo-fatigue-tired-enjoy-a3"),
                         },
                     ],
                 },
@@ -755,13 +784,13 @@ export const _state_properties = {
         }),
         new Item({
             id: "fatigue-energy",
-            question: "During the PAST MONTH, have you felt you've been lacking in energy?",
+            question: i18n.t("cis_demo-fatigue-energy"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-yes1") },
                     ],
                 },
             ],
@@ -771,25 +800,25 @@ export const _state_properties = {
         }),
         new Item({
             id: "fatigue-energy-cause",
-            question: "What do you think is the main reason for lacking in energy?",
+            question: i18n.t("cis_demo-fatigue-energy-cause"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "Problems with sleep" },
-                        { content: 2, label: "Tablets or medication" },
-                        { content: 3, label: "Physical illness" },
+                        { content: 1, label: i18n.t("cis_demo-generic-cause-a1") },
+                        { content: 2, label: i18n.t("cis_demo-generic-cause-a2") },
+                        { content: 3, label: i18n.t("cis_demo-generic-cause-a3") },
                         {
                             content: 4,
-                            label: "Working too hard, including looking after children",
+                            label: i18n.t("cis_demo-generic-cause-a4"),
                         },
                         {
                             content: 5,
-                            label: "Stress, worry or other psychological reason",
+                            label: i18n.t("cis_demo-generic-cause-a5"),
                         },
-                        { content: 6, label: "Physical exercise" },
-                        { content: 7, label: "Other cause" },
-                        { content: 8, label: "Don't know" },
+                        { content: 6, label: i18n.t("cis_demo-generic-cause-a6") },
+                        { content: 7, label: i18n.t("cis_demo-generic-cause-a7") },
+                        { content: 8, label: i18n.t("cis_demo-generic-cause-a8") },
                     ],
                 },
             ],
@@ -799,14 +828,14 @@ export const _state_properties = {
         }),
         new Item({
             id: "fatigue-energy-frequency",
-            question: "On how many days have you felt lacking in energy during the PAST SEVEN DAYS?",
+            question: i18n.t("cis_demo-fatigue-energy-frequency"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "None" },
-                        { content: 2, label: "Between one and three days" },
-                        { content: 3, label: "Four days or more" },
+                        { content: 1, label: i18n.t("cis_demo-generic-freq-a9") },
+                        { content: 2, label: i18n.t("cis_demo-generic-freq-a10-day") },
+                        { content: 3, label: i18n.t("cis_demo-generic-freq-a11-day") },
                     ],
                 },
             ],
@@ -820,15 +849,15 @@ export const _state_properties = {
         }),
         new Item({
             id: "fatigue-energy-duration",
-            question: "Have you felt lacking in energy for more than 3 hours in total on ANY day in the PAST SEVEN DAYS?",
+            question: i18n.t("cis_demo-fatigue-energy-duration"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No, less than 3 hours" },
+                        { content: 1, label: i18n.t("cis_demo-generic-duration-a1") },
                         {
                             content: 2,
-                            label: "Yes, I felt tired for more than 3 hours on at least one day",
+                            label: i18n.t("cis_demo-generic-duration-a2"),
                         },
                     ],
                 },
@@ -841,13 +870,13 @@ export const _state_properties = {
         }),
         new Item({
             id: "fatigue-energy-push",
-            question: "Have you felt so lacking in energy that you've had to push yourself to get things done during the PAST SEVEN DAYS?",
+            question: i18n.t("cis_demo-fatigue-energy-push"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes, on one or more occasion" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-yes2") },
                     ],
                 },
             ],
@@ -859,16 +888,16 @@ export const _state_properties = {
         }),
         new Item({
             id: "fatigue-energy-enjoy",
-            question: "Have you felt lacking in energy when doing things that you enjoy during the PAST SEVEN DAYS?",
+            question: i18n.t("cis_demo-fatigue-energy-enjoy"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No, not tired during enjoyable activities" },
-                        { content: 2, label: "Yes, tired during an enjoyable activity" },
+                        { content: 1, label: i18n.t("cis_demo-fatigue-energy-enjoy-a1") },
+                        { content: 2, label: i18n.t("cis_demo-fatigue-energy-enjoy-a2") },
                         {
                             content: 3,
-                            label: "I haven't done anything enjoyable in the past week",
+                            label: i18n.t("cis_demo-fatigue-energy-enjoy-a3"),
                         },
                     ],
                 },
@@ -881,17 +910,17 @@ export const _state_properties = {
         }),
         new Item({
             id: "fatigue-duration",
-            question: "How long have you been feeling tired or lacking in energy in the way you have just described?",
+            question: i18n.t("cis_demo-fatigue-duration"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "Less than 2 weeks" },
-                        { content: 2, label: "Between 2 weeks and 6 months" },
-                        { content: 3, label: "Between 6 months and 1 year" },
-                        { content: 4, label: "Between 1 and 2 years" },
-                        { content: 5, label: "Between 2 and 5 years" },
-                        { content: 6, label: "More than 5 years" },
+                        { content: 1, label: i18n.t("cis_demo-generic-duration-a3") },
+                        { content: 2, label: i18n.t("cis_demo-generic-duration-a4") },
+                        { content: 3, label: i18n.t("cis_demo-generic-duration-a5") },
+                        { content: 4, label: i18n.t("cis_demo-generic-duration-a6") },
+                        { content: 5, label: i18n.t("cis_demo-generic-duration-a7") },
+                        { content: 6, label: i18n.t("cis_demo-generic-duration-a8") },
                     ],
                 },
             ],
@@ -904,15 +933,15 @@ export const _state_properties = {
         }),
         new Item({
             id: "concentration",
-            question: "In the PAST MONTH, have you had any problems in concentrating on what you are doing?",
+            question: i18n.t("cis_demo-concentration"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
                         {
                             content: 2,
-                            label: "Yes, problems concentrating on what I am doing",
+                            label: i18n.t("cis_demo-concentration-yes"),
                         },
                     ],
                 },
@@ -929,13 +958,13 @@ export const _state_properties = {
         }),
         new Item({
             id: "concentration-forgetting",
-            question: "Have you noticed any problems with forgetting things in the PAST MONTH?",
+            question: i18n.t("cis_demo-concentration-forgetting"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-yes1") },
                     ],
                 },
             ],
@@ -949,14 +978,14 @@ export const _state_properties = {
         }),
         new Item({
             id: "concentration-frequency",
-            question: "On how many days have you noticed problems with your concentration OR your memory during the PAST SEVEN DAYS?",
+            question: i18n.t("cis_demo-concentration-frequency"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "None" },
-                        { content: 2, label: "Between one and three days" },
-                        { content: 3, label: "Four days or more" },
+                        { content: 1, label: i18n.t("cis_demo-generic-freq-a9") },
+                        { content: 2, label: i18n.t("cis_demo-generic-freq-a10-day") },
+                        { content: 3, label: i18n.t("cis_demo-generic-freq-a11-day") },
                     ],
                 },
             ],
@@ -976,15 +1005,15 @@ export const _state_properties = {
         }),
         new Item({
             id: "concentration-tasks",
-            question: "In the PAST SEVEN DAYS could you concentrate on all of the following without your mind wandering?:\n\na whole TV programme\n\na newspaper article\n\ntalking to someone?",
+            question: i18n.t("cis_demo-concentration-tasks"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "Yes, I could concentrate on all of them" },
+                        { content: 1, label: i18n.t("cis_demo-concentration-tasks-a1") },
                         {
                             content: 2,
-                            label: "No, I couldn't concentrate on at least one of these things",
+                            label: i18n.t("cis_demo-concentration-tasks-a2"),
                         },
                     ],
                 },
@@ -997,13 +1026,13 @@ export const _state_properties = {
         }),
         new Item({
             id: "concentration-distress",
-            question: "In the PAST SEVEN DAYS, have these problems with your concentration actually STOPPED you from getting on with things you used to do or would like to do?",
+            question: i18n.t("cis_demo-concentration-distress"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-yes1") },
                     ],
                 },
             ],
@@ -1015,17 +1044,17 @@ export const _state_properties = {
         }),
         new Item({
             id: "concentration-duration",
-            question: "How long have you been having problems with your CONCENTRATION as you have described?",
+            question: i18n.t("cis_demo-concentration-duration"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "Less than 2 weeks" },
-                        { content: 2, label: "Between 2 weeks and 6 months" },
-                        { content: 3, label: "Between 6 months and 1 year" },
-                        { content: 4, label: "Between 1 and 2 years" },
-                        { content: 5, label: "Between 2 and 5 years" },
-                        { content: 6, label: "More than 5 years" },
+                        { content: 1, label: i18n.t("cis_demo-generic-duration-a3") },
+                        { content: 2, label: i18n.t("cis_demo-generic-duration-a4") },
+                        { content: 3, label: i18n.t("cis_demo-generic-duration-a5") },
+                        { content: 4, label: i18n.t("cis_demo-generic-duration-a6") },
+                        { content: 5, label: i18n.t("cis_demo-generic-duration-a7") },
+                        { content: 6, label: i18n.t("cis_demo-generic-duration-a8") },
                     ],
                 },
             ],
@@ -1043,13 +1072,16 @@ export const _state_properties = {
         }),
         new Item({
             id: "concentration-forgetting-important",
-            question: "Have you forgotten anything important in the PAST SEVEN DAYS?",
+            question: i18n.t("cis_demo-concentration-forgetting-important"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes, I have forgotten something important" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        {
+                            content: 2,
+                            label: i18n.t("cis_demo-concentration-forgetting-important-yes"),
+                        },
                     ],
                 },
             ],
@@ -1061,17 +1093,17 @@ export const _state_properties = {
         }),
         new Item({
             id: "concentration-forgetting-duration",
-            question: "How long have you been having problems with your MEMORY as you have described?",
+            question: i18n.t("cis_demo-concentration-forgetting-duration"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "Less than 2 weeks" },
-                        { content: 2, label: "Between 2 weeks and 6 months" },
-                        { content: 3, label: "Between 6 months and 1 year" },
-                        { content: 4, label: "Between 1 and 2 years" },
-                        { content: 5, label: "Between 2 and 5 years" },
-                        { content: 6, label: "More than 5 years" },
+                        { content: 1, label: i18n.t("cis_demo-generic-duration-a3") },
+                        { content: 2, label: i18n.t("cis_demo-generic-duration-a4") },
+                        { content: 3, label: i18n.t("cis_demo-generic-duration-a5") },
+                        { content: 4, label: i18n.t("cis_demo-generic-duration-a6") },
+                        { content: 5, label: i18n.t("cis_demo-generic-duration-a7") },
+                        { content: 6, label: i18n.t("cis_demo-generic-duration-a8") },
                     ],
                 },
             ],
@@ -1079,13 +1111,13 @@ export const _state_properties = {
         }),
         new Item({
             id: "sleep-loss",
-            question: "In the PAST MONTH, have you been having problems with trying to get to sleep or with getting back to sleep if you woke up or were woken up?",
+            question: i18n.t("cis_demo-sleep-loss"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-yes1") },
                     ],
                 },
             ],
@@ -1103,14 +1135,14 @@ export const _state_properties = {
         }),
         new Item({
             id: "sleep-loss-frequency",
-            question: "On how many nights in the SEVEN NIGHTS did you have problems with your sleep?",
+            question: i18n.t("cis_demo-sleep-loss-frequency"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "None" },
-                        { content: 2, label: "Between one and three nights" },
-                        { content: 3, label: "Four nights or more" },
+                        { content: 1, label: i18n.t("cis_demo-generic-freq-a9") },
+                        { content: 2, label: i18n.t("cis_demo-generic-freq-a10-night") },
+                        { content: 3, label: i18n.t("cis_demo-generic-freq-a11-night") },
                     ],
                 },
             ],
@@ -1124,15 +1156,15 @@ export const _state_properties = {
         }),
         new Item({
             id: "sleep-loss-time",
-            question: "Thinking about the night you had the LEAST sleep in the PAST WEEK, how long did you spend trying to get to sleep?\n\nOnly include time spent lying awake in bed TRYING to return to sleep.",
+            question: i18n.t("cis_demo-sleep-loss-time"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "Less than 15 minutes" },
-                        { content: 2, label: "Between 15 minutes and 1 hour" },
-                        { content: 3, label: "Between 1 and 3 hours" },
-                        { content: 4, label: "Three hours or more" },
+                        { content: 1, label: i18n.t("cis_demo-generic-duration-a9") },
+                        { content: 2, label: i18n.t("cis_demo-generic-duration-a10") },
+                        { content: 3, label: i18n.t("cis_demo-generic-duration-a11") },
+                        { content: 4, label: i18n.t("cis_demo-generic-duration-a12") },
                     ],
                 },
             ],
@@ -1151,14 +1183,14 @@ export const _state_properties = {
         }),
         new Item({
             id: "sleep-loss-long",
-            question: "In the PAST SEVEN DAYS, how many nights did you spend 3 or more hours trying to get to sleep?",
+            question: i18n.t("cis_demo-sleep-loss-long"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "None" },
-                        { content: 2, label: "Between one and three nights" },
-                        { content: 3, label: "Four nights or more" },
+                        { content: 1, label: i18n.t("cis_demo-generic-freq-a9") },
+                        { content: 2, label: i18n.t("cis_demo-generic-freq-a10-night") },
+                        { content: 3, label: i18n.t("cis_demo-generic-freq-a11-night") },
                     ],
                 },
             ],
@@ -1170,13 +1202,13 @@ export const _state_properties = {
         }),
         new Item({
             id: "sleep-loss-morning",
-            question: "In the PAST SEVEN DAYS, have you woken more than two hours earlier than you needed to and found that you couldn't get back to sleep?",
+            question: i18n.t("cis_demo-sleep-loss-morning"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes, and I couldn't get back to sleep" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-sleep-loss-morning-yes") },
                     ],
                 },
             ],
@@ -1197,17 +1229,17 @@ export const _state_properties = {
         }),
         new Item({
             id: "sleep-cause",
-            question: "What are your sleep difficulties caused by?",
+            question: i18n.t("cis_demo-sleep-cause"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "Noises (babies crying, busy roads etc.)" },
-                        { content: 2, label: "Shift work or late nights" },
-                        { content: 3, label: "Pain or illness" },
-                        { content: 4, label: "Worries" },
-                        { content: 5, label: "Reason not known" },
-                        { content: 6, label: "Other" },
+                        { content: 1, label: i18n.t("cis_demo-sleep-cause-a1") },
+                        { content: 2, label: i18n.t("cis_demo-sleep-cause-a2") },
+                        { content: 3, label: i18n.t("cis_demo-sleep-cause-a3") },
+                        { content: 4, label: i18n.t("cis_demo-sleep-cause-a4") },
+                        { content: 5, label: i18n.t("cis_demo-sleep-cause-a5") },
+                        { content: 6, label: i18n.t("cis_demo-sleep-cause-a6") },
                     ],
                 },
             ],
@@ -1215,17 +1247,17 @@ export const _state_properties = {
         }),
         new Item({
             id: "sleep-gain",
-            question: "Has sleeping more than usual been a problem for you in the PAST MONTH?",
+            question: i18n.t("cis_demo-sleep-gain"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
                         {
                             content: 2,
-                            label: "I have slept more than usual but this is not a problem",
+                            label: i18n.t("cis_demo-sleep-gain-yes"),
                         },
-                        { content: 3, label: "Yes" },
+                        { content: 3, label: i18n.t("cis_demo-generic-yes1") },
                     ],
                 },
             ],
@@ -1233,14 +1265,14 @@ export const _state_properties = {
         }),
         new Item({
             id: "sleep-gain-frequency",
-            question: "On how many nights in the SEVEN NIGHTS did you have problems with your sleep?",
+            question: i18n.t("cis_demo-sleep-gain-frequency"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "None" },
-                        { content: 2, label: "Between one and three nights" },
-                        { content: 3, label: "Four nights or more" },
+                        { content: 1, label: i18n.t("cis_demo-generic-freq-a9") },
+                        { content: 2, label: i18n.t("cis_demo-generic-freq-a10-night") },
+                        { content: 3, label: i18n.t("cis_demo-generic-freq-a11-night") },
                     ],
                 },
             ],
@@ -1254,15 +1286,15 @@ export const _state_properties = {
         }),
         new Item({
             id: "sleep-gain-time",
-            question: "Thinking about the night you slept the longest in the PAST SEVEN DAYS, how much longer did you sleep compared with how long you normally sleep for?",
+            question: i18n.t("cis_demo-sleep-gain-time"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "Less than 15 minutes" },
-                        { content: 2, label: "Between 15 minutes and 1 hour" },
-                        { content: 3, label: "Between 1 and 3 hours" },
-                        { content: 4, label: "Three hours or more" },
+                        { content: 1, label: i18n.t("cis_demo-generic-duration-a9") },
+                        { content: 2, label: i18n.t("cis_demo-generic-duration-a10") },
+                        { content: 3, label: i18n.t("cis_demo-generic-duration-a11") },
+                        { content: 4, label: i18n.t("cis_demo-generic-duration-a12") },
                     ],
                 },
             ],
@@ -1283,14 +1315,14 @@ export const _state_properties = {
         }),
         new Item({
             id: "sleep-gain-long",
-            question: "In the PAST SEVEN DAYS, on how many nights did you sleep for more than 3 hours longer usual?",
+            question: i18n.t("cis_demo-sleep-gain-long"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "None" },
-                        { content: 2, label: "Between one and three nights" },
-                        { content: 3, label: "Four nights or more" },
+                        { content: 1, label: i18n.t("cis_demo-generic-freq-a9") },
+                        { content: 2, label: i18n.t("cis_demo-generic-freq-a10-night") },
+                        { content: 3, label: i18n.t("cis_demo-generic-freq-a11-night") },
                     ],
                 },
             ],
@@ -1302,17 +1334,17 @@ export const _state_properties = {
         }),
         new Item({
             id: "sleep-duration",
-            question: "How long have you had these problems with your sleep as you have described?",
+            question: i18n.t("cis_demo-sleep-duration"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "Less than 2 weeks" },
-                        { content: 2, label: "Between 2 weeks and 6 months" },
-                        { content: 3, label: "Between 6 months and 1 year" },
-                        { content: 4, label: "Between 1 and 2 years" },
-                        { content: 5, label: "Between 2 and 5 years" },
-                        { content: 6, label: "More than 5 years" },
+                        { content: 1, label: i18n.t("cis_demo-generic-duration-a3") },
+                        { content: 2, label: i18n.t("cis_demo-generic-duration-a4") },
+                        { content: 3, label: i18n.t("cis_demo-generic-duration-a5") },
+                        { content: 4, label: i18n.t("cis_demo-generic-duration-a6") },
+                        { content: 5, label: i18n.t("cis_demo-generic-duration-a7") },
+                        { content: 6, label: i18n.t("cis_demo-generic-duration-a8") },
                     ],
                 },
             ],
@@ -1320,15 +1352,15 @@ export const _state_properties = {
         }),
         new Item({
             id: "irritability",
-            question: "Many people become irritable or short tempered at times, though they may not show it.\n\nHave you felt irritable or short tempered with those around you in the PAST MONTH?",
+            question: i18n.t("cis_demo-irritability"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
                         {
                             content: 2,
-                            label: "Yes, I have felt irritable or short tempered recently",
+                            label: i18n.t("cis_demo-irritability-yes"),
                         },
                     ],
                 },
@@ -1347,14 +1379,14 @@ export const _state_properties = {
         }),
         new Item({
             id: "irritability-trivial",
-            question: "During the PAST MONTH, did you get short tempered or angry over things which now seem trivial when you look back on them?",
+            question: i18n.t("cis_demo-irritability-trivial"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Sometimes" },
-                        { content: 3, label: "Yes" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-freq-a7") },
+                        { content: 3, label: i18n.t("cis_demo-generic-yes1") },
                     ],
                 },
             ],
@@ -1364,14 +1396,14 @@ export const _state_properties = {
         }),
         new Item({
             id: "irritability-frequency",
-            question: "On how many days have you felt irritable, short tempered or angry in the PAST SEVEN DAYS?",
+            question: i18n.t("cis_demo-irritability-frequency"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "None" },
-                        { content: 2, label: "Between one and three days" },
-                        { content: 3, label: "Four days or more" },
+                        { content: 1, label: i18n.t("cis_demo-generic-freq-a9") },
+                        { content: 2, label: i18n.t("cis_demo-generic-freq-a10-day") },
+                        { content: 3, label: i18n.t("cis_demo-generic-freq-a11-day") },
                     ],
                 },
             ],
@@ -1385,15 +1417,15 @@ export const _state_properties = {
         }),
         new Item({
             id: "irritability-long",
-            question: "In total, have you felt irritable, short tempered or angry for more than one hour on any day in the PAST SEVEN DAYS?",
+            question: i18n.t("cis_demo-irritability-long"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
                         {
                             content: 2,
-                            label: "Yes, I felt this way for more than one hour on at least one day",
+                            label: i18n.t("cis_demo-irritability-long-yes"),
                         },
                     ],
                 },
@@ -1406,17 +1438,17 @@ export const _state_properties = {
         }),
         new Item({
             id: "irritability-shout",
-            question: "During the PAST SEVEN DAYS, have you felt so irritable, short tempered or angry that you have wanted to shout at someone, even if you haven't actually shouted?",
+            question: i18n.t("cis_demo-irritability-shout"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
                         {
                             content: 2,
-                            label: "Yes, but I didn't actually shout at someone",
+                            label: i18n.t("cis_demo-irritability-shout-yes1"),
                         },
-                        { content: 3, label: "Yes, and I actually shouted" },
+                        { content: 3, label: i18n.t("cis_demo-irritability-shout-yes2") },
                     ],
                 },
             ],
@@ -1431,14 +1463,14 @@ export const _state_properties = {
         }),
         new Item({
             id: "irritability-rows",
-            question: "In the past SEVEN DAYS, have you had arguments, rows or quarrels or lost your temper with anyone?",
+            question: i18n.t("cis_demo-irritability-rows"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes, but this was justified" },
-                        { content: 3, label: "Yes" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-irritability-rows-yes") },
+                        { content: 3, label: i18n.t("cis_demo-generic-yes1") },
                     ],
                 },
             ],
@@ -1450,17 +1482,17 @@ export const _state_properties = {
         }),
         new Item({
             id: "irritability-duration",
-            question: "How long have you been feeling irritable, short-tempered or angry as you have described?",
+            question: i18n.t("cis_demo-irritability-duration"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "Less than 2 weeks" },
-                        { content: 2, label: "Between 2 weeks and 6 months" },
-                        { content: 3, label: "Between 6 months and 1 year" },
-                        { content: 4, label: "Between 1 and 2 years" },
-                        { content: 5, label: "Between 2 and 5 years" },
-                        { content: 6, label: "More than 5 years" },
+                        { content: 1, label: i18n.t("cis_demo-generic-duration-a3") },
+                        { content: 2, label: i18n.t("cis_demo-generic-duration-a4") },
+                        { content: 3, label: i18n.t("cis_demo-generic-duration-a5") },
+                        { content: 4, label: i18n.t("cis_demo-generic-duration-a6") },
+                        { content: 5, label: i18n.t("cis_demo-generic-duration-a7") },
+                        { content: 6, label: i18n.t("cis_demo-generic-duration-a8") },
                     ],
                 },
             ],
@@ -1477,13 +1509,13 @@ export const _state_properties = {
         }),
         new Item({
             id: "hypochondria",
-            question: "Many people get concerned about their physical health. In the PAST MONTH have you been at all worried about your physical health?",
+            question: i18n.t("cis_demo-hypochondria"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-yes1") },
                     ],
                 },
             ],
@@ -1499,13 +1531,13 @@ export const _state_properties = {
         }),
         new Item({
             id: "hypochondria-serious",
-            question: "Do you find yourself worrying that you might have a serious illness like cancer, heart disease or AIDS?",
+            question: i18n.t("cis_demo-hypochondria-serious"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-yes1") },
                     ],
                 },
             ],
@@ -1515,14 +1547,14 @@ export const _state_properties = {
         }),
         new Item({
             id: "hypochondria-frequency",
-            question: "Thinking about the PAST SEVEN DAYS, on how many days have you found yourself worrying about your physical health, or worrying that you might have a serious physical illness?",
+            question: i18n.t("cis_demo-hypochondria-frequency"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "None" },
-                        { content: 2, label: "Between one and three days" },
-                        { content: 3, label: "Four days or more" },
+                        { content: 1, label: i18n.t("cis_demo-generic-freq-a9") },
+                        { content: 2, label: i18n.t("cis_demo-generic-freq-a10-day") },
+                        { content: 3, label: i18n.t("cis_demo-generic-freq-a11-day") },
                     ],
                 },
             ],
@@ -1536,13 +1568,16 @@ export const _state_properties = {
         }),
         new Item({
             id: "hypochondria-excessive",
-            question: "In your opinion, have you been worrying too much in view of your actual physical health?",
+            question: i18n.t("cis_demo-hypochondria-excessive"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes, I worry too much" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        {
+                            content: 2,
+                            label: i18n.t("cis_demo-hypochondria-excessive-yes"),
+                        },
                     ],
                 },
             ],
@@ -1554,15 +1589,15 @@ export const _state_properties = {
         }),
         new Item({
             id: "hypochondria-valence",
-            question: "How unpleasant has this worrying been in the PAST SEVEN DAYS?",
+            question: i18n.t("cis_demo-hypochondria-valence"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "Not at all" },
-                        { content: 2, label: "A little unpleasant" },
-                        { content: 3, label: "Unpleasant" },
-                        { content: 4, label: "Very unpleasant" },
+                        { content: 1, label: i18n.t("cis_demo-generic-distress-a1") },
+                        { content: 2, label: i18n.t("cis_demo-generic-distress-a2") },
+                        { content: 3, label: i18n.t("cis_demo-generic-distress-a3") },
+                        { content: 4, label: i18n.t("cis_demo-generic-distress-a4") },
                     ],
                 },
             ],
@@ -1576,15 +1611,15 @@ export const _state_properties = {
         }),
         new Item({
             id: "hypochondria-distraction",
-            question: "In the PAST SEVEN DAYS, have you been able to take your mind off your health worries at least once, by doing something else?",
+            question: i18n.t("cis_demo-hypochondria-distraction"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "Yes" },
+                        { content: 1, label: i18n.t("cis_demo-generic-yes1") },
                         {
                             content: 2,
-                            label: "No, I could not take my mind off these worries even once",
+                            label: i18n.t("cis_demo-hypochondria-distraction-yes"),
                         },
                     ],
                 },
@@ -1597,17 +1632,17 @@ export const _state_properties = {
         }),
         new Item({
             id: "hypochondria-duration",
-            question: "How long have you been worrying about your physical health in the way you have described?",
+            question: i18n.t("cis_demo-hypochondria-duration"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "Less than 2 weeks" },
-                        { content: 2, label: "Between 2 weeks and 6 months" },
-                        { content: 3, label: "Between 6 months and 1 year" },
-                        { content: 4, label: "Between 1 and 2 years" },
-                        { content: 5, label: "Between 2 and 5 years" },
-                        { content: 6, label: "More than 5 years" },
+                        { content: 1, label: i18n.t("cis_demo-generic-duration-a3") },
+                        { content: 2, label: i18n.t("cis_demo-generic-duration-a4") },
+                        { content: 3, label: i18n.t("cis_demo-generic-duration-a5") },
+                        { content: 4, label: i18n.t("cis_demo-generic-duration-a6") },
+                        { content: 5, label: i18n.t("cis_demo-generic-duration-a7") },
+                        { content: 6, label: i18n.t("cis_demo-generic-duration-a8") },
                     ],
                 },
             ],
@@ -1615,13 +1650,13 @@ export const _state_properties = {
         }),
         new Item({
             id: "depression",
-            question: "Almost everyone becomes low in mood or depressed at times.\n\nHave you had a spell of feeling sad, miserable or depressed in the PAST MONTH?",
+            question: i18n.t("cis_demo-depression"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-yes1") },
                     ],
                 },
             ],
@@ -1637,13 +1672,13 @@ export const _state_properties = {
         }),
         new Item({
             id: "depression-recent",
-            question: "In the PAST SEVEN DAYS, have you had a spell of feeling sad, miserable or depressed?",
+            question: i18n.t("cis_demo-depression-recent"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No, not in the past week" },
-                        { content: 2, label: "Yes" },
+                        { content: 1, label: i18n.t("cis_demo-depression-recent-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-yes1") },
                     ],
                 },
             ],
@@ -1651,14 +1686,14 @@ export const _state_properties = {
         }),
         new Item({
             id: "depression-enjoy",
-            question: "During the PAST MONTH, have you been able to enjoy or take an interest in things as much as you usually do?",
+            question: i18n.t("cis_demo-depression-enjoy"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "Yes" },
-                        { content: 2, label: "No, less enjoyment than usual" },
-                        { content: 3, label: "No, I don't enjoy anything" },
+                        { content: 1, label: i18n.t("cis_demo-generic-yes1") },
+                        { content: 2, label: i18n.t("cis_demo-depression-enjoy-a1") },
+                        { content: 3, label: i18n.t("cis_demo-depression-enjoy-a2") },
                     ],
                 },
             ],
@@ -1672,14 +1707,14 @@ export const _state_properties = {
         }),
         new Item({
             id: "depression-enjoy-recent",
-            question: "In the PAST SEVEN DAYS, have you been able to enjoy or take an interest in things as much as usual?",
+            question: i18n.t("cis_demo-depression-enjoy-recent"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "Yes" },
-                        { content: 2, label: "No, less enjoyment than usual" },
-                        { content: 3, label: "No, I don't enjoy anything" },
+                        { content: 1, label: i18n.t("cis_demo-generic-yes1") },
+                        { content: 2, label: i18n.t("cis_demo-depression-enjoy-a1") },
+                        { content: 3, label: i18n.t("cis_demo-depression-enjoy-a2") },
                     ],
                 },
             ],
@@ -1702,14 +1737,14 @@ export const _state_properties = {
         }),
         new Item({
             id: "depression-sad",
-            question: "In the PAST SEVEN DAYS, on how many days have you felt sad, miserable or depressed OR unable to enjoy or take an interest in things?",
+            question: i18n.t("cis_demo-depression-sad"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "None" },
-                        { content: 2, label: "Between one and three days" },
-                        { content: 3, label: "Four days or more" },
+                        { content: 1, label: i18n.t("cis_demo-generic-freq-a9") },
+                        { content: 2, label: i18n.t("cis_demo-generic-freq-a10-day") },
+                        { content: 3, label: i18n.t("cis_demo-generic-freq-a11-day") },
                     ],
                 },
             ],
@@ -1721,15 +1756,15 @@ export const _state_properties = {
         }),
         new Item({
             id: "depression-sad-long",
-            question: "Have you felt sad, miserable or depressed OR unable to enjoy or take an interest in things for more than 3 hours in total on any day in the PAST SEVEN DAYS?",
+            question: i18n.t("cis_demo-depression-sad-long"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No, less than 3 hours" },
+                        { content: 1, label: i18n.t("cis_demo-generic-duration-a1") },
                         {
                             content: 2,
-                            label: "Yes, for 3 hours or more on at least one day",
+                            label: i18n.t("cis_demo-generic-duration-a2"),
                         },
                     ],
                 },
@@ -1751,29 +1786,29 @@ export const _state_properties = {
         }),
         new Item({
             id: "depression-content",
-            question: "What is the MAIN thing that made you feel sad, miserable or depressed OR unable to enjoy or take an interest in things in the PAST WEEK?",
+            question: i18n.t("cis_demo-depression-content"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
                         {
                             content: 1,
-                            label: "Family members, including spouse or partner",
+                            label: i18n.t("cis_demo-depression-content-a1"),
                         },
                         {
                             content: 2,
-                            label: "Relationships with friends or people at work",
+                            label: i18n.t("cis_demo-depression-content-a2"),
                         },
-                        { content: 3, label: "Housing" },
-                        { content: 4, label: "Money or bills" },
+                        { content: 3, label: i18n.t("cis_demo-depression-content-a3") },
+                        { content: 4, label: i18n.t("cis_demo-depression-content-a4") },
                         {
                             content: 5,
-                            label: "Your own physical health, including pregnancy",
+                            label: i18n.t("cis_demo-depression-content-a5"),
                         },
-                        { content: 6, label: "Your own mental health" },
-                        { content: 7, label: "Work or lack of work (including studying)" },
-                        { content: 8, label: "Legal difficulties" },
-                        { content: 9, label: "Political issues or the news" },
+                        { content: 6, label: i18n.t("cis_demo-depression-content-a6") },
+                        { content: 7, label: i18n.t("cis_demo-depression-content-a7") },
+                        { content: 8, label: i18n.t("cis_demo-depression-content-a8") },
+                        { content: 9, label: i18n.t("cis_demo-depression-content-a9") },
                     ],
                 },
             ],
@@ -1781,14 +1816,14 @@ export const _state_properties = {
         }),
         new Item({
             id: "depression-company",
-            question: "In the PAST SEVEN DAYS when you felt sad, miserable or depressed OR unable to enjoy or take an interest in things, did you ever become happier when something nice happened, or when you were in company?",
+            question: i18n.t("cis_demo-depression-company"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "Yes, always" },
-                        { content: 2, label: "Sometimes I cheered up" },
-                        { content: 3, label: "No, nothing cheered me up" },
+                        { content: 1, label: i18n.t("cis_demo-depression-company-a1") },
+                        { content: 2, label: i18n.t("cis_demo-depression-company-a2") },
+                        { content: 3, label: i18n.t("cis_demo-depression-company-a3") },
                     ],
                 },
             ],
@@ -1805,17 +1840,17 @@ export const _state_properties = {
         }),
         new Item({
             id: "depression-duration",
-            question: "How long have you been feeling sad, miserable or depressed OR unable to enjoy or take an interest in things as you have described?",
+            question: i18n.t("cis_demo-depression-duration"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "Less than 2 weeks" },
-                        { content: 2, label: "Between 2 weeks and 6 months" },
-                        { content: 3, label: "Between 6 months and 1 year" },
-                        { content: 4, label: "Between 1 and 2 years" },
-                        { content: 5, label: "Between 2 and 5 years" },
-                        { content: 6, label: "More than 5 years" },
+                        { content: 1, label: i18n.t("cis_demo-generic-duration-a3") },
+                        { content: 2, label: i18n.t("cis_demo-generic-duration-a4") },
+                        { content: 3, label: i18n.t("cis_demo-generic-duration-a5") },
+                        { content: 4, label: i18n.t("cis_demo-generic-duration-a6") },
+                        { content: 5, label: i18n.t("cis_demo-generic-duration-a7") },
+                        { content: 6, label: i18n.t("cis_demo-generic-duration-a8") },
                     ],
                 },
             ],
@@ -1827,18 +1862,18 @@ export const _state_properties = {
         }),
         new Item({
             id: "depression-detail-time",
-            question: "I would now like to ask you about when you have been feeling sad, miserable or depressed OR unable to enjoy or take an interest in things.\n\nIn the PAST SEVEN DAYS, was this worse in the morning, in the evening, or did this make no difference?",
+            question: i18n.t("cis_demo-depression-detail-time"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "Worse in the morning" },
-                        { content: 2, label: "Worse in the evening" },
+                        { content: 1, label: i18n.t("cis_demo-depression-detail-time-a1") },
+                        { content: 2, label: i18n.t("cis_demo-depression-detail-time-a2") },
                         {
                             content: 3,
-                            label: "Sometimes worse in the morning sometimes in the evening",
+                            label: i18n.t("cis_demo-depression-detail-time-a3"),
                         },
-                        { content: 4, label: "No difference between morning and evening" },
+                        { content: 4, label: i18n.t("cis_demo-depression-detail-time-a4") },
                     ],
                 },
             ],
@@ -1855,15 +1890,15 @@ export const _state_properties = {
         }),
         new Item({
             id: "depression-detail-sex",
-            question: "Many people find that feeling sad, miserable or depressed, OR unable to enjoy or take an interest in things can affect their interest in sex.\n\nOver the PAST MONTH, do you think your interest in sex has increased, decreased or stayed the same?",
+            question: i18n.t("cis_demo-depression-detail-sex"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "Not applicable" },
-                        { content: 2, label: "No change" },
-                        { content: 3, label: "Increased" },
-                        { content: 4, label: "Decreased" },
+                        { content: 1, label: i18n.t("cis_demo-depression-detail-sex-a1") },
+                        { content: 2, label: i18n.t("cis_demo-depression-detail-sex-a2") },
+                        { content: 3, label: i18n.t("cis_demo-depression-detail-sex-a3") },
+                        { content: 4, label: i18n.t("cis_demo-depression-detail-sex-a4") },
                     ],
                 },
             ],
@@ -1877,13 +1912,13 @@ export const _state_properties = {
         }),
         new Item({
             id: "depression-detail-restless",
-            question: "In the PAST SEVEN DAYS, when you have felt sad, miserable or depressed OR unable to enjoy or take an interest in things have you been so restless that you couldn't sit still?",
+            question: i18n.t("cis_demo-depression-detail-restless"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-yes1") },
                     ],
                 },
             ],
@@ -1895,13 +1930,13 @@ export const _state_properties = {
         }),
         new Item({
             id: "depression-detail-slow",
-            question: "In the PAST SEVEN DAYS, when you have felt sad, miserable or depressed OR unable to enjoy or take an interest in things have you been doing things more slowly than usual, for example walking more slowly?",
+            question: i18n.t("cis_demo-depression-detail-slow"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-yes1") },
                     ],
                 },
             ],
@@ -1917,15 +1952,27 @@ export const _state_properties = {
         }),
         new Item({
             id: "depression-detail-guilt",
-            question: "In the PAST SEVEN DAYS have you on at least one occasion felt guilty or blamed yourself when things went wrong, even when it hasn't been your fault?",
+            question: i18n.t("cis_demo-depression-detail-guilt"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "Never" },
-                        { content: 2, label: "Only when it was my fault" },
-                        { content: 3, label: "Sometimes" },
-                        { content: 4, label: "Often" },
+                        {
+                            content: 1,
+                            label: i18n.t("cis_demo-depression-detail-guilt-a1"),
+                        },
+                        {
+                            content: 2,
+                            label: i18n.t("cis_demo-depression-detail-guilt-a2"),
+                        },
+                        {
+                            content: 3,
+                            label: i18n.t("cis_demo-depression-detail-guilt-a3"),
+                        },
+                        {
+                            content: 4,
+                            label: i18n.t("cis_demo-depression-detail-guilt-a4"),
+                        },
                     ],
                 },
             ],
@@ -1942,18 +1989,18 @@ export const _state_properties = {
         }),
         new Item({
             id: "depression-detail-worth",
-            question: "In the PAST SEVEN DAYS have you been feeling you are not as good as other people?",
+            question: i18n.t("cis_demo-depression-detail-worth"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
                         {
                             content: 1,
-                            label: "No, I've been feeling as good as anyone else",
+                            label: i18n.t("cis_demo-depression-detail-worth-no"),
                         },
                         {
                             content: 2,
-                            label: "Yes, I've NOT been feeling as good as others",
+                            label: i18n.t("cis_demo-depression-detail-worth-yes"),
                         },
                     ],
                 },
@@ -1968,13 +2015,16 @@ export const _state_properties = {
         }),
         new Item({
             id: "depression-detail-hopeless",
-            question: "Have you felt hopeless at all during the PAST SEVEN DAYS, for instance about your future?",
+            question: i18n.t("cis_demo-depression-detail-hopeless"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes, I have felt hopeless sometimes" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        {
+                            content: 2,
+                            label: i18n.t("cis_demo-depression-detail-hopeless-yes"),
+                        },
                     ],
                 },
             ],
@@ -1992,14 +2042,14 @@ export const _state_properties = {
         }),
         new Item({
             id: "depression-suicide",
-            question: "In the PAST SEVEN DAYS, have you felt that life isn't worth living?",
+            question: i18n.t("cis_demo-depression-suicide"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Sometimes" },
-                        { content: 3, label: "Always" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-freq-a7") },
+                        { content: 3, label: i18n.t("cis_demo-generic-freq-a8") },
                     ],
                 },
             ],
@@ -2020,16 +2070,19 @@ export const _state_properties = {
         }),
         new Item({
             id: "depression-suicide-thoughts",
-            question: "In the PAST SEVEN DAYS, have you thought of killing yourself?",
+            question: i18n.t("cis_demo-depression-suicide-thoughts"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes, but I would not actually carry it out" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        {
+                            content: 2,
+                            label: i18n.t("cis_demo-depression-suicide-thoughts-yes1"),
+                        },
                         {
                             content: 3,
-                            label: "Yes, I have had thoughts about it in the past week",
+                            label: i18n.t("cis_demo-depression-suicide-thoughts-yes2"),
                         },
                     ],
                 },
@@ -2056,13 +2109,13 @@ export const _state_properties = {
         }),
         new Item({
             id: "depression-suicide-method",
-            question: "In the PAST SEVEN DAYS, have you thought about a way in which you might kill yourself?",
+            question: i18n.t("cis_demo-depression-suicide-method"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-yes1") },
                     ],
                 },
             ],
@@ -2074,14 +2127,17 @@ export const _state_properties = {
         }),
         new Item({
             id: "depression-suicide-doctor",
-            question: "Have you talked to your doctor about these thoughts of killing yourself?",
+            question: i18n.t("cis_demo-depression-suicide-doctor"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "Yes" },
-                        { content: 2, label: "No, but I have talked to other people" },
-                        { content: 3, label: "No" },
+                        { content: 1, label: i18n.t("cis_demo-generic-yes1") },
+                        {
+                            content: 2,
+                            label: i18n.t("cis_demo-depression-suicide-doctor-no"),
+                        },
+                        { content: 3, label: i18n.t("cis_demo-generic-no") },
                     ],
                 },
             ],
@@ -2093,24 +2149,24 @@ export const _state_properties = {
         }),
         new Item({
             id: "depression-suicide-referral",
-            question: "You have said that you are thinking about committing suicide.\n\nThis is a very serious matter. It is important you talk to your doctor about these thoughts.",
+            question: i18n.t("cis_demo-depression-suicide-referral"),
             next_item: "depression-outro",
         }),
         new Item({
             id: "depression-outro",
-            question: "Thank you for answering those questions on feeling unhappy or depressed.\n\nThe next section is about worrying and anxiety.",
+            question: i18n.t("cis_demo-depression-suicide-outro"),
             next_item: "worry",
         }),
         new Item({
             id: "worry",
-            question: "In the PAST MONTH, did you find yourself worrying more than you needed to about things?",
+            question: i18n.t("cis_demo-worry"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Sometimes" },
-                        { content: 3, label: "Often" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-freq-a7") },
+                        { content: 3, label: i18n.t("cis_demo-worry-a3") },
                     ],
                 },
             ],
@@ -2126,13 +2182,13 @@ export const _state_properties = {
         }),
         new Item({
             id: "worry-any",
-            question: "Have you had any worries at all in the PAST MONTH?",
+            question: i18n.t("cis_demo-worry-any"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-yes1") },
                     ],
                 },
             ],
@@ -2144,29 +2200,29 @@ export const _state_properties = {
         }),
         new Item({
             id: "worry-content",
-            question: "What is the MAIN thing you have been worried about in the PAST WEEK?",
+            question: i18n.t("cis_demo-worry-content"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
                         {
                             content: 1,
-                            label: "Family members, including spouse or partner",
+                            label: i18n.t("cis_demo-worry-content-a1"),
                         },
                         {
                             content: 2,
-                            label: "Relationships with friends or with people at work",
+                            label: i18n.t("cis_demo-worry-content-a2"),
                         },
-                        { content: 3, label: "Housing" },
-                        { content: 4, label: "Money or bills" },
+                        { content: 3, label: i18n.t("cis_demo-worry-content-a3") },
+                        { content: 4, label: i18n.t("cis_demo-worry-content-a4") },
                         {
                             content: 5,
-                            label: "Your own physical health, including pregnancy",
+                            label: i18n.t("cis_demo-worry-content-a5"),
                         },
-                        { content: 6, label: "Your own mental health" },
-                        { content: 7, label: "Work or lack of work (including studying)" },
-                        { content: 8, label: "Legal difficulties" },
-                        { content: 9, label: "Political issues or the news" },
+                        { content: 6, label: i18n.t("cis_demo-worry-content-a6") },
+                        { content: 7, label: i18n.t("cis_demo-worry-content-a7") },
+                        { content: 8, label: i18n.t("cis_demo-worry-content-a8") },
+                        { content: 9, label: i18n.t("cis_demo-worry-content-a9") },
                     ],
                 },
             ],
@@ -2174,19 +2230,19 @@ export const _state_properties = {
         }),
         new Item({
             id: "worry-intro",
-            question: "The next few questions are about the worries you have had OTHER than those about your physical health.",
+            question: i18n.t("cis_demo-worry-intro"),
             next_item: "worry-frequency",
         }),
         new Item({
             id: "worry-frequency",
-            question: "On how many of the PAST SEVEN DAYS have you been worrying about things OTHER than your physical health?",
+            question: i18n.t("cis_demo-worry-frequency"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "None" },
-                        { content: 2, label: "Between one and three days" },
-                        { content: 3, label: "Four days or more" },
+                        { content: 1, label: i18n.t("cis_demo-generic-freq-a9") },
+                        { content: 2, label: i18n.t("cis_demo-generic-freq-a10-day") },
+                        { content: 3, label: i18n.t("cis_demo-generic-freq-a11-day") },
                     ],
                 },
             ],
@@ -2202,13 +2258,13 @@ export const _state_properties = {
         }),
         new Item({
             id: "worry-excessive",
-            question: "In your opinion, have you been worrying too much in view of your circumstances?",
+            question: i18n.t("cis_demo-worry-excessive"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes, worrying too much" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-worry-excessive-yes") },
                     ],
                 },
             ],
@@ -2220,15 +2276,15 @@ export const _state_properties = {
         }),
         new Item({
             id: "worry-valence",
-            question: "How unpleasant has your worrying been about things OTHER than your physical health in the PAST SEVEN DAYS?",
+            question: i18n.t("cis_demo-worry-valence"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "Not at all" },
-                        { content: 2, label: "A little unpleasant" },
-                        { content: 3, label: "Unpleasant" },
-                        { content: 4, label: "Very unpleasant" },
+                        { content: 1, label: i18n.t("cis_demo-generic-distress-a1") },
+                        { content: 2, label: i18n.t("cis_demo-generic-distress-a2") },
+                        { content: 3, label: i18n.t("cis_demo-generic-distress-a3") },
+                        { content: 4, label: i18n.t("cis_demo-generic-distress-a4") },
                     ],
                 },
             ],
@@ -2243,15 +2299,15 @@ export const _state_properties = {
         }),
         new Item({
             id: "worry-long",
-            question: "Have you worried about something OTHER than your physical health for more than three hours in total on any day in the PAST SEVEN DAYS?",
+            question: i18n.t("cis_demo-worry-long"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No, Less than 3 hours" },
+                        { content: 1, label: i18n.t("cis_demo-generic-duration-a1") },
                         {
                             content: 2,
-                            label: "Yes, 3 hours or more on at least one day this week",
+                            label: i18n.t("cis_demo-worry-long-yes"),
                         },
                     ],
                 },
@@ -2264,17 +2320,17 @@ export const _state_properties = {
         }),
         new Item({
             id: "worry-duration",
-            question: "How long have you been worrying about things OTHER than your physical health in the way that you have described?",
+            question: i18n.t("cis_demo-worry-duration"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "Less than 2 weeks" },
-                        { content: 2, label: "Between 2 weeks and 6 months" },
-                        { content: 3, label: "Between 6 months and 1 year" },
-                        { content: 4, label: "Between 1 and 2 years" },
-                        { content: 5, label: "Between 2 and 5 years" },
-                        { content: 6, label: "More than 5 years" },
+                        { content: 1, label: i18n.t("cis_demo-generic-duration-a3") },
+                        { content: 2, label: i18n.t("cis_demo-generic-duration-a4") },
+                        { content: 3, label: i18n.t("cis_demo-generic-duration-a5") },
+                        { content: 4, label: i18n.t("cis_demo-generic-duration-a6") },
+                        { content: 5, label: i18n.t("cis_demo-generic-duration-a7") },
+                        { content: 6, label: i18n.t("cis_demo-generic-duration-a8") },
                     ],
                 },
             ],
@@ -2282,13 +2338,13 @@ export const _state_properties = {
         }),
         new Item({
             id: "anxiety",
-            question: "Have you been feeling anxious or nervous in the PAST MONTH?",
+            question: i18n.t("cis_demo-anxiety"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-yes1") },
                     ],
                 },
             ],
@@ -2299,14 +2355,14 @@ export const _state_properties = {
         }),
         new Item({
             id: "anxiety-tense",
-            question: "In the PAST MONTH, did you ever find your muscles felt tense or that you couldn't relax?",
+            question: i18n.t("cis_demo-anxiety-tense"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Sometimes" },
-                        { content: 3, label: "Often" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-freq-a7") },
+                        { content: 3, label: i18n.t("cis_demo-generic-freq-a12") },
                     ],
                 },
             ],
@@ -2320,13 +2376,13 @@ export const _state_properties = {
         }),
         new Item({
             id: "anxiety-phobia",
-            question: "Some people have phobias; they get anxious, nervous or tense about specific things or situations when there is no real danger. For example, they may get nervous when speaking or eating in front of strangers, when they are far from home or in crowded rooms, or they may have a fear of heights. Others get nervous at the sight of things like blood or spiders.\n\nIn the PAST MONTH, have you felt anxious, nervous or tense about any specific things or situations when there was no real danger?",
+            question: i18n.t("cis_demo-anxiety-phobia"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-yes1") },
                     ],
                 },
             ],
@@ -2338,18 +2394,18 @@ export const _state_properties = {
         }),
         new Item({
             id: "anxiety-phobia-only",
-            question: "In the PAST MONTH, when you have felt anxious, nervous or tense was this ALWAYS brought on by the phobia about some SPECIFIC thing or did you sometimes feel GENERALLY anxious, nervous or tense?",
+            question: i18n.t("cis_demo-anxiety-phobia-only"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
                         {
                             content: 1,
-                            label: "These feelings were ALWAYS brought on by specific phobia",
+                            label: i18n.t("cis_demo-anxiety-phobia-only-a1"),
                         },
                         {
                             content: 2,
-                            label: "I sometimes felt generally anxious, nervous or tense",
+                            label: i18n.t("cis_demo-anxiety-phobia-only-a2"),
                         },
                     ],
                 },
@@ -2363,19 +2419,19 @@ export const _state_properties = {
         }),
         new Item({
             id: "anxiety-intro",
-            question: "The next questions are concerned with GENERAL anxiety, nervousness or tension ONLY. Questions about the anxiety which is brought on by the phobia(s) about specific things or situations will be asked later.",
+            question: i18n.t("cis_demo-anxiety-intro"),
             next_item: "anxiety-frequency",
         }),
         new Item({
             id: "anxiety-frequency",
-            question: "On how many of the PAST SEVEN DAYS have you felt GENERALLY anxious, nervous or tense?",
+            question: i18n.t("cis_demo-anxiety-frequency"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "None" },
-                        { content: 2, label: "Between one and three days" },
-                        { content: 3, label: "Four days or more" },
+                        { content: 1, label: i18n.t("cis_demo-generic-freq-a9") },
+                        { content: 2, label: i18n.t("cis_demo-generic-freq-a10-day") },
+                        { content: 3, label: i18n.t("cis_demo-generic-freq-a11-day") },
                     ],
                 },
             ],
@@ -2394,15 +2450,15 @@ export const _state_properties = {
         }),
         new Item({
             id: "anxiety-valence",
-            question: "How unpleasant has your anxiety, nervousness or tension been in the PAST SEVEN DAYS?",
+            question: i18n.t("cis_demo-anxiety-valence"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "Not at all" },
-                        { content: 2, label: "A little unpleasant" },
-                        { content: 3, label: "Unpleasant" },
-                        { content: 4, label: "Very unpleasant" },
+                        { content: 1, label: i18n.t("cis_demo-generic-distress-a1") },
+                        { content: 2, label: i18n.t("cis_demo-generic-distress-a2") },
+                        { content: 3, label: i18n.t("cis_demo-generic-distress-a3") },
+                        { content: 4, label: i18n.t("cis_demo-generic-distress-a4") },
                     ],
                 },
             ],
@@ -2417,13 +2473,13 @@ export const _state_properties = {
         }),
         new Item({
             id: "anxiety-heart",
-            question: "In the PAST SEVEN DAYS, when you've been anxious, nervous or tense, have you had the following symptom:\n\nYour heart racing or pounding?",
+            question: i18n.t("cis_demo-anxiety-heart"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-yes1") },
                     ],
                 },
             ],
@@ -2435,13 +2491,13 @@ export const _state_properties = {
         }),
         new Item({
             id: "anxiety-dizzy",
-            question: "In the PAST SEVEN DAYS, when you've been anxious, nervous or tense, have you had the following symptom:\n\nFeeling dizzy?",
+            question: i18n.t("cis_demo-anxiety-dizzy"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-yes1") },
                     ],
                 },
             ],
@@ -2453,13 +2509,13 @@ export const _state_properties = {
         }),
         new Item({
             id: "anxiety-nausea",
-            question: "In the PAST SEVEN DAYS, when you've been anxious, nervous or tense, have you had the following symptom:\n\nAbdominal discomfort or feeling like you were going to vomit?",
+            question: i18n.t("cis_demo-anxiety-nausea"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-yes1") },
                     ],
                 },
             ],
@@ -2471,13 +2527,13 @@ export const _state_properties = {
         }),
         new Item({
             id: "anxiety-sweating",
-            question: "In the PAST SEVEN DAYS, when you've been anxious, nervous or tense, have you had the following symptom:\n\nHands sweating or shaking?",
+            question: i18n.t("cis_demo-anxiety-sweating"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-yes1") },
                     ],
                 },
             ],
@@ -2489,13 +2545,13 @@ export const _state_properties = {
         }),
         new Item({
             id: "anxiety-breathless",
-            question: "In the PAST SEVEN DAYS, when you've been anxious, nervous or tense, have you had the following symptom:\n\nDifficulty getting breath?",
+            question: i18n.t("cis_demo-anxiety-breathless"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-yes1") },
                     ],
                 },
             ],
@@ -2507,13 +2563,13 @@ export const _state_properties = {
         }),
         new Item({
             id: "anxiety-dry-mouth",
-            question: "In the PAST SEVEN DAYS, when you've been anxious, nervous or tense, have you had the following symptom:\n\nDry mouth?",
+            question: i18n.t("cis_demo-anxiety-dry-mouth"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-yes1") },
                     ],
                 },
             ],
@@ -2525,13 +2581,13 @@ export const _state_properties = {
         }),
         new Item({
             id: "anxiety-chest-pain",
-            question: "In the PAST SEVEN DAYS, when you've been anxious, nervous or tense, have you had the following symptom:\n\nChest pain?",
+            question: i18n.t("cis_demo-anxiety-chest-pain"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-yes1") },
                     ],
                 },
             ],
@@ -2543,13 +2599,13 @@ export const _state_properties = {
         }),
         new Item({
             id: "anxiety-numb",
-            question: "In the PAST SEVEN DAYS, when you've been anxious, nervous or tense, have you had the following symptom:\n\nNumbness or tingling in hands or feet?",
+            question: i18n.t("cis_demo-anxiety-numb"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-yes1") },
                     ],
                 },
             ],
@@ -2563,13 +2619,13 @@ export const _state_properties = {
         }),
         new Item({
             id: "anxiety-long",
-            question: "Have you felt anxious, nervous or tense for more than 3 hours in total on any day in the PAST SEVEN DAYS?",
+            question: i18n.t("cis_demo-anxiety-long"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes, more than 3 hours on at least one day" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-anxiety-long-a2") },
                     ],
                 },
             ],
@@ -2581,17 +2637,17 @@ export const _state_properties = {
         }),
         new Item({
             id: "anxiety-duration",
-            question: "How long have you had these feelings of general anxiety, nervousness or tension, as you have described?",
+            question: i18n.t("cis_demo-anxiety-duration"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "Less than 2 weeks" },
-                        { content: 2, label: "Between 2 weeks and 6 months" },
-                        { content: 3, label: "Between 6 months and 1 year" },
-                        { content: 4, label: "Between 1 and 2 years" },
-                        { content: 5, label: "Between 2 and 5 years" },
-                        { content: 6, label: "More than 5 years" },
+                        { content: 1, label: i18n.t("cis_demo-generic-duration-a3") },
+                        { content: 2, label: i18n.t("cis_demo-generic-duration-a4") },
+                        { content: 3, label: i18n.t("cis_demo-generic-duration-a5") },
+                        { content: 4, label: i18n.t("cis_demo-generic-duration-a6") },
+                        { content: 5, label: i18n.t("cis_demo-generic-duration-a7") },
+                        { content: 6, label: i18n.t("cis_demo-generic-duration-a8") },
                     ],
                 },
             ],
@@ -2606,13 +2662,13 @@ export const _state_properties = {
         }),
         new Item({
             id: "phobia",
-            question: "Sometimes people  AVOID  a specific situation or thing because they have a phobia about it. For instance, some people avoid eating in public or avoid going to busy places because it would make them feel nervous or anxious.\n\nIn the PAST MONTH, have you  AVOIDED  any situation or thing because it would have made you feel nervous or anxious, even though there was no real danger?",
+            question: i18n.t("cis_demo-phobia"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-yes1") },
                     ],
                 },
             ],
@@ -2629,22 +2685,22 @@ export const _state_properties = {
         }),
         new Item({
             id: "phobia_type",
-            question: "Here is a list of things that some people feel nervous about.\n\nWhich one of these are you MOST afraid of?",
+            question: i18n.t("cis_demo-phobia_type"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "Travelling alone by bus or train" },
-                        { content: 2, label: "Being far from home" },
-                        { content: 3, label: "Eating or speaking in front of strangers" },
-                        { content: 4, label: "The sight of blood" },
-                        { content: 5, label: "Going into crowded shops" },
-                        { content: 6, label: "Insects, spiders or animals" },
-                        { content: 7, label: "Being watched or stared at" },
-                        { content: 8, label: "Enclosed spaces or heights" },
+                        { content: 1, label: i18n.t("cis_demo-phobia_type-a1") },
+                        { content: 2, label: i18n.t("cis_demo-phobia_type-a2") },
+                        { content: 3, label: i18n.t("cis_demo-phobia_type-a3") },
+                        { content: 4, label: i18n.t("cis_demo-phobia_type-a4") },
+                        { content: 5, label: i18n.t("cis_demo-phobia_type-a5") },
+                        { content: 6, label: i18n.t("cis_demo-phobia_type-a6") },
+                        { content: 7, label: i18n.t("cis_demo-phobia_type-a7") },
+                        { content: 8, label: i18n.t("cis_demo-phobia_type-a8") },
                         {
                             content: 9,
-                            label: "I am not frightened of anything on this list but I am frightened of something else",
+                            label: i18n.t("cis_demo-phobia_type-a9"),
                         },
                     ],
                 },
@@ -2668,14 +2724,14 @@ export const _state_properties = {
         }),
         new Item({
             id: "phobia-frequency",
-            question: "On how many of the PAST SEVEN DAYS have you felt nervous or anxious about the situation or thing you are most frightened of?",
+            question: i18n.t("cis_demo-phobia-frequency"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "None" },
-                        { content: 2, label: "Between one and three days" },
-                        { content: 3, label: "Four days or more" },
+                        { content: 1, label: i18n.t("cis_demo-generic-freq-a9") },
+                        { content: 2, label: i18n.t("cis_demo-generic-freq-a10-day") },
+                        { content: 3, label: i18n.t("cis_demo-generic-freq-a11-day") },
                     ],
                 },
             ],
@@ -2691,13 +2747,13 @@ export const _state_properties = {
         }),
         new Item({
             id: "phobia-heart",
-            question: "In the PAST SEVEN DAYS, on those occasions when you felt anxious, nervous or tense about this, have you had the following symptom:\n\nYour heart racing or pounding?",
+            question: i18n.t("cis_demo-phobia-heart"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-yes1") },
                     ],
                 },
             ],
@@ -2709,13 +2765,13 @@ export const _state_properties = {
         }),
         new Item({
             id: "phobia-dizzy",
-            question: "In the PAST SEVEN DAYS, on those occasions when you felt anxious, nervous or tense about this have you had the following symptom:\n\nFeeling dizzy?",
+            question: i18n.t("cis_demo-phobia-dizzy"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-yes1") },
                     ],
                 },
             ],
@@ -2727,13 +2783,13 @@ export const _state_properties = {
         }),
         new Item({
             id: "phobia-nausea",
-            question: "In the PAST SEVEN DAYS, on those occasions when you felt anxious, nervous or tense about this have you had the following symptom:\n\nAbdominal discomfort or feeling like you were going to vomit?",
+            question: i18n.t("cis_demo-phobia-nausea"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-yes1") },
                     ],
                 },
             ],
@@ -2745,13 +2801,13 @@ export const _state_properties = {
         }),
         new Item({
             id: "phobia-sweating",
-            question: "In the PAST SEVEN DAYS, on those occasions when you felt anxious, nervous or tense about this have you had the following symptom:\n\nHands sweating or shaking?",
+            question: i18n.t("cis_demo-phobia-sweating"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-yes1") },
                     ],
                 },
             ],
@@ -2763,13 +2819,13 @@ export const _state_properties = {
         }),
         new Item({
             id: "phobia-breathless",
-            question: "In the PAST SEVEN DAYS, on those occasions when you felt anxious, nervous or tense about this have you had the following symptom:\n\nDifficulty getting breath?",
+            question: i18n.t("cis_demo-phobia-breathless"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-yes1") },
                     ],
                 },
             ],
@@ -2781,13 +2837,13 @@ export const _state_properties = {
         }),
         new Item({
             id: "phobia-dry-mouth",
-            question: "In the PAST SEVEN DAYS, on those occasions when you felt anxious, nervous or tense about this have you had the following symptom:\n\nDry mouth?",
+            question: i18n.t("cis_demo-phobia-dry-mouth"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-yes1") },
                     ],
                 },
             ],
@@ -2799,13 +2855,13 @@ export const _state_properties = {
         }),
         new Item({
             id: "phobia-chest-pain",
-            question: "In the PAST SEVEN DAYS, on those occasions when you felt anxious, nervous or tense about this have you had the following symptom:\n\nChest pain?",
+            question: i18n.t("cis_demo-phobia-chest-pain"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-yes1") },
                     ],
                 },
             ],
@@ -2817,13 +2873,13 @@ export const _state_properties = {
         }),
         new Item({
             id: "phobia-numb",
-            question: "In the PAST SEVEN DAYS, on those occasions when you felt anxious, nervous or tense about this have you had the following symptom:\n\nNumbness or tingling in hands or feet?",
+            question: i18n.t("cis_demo-phobia-numb"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-yes1") },
                     ],
                 },
             ],
@@ -2837,13 +2893,13 @@ export const _state_properties = {
         }),
         new Item({
             id: "phobia-avoid",
-            question: "In the PAST SEVEN DAYS, have you AVOIDED any situations or things because it would have made you feel anxious, nervous or tense, even though there was no real danger?",
+            question: i18n.t("cis_demo-phobia-avoid"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes, on one or more occasion" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-yes2") },
                     ],
                 },
             ],
@@ -2861,14 +2917,14 @@ export const _state_properties = {
         }),
         new Item({
             id: "phobia-avoid-frequency",
-            question: "How many times have you avoided such situations or things in the PAST SEVEN DAYS?",
+            question: i18n.t("cis_demo-phobia-avoid-frequency"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "None" },
-                        { content: 2, label: "Between one and three times" },
-                        { content: 3, label: "Four times or more" },
+                        { content: 1, label: i18n.t("cis_demo-generic-freq-a1") },
+                        { content: 2, label: i18n.t("cis_demo-generic-freq-a13") },
+                        { content: 3, label: i18n.t("cis_demo-generic-freq-a14") },
                     ],
                 },
             ],
@@ -2889,17 +2945,17 @@ export const _state_properties = {
         }),
         new Item({
             id: "phobia-duration",
-            question: "How long have you been having these feelings about the situations or things as you have just described?",
+            question: i18n.t("cis_demo-phobia-duration"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "Less than 2 weeks" },
-                        { content: 2, label: "Between 2 weeks and 6 months" },
-                        { content: 3, label: "Between 6 months and 1 year" },
-                        { content: 4, label: "Between 1 and 2 years" },
-                        { content: 5, label: "Between 2 and 5 years" },
-                        { content: 6, label: "More than 5 years" },
+                        { content: 1, label: i18n.t("cis_demo-generic-duration-a3") },
+                        { content: 2, label: i18n.t("cis_demo-generic-duration-a4") },
+                        { content: 3, label: i18n.t("cis_demo-generic-duration-a5") },
+                        { content: 4, label: i18n.t("cis_demo-generic-duration-a6") },
+                        { content: 5, label: i18n.t("cis_demo-generic-duration-a7") },
+                        { content: 6, label: i18n.t("cis_demo-generic-duration-a8") },
                     ],
                 },
             ],
@@ -2907,14 +2963,14 @@ export const _state_properties = {
         }),
         new Item({
             id: "panic",
-            question: "Thinking about the PAST MONTH, did your anxiety or tension ever get so bad that you got in a panic, for instance make you feel that you might collapse or lose control unless you did something about it?",
+            question: i18n.t("cis_demo-panic"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No, my anxiety never got that bad" },
-                        { content: 2, label: "Yes, sometimes" },
-                        { content: 3, label: "Yes, often" },
+                        { content: 1, label: i18n.t("cis_demo-panic-no") },
+                        { content: 2, label: i18n.t("cis_demo-panic-yes1") },
+                        { content: 3, label: i18n.t("cis_demo-panic-yes2") },
                     ],
                 },
             ],
@@ -2926,14 +2982,14 @@ export const _state_properties = {
         }),
         new Item({
             id: "panic-frequency",
-            question: "How often has this panic happened in the PAST SEVEN DAYS?",
+            question: i18n.t("cis_demo-panic-frequency"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "Not in the past seven days" },
-                        { content: 2, label: "Once" },
-                        { content: 3, label: "More than once" },
+                        { content: 1, label: i18n.t("cis_demo-panic-frequency-a1") },
+                        { content: 2, label: i18n.t("cis_demo-panic-frequency-a2") },
+                        { content: 3, label: i18n.t("cis_demo-panic-frequency-a3") },
                     ],
                 },
             ],
@@ -2951,14 +3007,14 @@ export const _state_properties = {
         }),
         new Item({
             id: "panic-valence",
-            question: "In the PAST SEVEN DAYS, how unpleasant have these feelings of panic been?",
+            question: i18n.t("cis_demo-panic-valence"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "A little uncomfortable" },
-                        { content: 2, label: "Unpleasant" },
-                        { content: 3, label: "Unbearable, or very unpleasant" },
+                        { content: 1, label: i18n.t("cis_demo-panic-valence-a1") },
+                        { content: 2, label: i18n.t("cis_demo-panic-valence-a2") },
+                        { content: 3, label: i18n.t("cis_demo-panic-valence-a3") },
                     ],
                 },
             ],
@@ -2970,13 +3026,13 @@ export const _state_properties = {
         }),
         new Item({
             id: "panic-long",
-            question: "In the PAST SEVEN DAYS, did the worst of these panics last for longer than 10 minutes?",
+            question: i18n.t("cis_demo-panic-long"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "Less than 10 minutes" },
-                        { content: 2, label: "10 minutes or more" },
+                        { content: 1, label: i18n.t("cis_demo-panic-long-a1") },
+                        { content: 2, label: i18n.t("cis_demo-panic-long-a2") },
                     ],
                 },
             ],
@@ -2988,13 +3044,13 @@ export const _state_properties = {
         }),
         new Item({
             id: "panic-sudden",
-            question: "Do these panics start suddenly so you are at maximum anxiety within a few minutes?",
+            question: i18n.t("cis_demo-panic-sudden"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-yes1") },
                     ],
                 },
             ],
@@ -3002,13 +3058,13 @@ export const _state_properties = {
         }),
         new Item({
             id: "panic-heart",
-            question: "In the PAST SEVEN DAYS when you had these panics:\n\nDid your heart beat harder or speed up?",
+            question: i18n.t("cis_demo-panic-heart"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-yes1") },
                     ],
                 },
             ],
@@ -3020,13 +3076,13 @@ export const _state_properties = {
         }),
         new Item({
             id: "panic-sweat",
-            question: "In the PAST SEVEN DAYS when you had these panics:\n\nDid you have sweaty or clammy hands?",
+            question: i18n.t("cis_demo-panic-sweat"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-yes1") },
                     ],
                 },
             ],
@@ -3038,13 +3094,13 @@ export const _state_properties = {
         }),
         new Item({
             id: "panic-shake",
-            question: "In the PAST SEVEN DAYS when you had these panics:\n\nWere you trembling or shaking?",
+            question: i18n.t("cis_demo-panic-shake"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-yes1") },
                     ],
                 },
             ],
@@ -3056,13 +3112,13 @@ export const _state_properties = {
         }),
         new Item({
             id: "panic-breathless",
-            question: "In the PAST SEVEN DAYS when you had these panics:\n\nDid you have shortness of breath or difficulty breathing?",
+            question: i18n.t("cis_demo-panic-breathless"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-yes1") },
                     ],
                 },
             ],
@@ -3074,13 +3130,13 @@ export const _state_properties = {
         }),
         new Item({
             id: "panic-choke",
-            question: "In the PAST SEVEN DAYS when you had these panics:\n\nDid you have a choking sensation?",
+            question: i18n.t("cis_demo-panic-choke"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-yes1") },
                     ],
                 },
             ],
@@ -3092,13 +3148,13 @@ export const _state_properties = {
         }),
         new Item({
             id: "panic-chest-pain",
-            question: "In the PAST SEVEN DAYS when you had these panics:\n\nDid you have pain, pressure or discomfort in your chest?",
+            question: i18n.t("cis_demo-panic-pain"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-yes1") },
                     ],
                 },
             ],
@@ -3110,13 +3166,13 @@ export const _state_properties = {
         }),
         new Item({
             id: "panic-nausea",
-            question: "In the PAST SEVEN DAYS when you had these panics:\n\nDid you have abdominal discomfort or feel like you were going to vomit?",
+            question: i18n.t("cis_demo-panic-nausea"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-yes1") },
                     ],
                 },
             ],
@@ -3128,13 +3184,13 @@ export const _state_properties = {
         }),
         new Item({
             id: "panic-dizzy",
-            question: "In the PAST SEVEN DAYS when you had these panics:\n\nDid you feel dizzy, unsteady, lightheaded or faint?",
+            question: i18n.t("cis_demo-panic-dizzy"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-yes1") },
                     ],
                 },
             ],
@@ -3146,13 +3202,13 @@ export const _state_properties = {
         }),
         new Item({
             id: "panic-derealization",
-            question: "In the PAST SEVEN DAYS when you had these panics:\n\nDid things around you feel strange, unreal or detached  OR  did you feel outside or detached from yourself?",
+            question: i18n.t("cis_demo-panic-derealization"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-yes1") },
                     ],
                 },
             ],
@@ -3164,13 +3220,13 @@ export const _state_properties = {
         }),
         new Item({
             id: "panic-crazy",
-            question: "In the PAST SEVEN DAYS when you had these panics:\n\nDid you fear that you were losing control or going crazy?",
+            question: i18n.t("cis_demo-panic-crazy"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-yes1") },
                     ],
                 },
             ],
@@ -3182,13 +3238,13 @@ export const _state_properties = {
         }),
         new Item({
             id: "panic-dying",
-            question: "In the PAST SEVEN DAYS when you had these panics:\n\nDid you fear that you were dying?",
+            question: i18n.t("cis_demo-panic-dying"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-yes1") },
                     ],
                 },
             ],
@@ -3200,13 +3256,13 @@ export const _state_properties = {
         }),
         new Item({
             id: "panic-tingling",
-            question: "In the PAST SEVEN DAYS when you had these panics:\n\nDid you have tingling or numbness in parts of your body?",
+            question: i18n.t("cis_demo-panic-tingling"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-yes1") },
                     ],
                 },
             ],
@@ -3218,13 +3274,13 @@ export const _state_properties = {
         }),
         new Item({
             id: "panic-chills",
-            question: "In the PAST SEVEN DAYS when you had these panics:\n\nDid you have hot flushes or chills?",
+            question: i18n.t("cis_demo-panic-chills"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-yes1") },
                     ],
                 },
             ],
@@ -3238,13 +3294,13 @@ export const _state_properties = {
         }),
         new Item({
             id: "panic-specific",
-            question: "Is this panic ALWAYS brought on by specific situations or things?",
+            question: i18n.t("cis_demo-panic-specific"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Yes" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-yes1") },
                     ],
                 },
             ],
@@ -3252,17 +3308,17 @@ export const _state_properties = {
         }),
         new Item({
             id: "panic-duration",
-            question: "How long have you been having these feelings of panic as you have described?",
+            question: i18n.t("cis_demo-panic-duration"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "Less than 2 weeks" },
-                        { content: 2, label: "Between 2 weeks and 6 months" },
-                        { content: 3, label: "Between 6 months and 1 year" },
-                        { content: 4, label: "Between 1 and 2 years" },
-                        { content: 5, label: "Between 2 and 5 years" },
-                        { content: 6, label: "More than 5 years" },
+                        { content: 1, label: i18n.t("cis_demo-generic-duration-a3") },
+                        { content: 2, label: i18n.t("cis_demo-generic-duration-a4") },
+                        { content: 3, label: i18n.t("cis_demo-generic-duration-a5") },
+                        { content: 4, label: i18n.t("cis_demo-generic-duration-a6") },
+                        { content: 5, label: i18n.t("cis_demo-generic-duration-a7") },
+                        { content: 6, label: i18n.t("cis_demo-generic-duration-a8") },
                     ],
                 },
             ],
@@ -3270,19 +3326,19 @@ export const _state_properties = {
         }),
         new Item({
             id: "anxiety-outro",
-            question: "Thank you for answering those questions on anxiety and worry.",
+            question: i18n.t("cis_demo-anxiety-outro"),
             next_item: "compulsions",
         }),
         new Item({
             id: "compulsions",
-            question: "In the PAST MONTH, did you find that you kept on doing things over and over again when you knew you had already done them, for instance checking things like taps, or washing yourself when you had already done so?",
+            question: i18n.t("cis_demo-compulsions"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Sometimes" },
-                        { content: 3, label: "Often" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-freq-a7") },
+                        { content: 3, label: i18n.t("cis_demo-generic-freq-a12") },
                     ],
                 },
             ],
@@ -3297,14 +3353,14 @@ export const _state_properties = {
         }),
         new Item({
             id: "compulsions-frequency",
-            question: "On how many days in the PAST SEVEN DAYS did you find yourself doing things over again that you had already done?",
+            question: i18n.t("cis_demo-compulsions-frequency"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "None" },
-                        { content: 2, label: "Between one and three days" },
-                        { content: 3, label: "Four days or more" },
+                        { content: 1, label: i18n.t("cis_demo-generic-freq-a9") },
+                        { content: 2, label: i18n.t("cis_demo-generic-freq-a10-day") },
+                        { content: 3, label: i18n.t("cis_demo-generic-freq-a11-day") },
                     ],
                 },
             ],
@@ -3318,13 +3374,13 @@ export const _state_properties = {
         }),
         new Item({
             id: "compulsions-control",
-            question: "During the PAST SEVEN DAYS, have you tried to stop yourself repeating things over again?",
+            question: i18n.t("cis_demo-compulsions-control"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No, not in the past week" },
-                        { content: 2, label: "Yes, on at least one occasion" },
+                        { content: 1, label: i18n.t("cis_demo-compulsions-control-a1") },
+                        { content: 2, label: i18n.t("cis_demo-compulsions-control-a2") },
                     ],
                 },
             ],
@@ -3336,13 +3392,13 @@ export const _state_properties = {
         }),
         new Item({
             id: "compulsions-valence",
-            question: "Has repeating things over again made you upset or annoyed with yourself in the PAST SEVEN DAYS?",
+            question: i18n.t("cis_demo-compulsions-valence"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "Not at all" },
-                        { content: 2, label: "Yes, it has upset or annoyed me" },
+                        { content: 1, label: i18n.t("cis_demo-compulsions-valence-a1") },
+                        { content: 2, label: i18n.t("cis_demo-compulsions-valence-a2") },
                     ],
                 },
             ],
@@ -3354,14 +3410,14 @@ export const _state_properties = {
         }),
         new Item({
             id: "compulsions-repeats",
-            question: "In the PAST SEVEN DAYS, what is the GREATEST NUMBER of times you repeated something you had already done?",
+            question: i18n.t("cis_demo-compulsions-repeats"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "Once (ie 2 times altogether)" },
-                        { content: 2, label: "Two repeats" },
-                        { content: 3, label: "Three or more repeats" },
+                        { content: 1, label: i18n.t("cis_demo-compulsions-repeats-a1") },
+                        { content: 2, label: i18n.t("cis_demo-compulsions-repeats-a2") },
+                        { content: 3, label: i18n.t("cis_demo-compulsions-repeats-a3") },
                     ],
                 },
             ],
@@ -3373,17 +3429,17 @@ export const _state_properties = {
         }),
         new Item({
             id: "compulsions-duration",
-            question: "How long have you been repeating things that you have already done in the way you have described?",
+            question: i18n.t("cis_demo-compulsions-duration"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "Less than 2 weeks" },
-                        { content: 2, label: "Between 2 weeks and 6 months" },
-                        { content: 3, label: "Between 6 months and 1 year" },
-                        { content: 4, label: "Between 1 and 2 years" },
-                        { content: 5, label: "Between 2 and 5 years" },
-                        { content: 6, label: "More than 5 years" },
+                        { content: 1, label: i18n.t("cis_demo-generic-duration-a3") },
+                        { content: 2, label: i18n.t("cis_demo-generic-duration-a4") },
+                        { content: 3, label: i18n.t("cis_demo-generic-duration-a5") },
+                        { content: 4, label: i18n.t("cis_demo-generic-duration-a6") },
+                        { content: 5, label: i18n.t("cis_demo-generic-duration-a7") },
+                        { content: 6, label: i18n.t("cis_demo-generic-duration-a8") },
                     ],
                 },
             ],
@@ -3391,14 +3447,14 @@ export const _state_properties = {
         }),
         new Item({
             id: "obsessions",
-            question: "In the PAST MONTH, did you have any thoughts or ideas over and over again that you found unpleasant and would prefer not to think about, that still kept coming into your mind?",
+            question: i18n.t("cis_demo-obsessions"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No" },
-                        { content: 2, label: "Sometimes" },
-                        { content: 3, label: "Often" },
+                        { content: 1, label: i18n.t("cis_demo-generic-no") },
+                        { content: 2, label: i18n.t("cis_demo-generic-freq-a7") },
+                        { content: 3, label: i18n.t("cis_demo-generic-freq-a12") },
                     ],
                 },
             ],
@@ -3411,16 +3467,16 @@ export const _state_properties = {
         }),
         new Item({
             id: "obsessions-repeat",
-            question: "Are these the SAME thoughts or ideas over and over again, or are you worrying about something in GENERAL?",
+            question: i18n.t("cis_demo-obsessions-repeat"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
                         {
                             content: 1,
-                            label: "The same thoughts or ideas over and over again",
+                            label: i18n.t("cis_demo-obsessions-repeat-a1"),
                         },
-                        { content: 2, label: "Worrying about something in general" },
+                        { content: 2, label: i18n.t("cis_demo-obsessions-repeat-a2") },
                     ],
                 },
             ],
@@ -3430,14 +3486,14 @@ export const _state_properties = {
         }),
         new Item({
             id: "obsessions-frequency",
-            question: "On how many days in the PAST SEVEN DAYS have you had these unpleasant thoughts?",
+            question: i18n.t("cis_demo-obsessions-frequency"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "None" },
-                        { content: 2, label: "Between one and three days" },
-                        { content: 3, label: "Four days or more" },
+                        { content: 1, label: i18n.t("cis_demo-generic-freq-a9") },
+                        { content: 2, label: i18n.t("cis_demo-generic-freq-a10-day") },
+                        { content: 3, label: i18n.t("cis_demo-generic-freq-a11-day") },
                     ],
                 },
             ],
@@ -3451,15 +3507,15 @@ export const _state_properties = {
         }),
         new Item({
             id: "obsessions-control",
-            question: "During the PAST SEVEN DAYS, have you tried to stop yourself thinking any of these thoughts?",
+            question: i18n.t("cis_demo-obsessions-control"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "No, not in the past week" },
+                        { content: 1, label: i18n.t("cis_demo-obsessions-control-a1") },
                         {
                             content: 2,
-                            label: "Yes, I have tried to stop these thoughts at least once",
+                            label: i18n.t("cis_demo-obsessions-control-a2"),
                         },
                     ],
                 },
@@ -3472,15 +3528,15 @@ export const _state_properties = {
         }),
         new Item({
             id: "obsessions-valence",
-            question: "Have you become upset or annoyed with yourself when you have had these thoughts in the PAST SEVEN DAYS?",
+            question: i18n.t("cis_demo-obsessions-valence"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "Not at all" },
+                        { content: 1, label: i18n.t("cis_demo-obsessions-valence-a1") },
                         {
                             content: 2,
-                            label: "Yes, they have upset or annoyed me in the past week",
+                            label: i18n.t("cis_demo-obsessions-valence-a2"),
                         },
                     ],
                 },
@@ -3493,13 +3549,13 @@ export const _state_properties = {
         }),
         new Item({
             id: "obsessions-long",
-            question: "What is the longest time you have spent thinking these thoughts, in the PAST SEVEN DAYS?",
+            question: i18n.t("cis_demo-obsessions-long"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "Less than fifteen minutes" },
-                        { content: 2, label: "Fifteen minutes or more" },
+                        { content: 1, label: i18n.t("cis_demo-obsessions-long-a1") },
+                        { content: 2, label: i18n.t("cis_demo-obsessions-long-a2") },
                     ],
                 },
             ],
@@ -3512,17 +3568,17 @@ export const _state_properties = {
         }),
         new Item({
             id: "obsessions-duration",
-            question: "How long have you been having these thoughts in the way which you have described?",
+            question: i18n.t("cis_demo-obsessions-duration"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "Less than 2 weeks" },
-                        { content: 2, label: "Between 2 weeks and 6 months" },
-                        { content: 3, label: "Between 6 months and 1 year" },
-                        { content: 4, label: "Between 1 and 2 years" },
-                        { content: 5, label: "Between 2 and 5 years" },
-                        { content: 6, label: "More than 5 years" },
+                        { content: 1, label: i18n.t("cis_demo-generic-duration-a3") },
+                        { content: 2, label: i18n.t("cis_demo-generic-duration-a4") },
+                        { content: 3, label: i18n.t("cis_demo-generic-duration-a5") },
+                        { content: 4, label: i18n.t("cis_demo-generic-duration-a6") },
+                        { content: 5, label: i18n.t("cis_demo-generic-duration-a7") },
+                        { content: 6, label: i18n.t("cis_demo-generic-duration-a8") },
                     ],
                 },
             ],
@@ -3530,18 +3586,18 @@ export const _state_properties = {
         }),
         new Item({
             id: "overall-follow-up",
-            question: "How have ALL of these things that you have told me about affected you overall?\n\nIn the PAST SEVEN DAYS, has the way you have been feeling actually STOPPED you from getting on with the tasks and activities you used to do or would like to do?",
+            question: i18n.t("cis_demo-overall-follow-up"),
             answers: [
                 {
                     type: AnswerType.RADIO,
                     options: [
-                        { content: 1, label: "Not at all" },
+                        { content: 1, label: i18n.t("cis_demo-overall-follow-up-a1") },
                         {
                             content: 2,
-                            label: "They have made things more difficult but I get everything done",
+                            label: i18n.t("cis_demo-overall-follow-up-a2"),
                         },
-                        { content: 3, label: "They have stopped one activity" },
-                        { content: 4, label: "They have stopped more than one activity" },
+                        { content: 3, label: i18n.t("cis_demo-overall-follow-up-a3") },
+                        { content: 4, label: i18n.t("cis_demo-overall-follow-up-a4") },
                     ],
                 },
             ],

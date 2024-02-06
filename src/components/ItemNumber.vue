@@ -3,7 +3,7 @@ import ItemLabel from "@/components/ItemLabel.vue";
 import { storeToRefs } from "pinia";
 import { useQuestionnaireStore } from "@/stores/questionnaire";
 import { computed } from "vue";
-import type { Answer, ValidationIssueLevel } from "questionnaire-core";
+import type { Answer } from "questionnaire-core";
 
 const questionnaireStore = useQuestionnaireStore();
 const { questionnaire } = storeToRefs(questionnaireStore);

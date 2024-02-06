@@ -2,9 +2,18 @@
 import { ValidationIssueLevel } from "questionnaire-core";
 import SettingsMenu from "@/components/SettingsMenu.vue";
 import AnswerSet from "@/components/AnswerSet.vue";
-import { computed, onMounted } from "vue";
+import { computed } from "vue";
 import { storeToRefs } from "pinia";
 import { useQuestionnaireStore } from "@/stores/questionnaire";
+// Code below goes in any file that needs to use the i18n library
+import queryString from "query-string";
+import { I18n } from "i18n-js";
+import translations from "../i18n.json"; // adapt as necessary for src/i18n.json
+
+const i18n = new I18n(translations);
+const parsed = queryString.parse(location.search);
+if (parsed?.locale) i18n.locale = String(parsed.locale).toLowerCase();
+// End of i18n setup
 
 const questionnaireStore = useQuestionnaireStore();
 const { questionnaire } = storeToRefs(questionnaireStore);
@@ -17,7 +26,7 @@ export interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   disable_back_button: false,
-  next_button_label: "Next <kbd>&rarr;</kbd>",
+  next_button_label: i18n.t("qvue_base-next"),
   next_button_key: "arrowright",
 });
 
@@ -76,7 +85,8 @@ const answerChanged = () => {
         data-click-on-key="arrowleft"
         data-nav-direction="back"
       >
-        <kbd>&larr;</kbd> Back
+        <kbd>&larr;</kbd>
+        {{ i18n.t("qvue_base-back") }}
       </button>
       <button
         class="btn btn-primary flex-grow-1 ms-2"

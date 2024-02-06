@@ -34,14 +34,46 @@ const answer = computed(() => {
 </script>
 
 <template>
-  <ItemBlank v-if="answer.type === Q.AnswerType.NONE" :id="answer.id" :base="props.base" />
-  <ItemRadio v-if="answer.type === Q.AnswerType.RADIO" :id="answer.id" :base="props.base" />
-  <ItemCheckbox v-if="answer.type === Q.AnswerType.CHECKBOX" :id="answer.id" :base="props.base" />
-  <ItemSelect v-if="answer.type === Q.AnswerType.SELECT" :id="answer.id" :base="props.base" />
-  <ItemNumber v-if="answer.type === Q.AnswerType.NUMBER" :id="answer.id" :base="props.base" />
-  <ItemText v-if="answer.type === Q.AnswerType.TEXT" :id="answer.id" :base="props.base" />
-  <ItemTextArea v-if="answer.type === Q.AnswerType.TEXTAREA" :id="answer.id" :base="props.base" />
-  <ItemDate v-if="answer.type === Q.AnswerType.DATE" :id="answer.id" :base="props.base" />
+  <ItemBlank
+    v-if="answer.type === Q.AnswerType.NONE"
+    :id="answer.id"
+    :base="props.base"
+  />
+  <ItemRadio
+    v-if="answer.type === Q.AnswerType.RADIO"
+    :id="answer.id"
+    :base="props.base"
+  />
+  <ItemCheckbox
+    v-if="answer.type === Q.AnswerType.CHECKBOX"
+    :id="answer.id"
+    :base="props.base"
+  />
+  <ItemSelect
+    v-if="answer.type === Q.AnswerType.SELECT"
+    :id="answer.id"
+    :base="props.base"
+  />
+  <ItemNumber
+    v-if="answer.type === Q.AnswerType.NUMBER"
+    :id="answer.id"
+    :base="props.base"
+  />
+  <ItemText
+    v-if="answer.type === Q.AnswerType.TEXT"
+    :id="answer.id"
+    :base="props.base"
+  />
+  <ItemTextArea
+    v-if="answer.type === Q.AnswerType.TEXTAREA"
+    :id="answer.id"
+    :base="props.base"
+  />
+  <ItemDate
+    v-if="answer.type === Q.AnswerType.DATE"
+    :id="answer.id"
+    :base="props.base"
+  />
 </template>
 
 <style scoped lang="scss">

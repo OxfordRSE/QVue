@@ -2,6 +2,15 @@
 import md from "markdown-it";
 import attrs from "markdown-it-attrs";
 import { computed } from "vue";
+// Code below goes in any file that needs to use the i18n library
+import queryString from "query-string";
+import { I18n } from "i18n-js";
+import translations from "../i18n.json"; // adapt as necessary for src/i18n.json
+
+const i18n = new I18n(translations);
+const parsed = queryString.parse(location.search);
+if (parsed?.locale) i18n.locale = String(parsed.locale).toLowerCase();
+// End of i18n setup
 
 const props = defineProps<{
   questionnaire_name: string;
@@ -30,7 +39,8 @@ const markdown = computed(() => {
       <div class="p-2">{{ questionnaire_name }}:</div>
       <div class="px-4" v-html="markdown" />
     </div>
-    <div class="p-2">Web application developed by:</div>
+    <div class="p-2">
+      {{ i18n.t("qvue_base-developed-by") }}</div>
     <div
       class="d-flex mb-2 justify-content-evenly align-content-center text-center"
     >

@@ -7,6 +7,15 @@ import {
   computed
 } from "vue";
 const settings = useSettingsStore();
+// Code below goes in any file that needs to use the i18n library
+import queryString from "query-string";
+import { I18n } from "i18n-js";
+import translations from "../i18n.json"; // adapt as necessary for src/i18n.json
+
+const i18n = new I18n(translations);
+const parsed = queryString.parse(location.search);
+if (parsed?.locale) i18n.locale = String(parsed.locale).toLowerCase();
+// End of i18n setup
 
 const enabled = computed(() => {
   return settings.keyboard_shortcuts !== SettingState.DISABLED ||
@@ -36,7 +45,7 @@ const enabled = computed(() => {
             v-model="settings.keyboard_shortcuts"
           />
           <label class="form-check-label" for="keyboard-shortcuts"
-            >Keyboard shortcuts</label
+            >{{ i18n.t("qvue_base-keyboard-shortcuts") }}</label
           >
         </div>
       </li>
@@ -50,13 +59,13 @@ const enabled = computed(() => {
             v-model="settings.auto_continue"
           />
           <label class="form-check-label" for="auto-continue"
-            >Auto-continue</label
+            >{{ i18n.t("qvue_base-auto-continue") }}</label
           >
         </div>
       </li>
       <li v-if="settings.auto_continue === SettingState.ON || settings.auto_continue === true">
         <div class="d-flex align-content-center">
-          Wait
+          {{ i18n.t("qvue_base-wait") }}
           <input
             type="range"
             class="form-range px-2"

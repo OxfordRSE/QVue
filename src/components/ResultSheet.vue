@@ -6,6 +6,15 @@ import { storeToRefs } from "pinia";
 import md from "markdown-it";
 import attrs from "markdown-it-attrs";
 
+// Code below goes in any file that needs to use the i18n library
+import queryString from "query-string";
+import { I18n } from "i18n-js";
+import translations from "../i18n.json"; // adapt as necessary for src/i18n.json
+
+const i18n = new I18n(translations);
+const parsed = queryString.parse(location.search);
+if (parsed?.locale) i18n.locale = String(parsed.locale).toLowerCase();
+// End of i18n setup
 const specification = useURLStore();
 const questionnaireStore = useQuestionnaireStore();
 const { questionnaire } = storeToRefs(questionnaireStore);
@@ -85,25 +94,24 @@ const markdown = computed(() => {
     class="sticky-top text-center"
   >
     <p v-if="!uploadComplete" class="text-bg-info">
-      Uploading to
+      {{ i18n.t("qvue_base-uploading") }}
       {{ specification.fetch.display || specification.fetch.url }}...
     </p>
     <p v-else-if="uploadStatus === -1" class="text-bg-warning">
-      You refused permission to upload data to
+      {{ i18n.t("qvue_base-upload-reject") }}
       {{ specification.fetch.display || specification.fetch.url }}.
     </p>
     <p v-else-if="uploadStatus !== 200" class="text-bg-danger">
-      Error uploading results to
+      {{ i18n.t("qvue_base-upload-error") }}
       {{ specification.fetch.display || specification.fetch.url }}.
       <span v-if="uploadReply" class="server-reply"
         ><br />{{ uploadReply }}</span
       >
       <span v-if="specification.content?.download"
-        ><br />You may wish to try downloading your results and sending them
-        yourself.</span
+        ><br />{{ i18n.t("qvue_base-upload-send") }}</span
       >
     </p>
-    <p v-else class="text-bg-success">Upload complete!</p>
+    <p v-else class="text-bg-success">{{ i18n.t("qvue_base-upload-complete") }}</p>
   </div>
   <div
     v-if="
