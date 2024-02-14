@@ -1,12 +1,12 @@
 {
   "name": "qvue",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "scripts": {
     "dev": "vite",
     "build": "run-s type-check test:unit test:e2e build-only",
     "preview": "vite preview --port 4173",
     "test:unit": "vitest --environment jsdom --watch false --allowOnly",
-    "test:server": "vite --port 8055",
+    "test:server": "vite --port 8055 --host",
     "test:cypress": "cypress run",
     "test:e2e": "start-server-and-test test:server http://127.0.0.1:8055/ test:cypress",
     "build-only": "vite build",

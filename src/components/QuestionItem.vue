@@ -19,16 +19,16 @@ const questionnaireStore = useQuestionnaireStore();
 const { questionnaire } = storeToRefs(questionnaireStore);
 
 export interface Props {
-  next_button_label?: string;
   next_button_key?: string;
   disable_back_button?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   disable_back_button: false,
-  next_button_label: i18n.t("qvue_base-next"),
   next_button_key: "arrowright",
 });
+
+const next_button_label = i18n.t("qvue_base-next");
 
 const item = computed(() => questionnaire.value.current_item);
 
@@ -103,7 +103,7 @@ const answerChanged = () => {
         "
         :data-click-on-key="props.next_button_key"
         data-nav-direction="next"
-        v-html="props.next_button_label"
+        v-html="next_button_label"
       />
     </div>
   </div>
