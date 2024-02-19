@@ -152,7 +152,7 @@ export const _state_properties: QuestionnaireProperties = {
     }),
     new Item({
       id: "health-appetite-loss",
-      question: i18n.t("cis_demo-appetite-loss"),
+      question: i18n.t("cis_demo-health-appetite-loss"),
       answers: [
         {
           type: AnswerType.RADIO,
@@ -418,7 +418,7 @@ export const _state_properties: QuestionnaireProperties = {
           type: AnswerType.RADIO,
           options: [
             { content: 1, label: i18n.t("cis_demo-generic-no") },
-            { content: 2, label: i18n.t("cis_demo-generic-yes1") },
+            { content: 2, label: i18n.t("cis_demo-generic-yes-a1") },
           ],
         },
       ],
@@ -453,7 +453,7 @@ export const _state_properties: QuestionnaireProperties = {
           type: AnswerType.RADIO,
           options: [
             { content: 1, label: i18n.t("cis_demo-generic-no") },
-            { content: 2, label: i18n.t("cis_demo-generic-yes1") },
+            { content: 2, label: i18n.t("cis_demo-generic-yes-a1") },
           ],
         },
       ],
@@ -595,7 +595,7 @@ export const _state_properties: QuestionnaireProperties = {
           type: AnswerType.RADIO,
           options: [
             { content: 1, label: i18n.t("cis_demo-generic-no") },
-            { content: 2, label: i18n.t("cis_demo-generic-yes1") },
+            { content: 2, label: i18n.t("cis_demo-generic-yes-a1") },
           ],
         },
       ],
@@ -758,7 +758,7 @@ export const _state_properties: QuestionnaireProperties = {
           type: AnswerType.RADIO,
           options: [
             { content: 1, label: i18n.t("cis_demo-generic-no") },
-            { content: 2, label: i18n.t("cis_demo-generic-yes1") },
+            { content: 2, label: i18n.t("cis_demo-generic-yes-a1") },
           ],
         },
       ],
@@ -862,7 +862,7 @@ export const _state_properties: QuestionnaireProperties = {
           type: AnswerType.RADIO,
           options: [
             { content: 1, label: i18n.t("cis_demo-generic-no") },
-            { content: 2, label: i18n.t("cis_demo-generic-yes2") },
+            { content: 2, label: i18n.t("cis_demo-generic-yes-a2") },
           ],
         },
       ],
@@ -910,7 +910,7 @@ export const _state_properties: QuestionnaireProperties = {
           type: AnswerType.RADIO,
           options: [
             { content: 1, label: i18n.t("cis_demo-generic-no") },
-            { content: 2, label: i18n.t("cis_demo-generic-yes1") },
+            { content: 2, label: i18n.t("cis_demo-generic-yes-a1") },
           ],
         },
       ],
@@ -1007,7 +1007,7 @@ export const _state_properties: QuestionnaireProperties = {
           type: AnswerType.RADIO,
           options: [
             { content: 1, label: i18n.t("cis_demo-generic-no") },
-            { content: 2, label: i18n.t("cis_demo-generic-yes2") },
+            { content: 2, label: i18n.t("cis_demo-generic-yes-a2") },
           ],
         },
       ],
@@ -1112,7 +1112,7 @@ export const _state_properties: QuestionnaireProperties = {
           type: AnswerType.RADIO,
           options: [
             { content: 1, label: i18n.t("cis_demo-generic-no") },
-            { content: 2, label: i18n.t("cis_demo-generic-yes1") },
+            { content: 2, label: i18n.t("cis_demo-generic-yes-a1") },
           ],
         },
       ],
@@ -1200,7 +1200,7 @@ export const _state_properties: QuestionnaireProperties = {
           type: AnswerType.RADIO,
           options: [
             { content: 1, label: i18n.t("cis_demo-generic-no") },
-            { content: 2, label: i18n.t("cis_demo-generic-yes1") },
+            { content: 2, label: i18n.t("cis_demo-generic-yes-a1") },
           ],
         },
       ],
@@ -1305,7 +1305,7 @@ export const _state_properties: QuestionnaireProperties = {
           type: AnswerType.RADIO,
           options: [
             { content: 1, label: i18n.t("cis_demo-generic-no") },
-            { content: 2, label: i18n.t("cis_demo-generic-yes1") },
+            { content: 2, label: i18n.t("cis_demo-generic-yes-a1") },
           ],
         },
       ],
@@ -1460,7 +1460,7 @@ export const _state_properties: QuestionnaireProperties = {
               content: 2,
               label: i18n.t("cis_demo-sleep-gain-yes"),
             },
-            { content: 3, label: i18n.t("cis_demo-generic-yes1") },
+            { content: 3, label: i18n.t("cis_demo-generic-yes-a1") },
           ],
         },
       ],
@@ -1604,7 +1604,7 @@ export const _state_properties: QuestionnaireProperties = {
           options: [
             { content: 1, label: i18n.t("cis_demo-generic-no") },
             { content: 2, label: i18n.t("cis_demo-generic-freq-a7") },
-            { content: 3, label: i18n.t("cis_demo-generic-yes1") },
+            { content: 3, label: i18n.t("cis_demo-generic-yes-a1") },
           ],
         },
       ],
@@ -1700,7 +1700,7 @@ export const _state_properties: QuestionnaireProperties = {
           options: [
             { content: 1, label: i18n.t("cis_demo-generic-no") },
             { content: 2, label: i18n.t("cis_demo-irritability-rows-yes") },
-            { content: 3, label: i18n.t("cis_demo-generic-yes1") },
+            { content: 3, label: i18n.t("cis_demo-generic-yes-a1") },
           ],
         },
       ],
@@ -1752,7 +1752,7 @@ export const _state_properties: QuestionnaireProperties = {
           type: AnswerType.RADIO,
           options: [
             { content: 1, label: i18n.t("cis_demo-generic-no") },
-            { content: 2, label: i18n.t("cis_demo-generic-yes1") },
+            { content: 2, label: i18n.t("cis_demo-generic-yes-a1") },
           ],
         },
       ],
@@ -1778,7 +1778,7 @@ export const _state_properties: QuestionnaireProperties = {
           type: AnswerType.RADIO,
           options: [
             { content: 1, label: i18n.t("cis_demo-generic-no") },
-            { content: 2, label: i18n.t("cis_demo-generic-yes1") },
+            { content: 2, label: i18n.t("cis_demo-generic-yes-a1") },
           ],
         },
       ],
@@ -1870,7 +1870,7 @@ export const _state_properties: QuestionnaireProperties = {
         {
           type: AnswerType.RADIO,
           options: [
-            { content: 1, label: i18n.t("cis_demo-generic-yes1") },
+            { content: 1, label: i18n.t("cis_demo-generic-yes-a1") },
             {
               content: 2,
               label: i18n.t("cis_demo-hypochondria-distraction-yes"),
@@ -1914,7 +1914,7 @@ export const _state_properties: QuestionnaireProperties = {
           type: AnswerType.RADIO,
           options: [
             { content: 1, label: i18n.t("cis_demo-generic-no") },
-            { content: 2, label: i18n.t("cis_demo-generic-yes1") },
+            { content: 2, label: i18n.t("cis_demo-generic-yes-a1") },
           ],
         },
       ],
@@ -1940,7 +1940,7 @@ export const _state_properties: QuestionnaireProperties = {
           type: AnswerType.RADIO,
           options: [
             { content: 1, label: i18n.t("cis_demo-depression-recent-no") },
-            { content: 2, label: i18n.t("cis_demo-generic-yes1") },
+            { content: 2, label: i18n.t("cis_demo-generic-yes-a1") },
           ],
         },
       ],
@@ -1953,7 +1953,7 @@ export const _state_properties: QuestionnaireProperties = {
         {
           type: AnswerType.RADIO,
           options: [
-            { content: 1, label: i18n.t("cis_demo-generic-yes1") },
+            { content: 1, label: i18n.t("cis_demo-generic-yes-a1") },
             { content: 2, label: i18n.t("cis_demo-depression-enjoy-a1") },
             { content: 3, label: i18n.t("cis_demo-depression-enjoy-a2") },
           ],
@@ -1980,7 +1980,7 @@ export const _state_properties: QuestionnaireProperties = {
         {
           type: AnswerType.RADIO,
           options: [
-            { content: 1, label: i18n.t("cis_demo-generic-yes1") },
+            { content: 1, label: i18n.t("cis_demo-generic-yes-a1") },
             { content: 2, label: i18n.t("cis_demo-depression-enjoy-a1") },
             { content: 3, label: i18n.t("cis_demo-depression-enjoy-a2") },
           ],
@@ -2214,7 +2214,7 @@ export const _state_properties: QuestionnaireProperties = {
           type: AnswerType.RADIO,
           options: [
             { content: 1, label: i18n.t("cis_demo-generic-no") },
-            { content: 2, label: i18n.t("cis_demo-generic-yes1") },
+            { content: 2, label: i18n.t("cis_demo-generic-yes-a1") },
           ],
         },
       ],
@@ -2236,7 +2236,7 @@ export const _state_properties: QuestionnaireProperties = {
           type: AnswerType.RADIO,
           options: [
             { content: 1, label: i18n.t("cis_demo-generic-no") },
-            { content: 2, label: i18n.t("cis_demo-generic-yes1") },
+            { content: 2, label: i18n.t("cis_demo-generic-yes-a1") },
           ],
         },
       ],
@@ -2440,7 +2440,7 @@ export const _state_properties: QuestionnaireProperties = {
           type: AnswerType.RADIO,
           options: [
             { content: 1, label: i18n.t("cis_demo-generic-no") },
-            { content: 2, label: i18n.t("cis_demo-generic-yes1") },
+            { content: 2, label: i18n.t("cis_demo-generic-yes-a1") },
           ],
         },
       ],
@@ -2461,7 +2461,7 @@ export const _state_properties: QuestionnaireProperties = {
         {
           type: AnswerType.RADIO,
           options: [
-            { content: 1, label: i18n.t("cis_demo-generic-yes1") },
+            { content: 1, label: i18n.t("cis_demo-generic-yes-a1") },
             {
               content: 2,
               label: i18n.t("cis_demo-depression-suicide-doctor-no"),
@@ -2524,7 +2524,7 @@ export const _state_properties: QuestionnaireProperties = {
           type: AnswerType.RADIO,
           options: [
             { content: 1, label: i18n.t("cis_demo-generic-no") },
-            { content: 2, label: i18n.t("cis_demo-generic-yes1") },
+            { content: 2, label: i18n.t("cis_demo-generic-yes-a1") },
           ],
         },
       ],
@@ -2694,7 +2694,7 @@ export const _state_properties: QuestionnaireProperties = {
           type: AnswerType.RADIO,
           options: [
             { content: 1, label: i18n.t("cis_demo-generic-no") },
-            { content: 2, label: i18n.t("cis_demo-generic-yes1") },
+            { content: 2, label: i18n.t("cis_demo-generic-yes-a1") },
           ],
         },
       ],
@@ -2742,7 +2742,7 @@ export const _state_properties: QuestionnaireProperties = {
           type: AnswerType.RADIO,
           options: [
             { content: 1, label: i18n.t("cis_demo-generic-no") },
-            { content: 2, label: i18n.t("cis_demo-generic-yes1") },
+            { content: 2, label: i18n.t("cis_demo-generic-yes-a1") },
           ],
         },
       ],
@@ -2852,7 +2852,7 @@ export const _state_properties: QuestionnaireProperties = {
           type: AnswerType.RADIO,
           options: [
             { content: 1, label: i18n.t("cis_demo-generic-no") },
-            { content: 2, label: i18n.t("cis_demo-generic-yes1") },
+            { content: 2, label: i18n.t("cis_demo-generic-yes-a1") },
           ],
         },
       ],
@@ -2874,7 +2874,7 @@ export const _state_properties: QuestionnaireProperties = {
           type: AnswerType.RADIO,
           options: [
             { content: 1, label: i18n.t("cis_demo-generic-no") },
-            { content: 2, label: i18n.t("cis_demo-generic-yes1") },
+            { content: 2, label: i18n.t("cis_demo-generic-yes-a1") },
           ],
         },
       ],
@@ -2896,7 +2896,7 @@ export const _state_properties: QuestionnaireProperties = {
           type: AnswerType.RADIO,
           options: [
             { content: 1, label: i18n.t("cis_demo-generic-no") },
-            { content: 2, label: i18n.t("cis_demo-generic-yes1") },
+            { content: 2, label: i18n.t("cis_demo-generic-yes-a1") },
           ],
         },
       ],
@@ -2918,7 +2918,7 @@ export const _state_properties: QuestionnaireProperties = {
           type: AnswerType.RADIO,
           options: [
             { content: 1, label: i18n.t("cis_demo-generic-no") },
-            { content: 2, label: i18n.t("cis_demo-generic-yes1") },
+            { content: 2, label: i18n.t("cis_demo-generic-yes-a1") },
           ],
         },
       ],
@@ -2940,7 +2940,7 @@ export const _state_properties: QuestionnaireProperties = {
           type: AnswerType.RADIO,
           options: [
             { content: 1, label: i18n.t("cis_demo-generic-no") },
-            { content: 2, label: i18n.t("cis_demo-generic-yes1") },
+            { content: 2, label: i18n.t("cis_demo-generic-yes-a1") },
           ],
         },
       ],
@@ -2962,7 +2962,7 @@ export const _state_properties: QuestionnaireProperties = {
           type: AnswerType.RADIO,
           options: [
             { content: 1, label: i18n.t("cis_demo-generic-no") },
-            { content: 2, label: i18n.t("cis_demo-generic-yes1") },
+            { content: 2, label: i18n.t("cis_demo-generic-yes-a1") },
           ],
         },
       ],
@@ -2984,7 +2984,7 @@ export const _state_properties: QuestionnaireProperties = {
           type: AnswerType.RADIO,
           options: [
             { content: 1, label: i18n.t("cis_demo-generic-no") },
-            { content: 2, label: i18n.t("cis_demo-generic-yes1") },
+            { content: 2, label: i18n.t("cis_demo-generic-yes-a1") },
           ],
         },
       ],
@@ -3006,7 +3006,7 @@ export const _state_properties: QuestionnaireProperties = {
           type: AnswerType.RADIO,
           options: [
             { content: 1, label: i18n.t("cis_demo-generic-no") },
-            { content: 2, label: i18n.t("cis_demo-generic-yes1") },
+            { content: 2, label: i18n.t("cis_demo-generic-yes-a1") },
           ],
         },
       ],
@@ -3079,7 +3079,7 @@ export const _state_properties: QuestionnaireProperties = {
           type: AnswerType.RADIO,
           options: [
             { content: 1, label: i18n.t("cis_demo-generic-no") },
-            { content: 2, label: i18n.t("cis_demo-generic-yes1") },
+            { content: 2, label: i18n.t("cis_demo-generic-yes-a1") },
           ],
         },
       ],
@@ -3168,7 +3168,7 @@ export const _state_properties: QuestionnaireProperties = {
           type: AnswerType.RADIO,
           options: [
             { content: 1, label: i18n.t("cis_demo-generic-no") },
-            { content: 2, label: i18n.t("cis_demo-generic-yes1") },
+            { content: 2, label: i18n.t("cis_demo-generic-yes-a1") },
           ],
         },
       ],
@@ -3190,7 +3190,7 @@ export const _state_properties: QuestionnaireProperties = {
           type: AnswerType.RADIO,
           options: [
             { content: 1, label: i18n.t("cis_demo-generic-no") },
-            { content: 2, label: i18n.t("cis_demo-generic-yes1") },
+            { content: 2, label: i18n.t("cis_demo-generic-yes-a1") },
           ],
         },
       ],
@@ -3212,7 +3212,7 @@ export const _state_properties: QuestionnaireProperties = {
           type: AnswerType.RADIO,
           options: [
             { content: 1, label: i18n.t("cis_demo-generic-no") },
-            { content: 2, label: i18n.t("cis_demo-generic-yes1") },
+            { content: 2, label: i18n.t("cis_demo-generic-yes-a1") },
           ],
         },
       ],
@@ -3234,7 +3234,7 @@ export const _state_properties: QuestionnaireProperties = {
           type: AnswerType.RADIO,
           options: [
             { content: 1, label: i18n.t("cis_demo-generic-no") },
-            { content: 2, label: i18n.t("cis_demo-generic-yes1") },
+            { content: 2, label: i18n.t("cis_demo-generic-yes-a1") },
           ],
         },
       ],
@@ -3256,7 +3256,7 @@ export const _state_properties: QuestionnaireProperties = {
           type: AnswerType.RADIO,
           options: [
             { content: 1, label: i18n.t("cis_demo-generic-no") },
-            { content: 2, label: i18n.t("cis_demo-generic-yes1") },
+            { content: 2, label: i18n.t("cis_demo-generic-yes-a1") },
           ],
         },
       ],
@@ -3278,7 +3278,7 @@ export const _state_properties: QuestionnaireProperties = {
           type: AnswerType.RADIO,
           options: [
             { content: 1, label: i18n.t("cis_demo-generic-no") },
-            { content: 2, label: i18n.t("cis_demo-generic-yes1") },
+            { content: 2, label: i18n.t("cis_demo-generic-yes-a1") },
           ],
         },
       ],
@@ -3300,7 +3300,7 @@ export const _state_properties: QuestionnaireProperties = {
           type: AnswerType.RADIO,
           options: [
             { content: 1, label: i18n.t("cis_demo-generic-no") },
-            { content: 2, label: i18n.t("cis_demo-generic-yes1") },
+            { content: 2, label: i18n.t("cis_demo-generic-yes-a1") },
           ],
         },
       ],
@@ -3322,7 +3322,7 @@ export const _state_properties: QuestionnaireProperties = {
           type: AnswerType.RADIO,
           options: [
             { content: 1, label: i18n.t("cis_demo-generic-no") },
-            { content: 2, label: i18n.t("cis_demo-generic-yes1") },
+            { content: 2, label: i18n.t("cis_demo-generic-yes-a1") },
           ],
         },
       ],
@@ -3346,7 +3346,7 @@ export const _state_properties: QuestionnaireProperties = {
           type: AnswerType.RADIO,
           options: [
             { content: 1, label: i18n.t("cis_demo-generic-no") },
-            { content: 2, label: i18n.t("cis_demo-generic-yes2") },
+            { content: 2, label: i18n.t("cis_demo-generic-yes-a2") },
           ],
         },
       ],
@@ -3521,7 +3521,7 @@ export const _state_properties: QuestionnaireProperties = {
           type: AnswerType.RADIO,
           options: [
             { content: 1, label: i18n.t("cis_demo-generic-no") },
-            { content: 2, label: i18n.t("cis_demo-generic-yes1") },
+            { content: 2, label: i18n.t("cis_demo-generic-yes-a1") },
           ],
         },
       ],
@@ -3535,7 +3535,7 @@ export const _state_properties: QuestionnaireProperties = {
           type: AnswerType.RADIO,
           options: [
             { content: 1, label: i18n.t("cis_demo-generic-no") },
-            { content: 2, label: i18n.t("cis_demo-generic-yes1") },
+            { content: 2, label: i18n.t("cis_demo-generic-yes-a1") },
           ],
         },
       ],
@@ -3557,7 +3557,7 @@ export const _state_properties: QuestionnaireProperties = {
           type: AnswerType.RADIO,
           options: [
             { content: 1, label: i18n.t("cis_demo-generic-no") },
-            { content: 2, label: i18n.t("cis_demo-generic-yes1") },
+            { content: 2, label: i18n.t("cis_demo-generic-yes-a1") },
           ],
         },
       ],
@@ -3579,7 +3579,7 @@ export const _state_properties: QuestionnaireProperties = {
           type: AnswerType.RADIO,
           options: [
             { content: 1, label: i18n.t("cis_demo-generic-no") },
-            { content: 2, label: i18n.t("cis_demo-generic-yes1") },
+            { content: 2, label: i18n.t("cis_demo-generic-yes-a1") },
           ],
         },
       ],
@@ -3601,7 +3601,7 @@ export const _state_properties: QuestionnaireProperties = {
           type: AnswerType.RADIO,
           options: [
             { content: 1, label: i18n.t("cis_demo-generic-no") },
-            { content: 2, label: i18n.t("cis_demo-generic-yes1") },
+            { content: 2, label: i18n.t("cis_demo-generic-yes-a1") },
           ],
         },
       ],
@@ -3623,7 +3623,7 @@ export const _state_properties: QuestionnaireProperties = {
           type: AnswerType.RADIO,
           options: [
             { content: 1, label: i18n.t("cis_demo-generic-no") },
-            { content: 2, label: i18n.t("cis_demo-generic-yes1") },
+            { content: 2, label: i18n.t("cis_demo-generic-yes-a1") },
           ],
         },
       ],
@@ -3645,7 +3645,7 @@ export const _state_properties: QuestionnaireProperties = {
           type: AnswerType.RADIO,
           options: [
             { content: 1, label: i18n.t("cis_demo-generic-no") },
-            { content: 2, label: i18n.t("cis_demo-generic-yes1") },
+            { content: 2, label: i18n.t("cis_demo-generic-yes-a1") },
           ],
         },
       ],
@@ -3667,7 +3667,7 @@ export const _state_properties: QuestionnaireProperties = {
           type: AnswerType.RADIO,
           options: [
             { content: 1, label: i18n.t("cis_demo-generic-no") },
-            { content: 2, label: i18n.t("cis_demo-generic-yes1") },
+            { content: 2, label: i18n.t("cis_demo-generic-yes-a1") },
           ],
         },
       ],
@@ -3689,7 +3689,7 @@ export const _state_properties: QuestionnaireProperties = {
           type: AnswerType.RADIO,
           options: [
             { content: 1, label: i18n.t("cis_demo-generic-no") },
-            { content: 2, label: i18n.t("cis_demo-generic-yes1") },
+            { content: 2, label: i18n.t("cis_demo-generic-yes-a1") },
           ],
         },
       ],
@@ -3711,7 +3711,7 @@ export const _state_properties: QuestionnaireProperties = {
           type: AnswerType.RADIO,
           options: [
             { content: 1, label: i18n.t("cis_demo-generic-no") },
-            { content: 2, label: i18n.t("cis_demo-generic-yes1") },
+            { content: 2, label: i18n.t("cis_demo-generic-yes-a1") },
           ],
         },
       ],
@@ -3733,7 +3733,7 @@ export const _state_properties: QuestionnaireProperties = {
           type: AnswerType.RADIO,
           options: [
             { content: 1, label: i18n.t("cis_demo-generic-no") },
-            { content: 2, label: i18n.t("cis_demo-generic-yes1") },
+            { content: 2, label: i18n.t("cis_demo-generic-yes-a1") },
           ],
         },
       ],
@@ -3755,7 +3755,7 @@ export const _state_properties: QuestionnaireProperties = {
           type: AnswerType.RADIO,
           options: [
             { content: 1, label: i18n.t("cis_demo-generic-no") },
-            { content: 2, label: i18n.t("cis_demo-generic-yes1") },
+            { content: 2, label: i18n.t("cis_demo-generic-yes-a1") },
           ],
         },
       ],
@@ -3777,7 +3777,7 @@ export const _state_properties: QuestionnaireProperties = {
           type: AnswerType.RADIO,
           options: [
             { content: 1, label: i18n.t("cis_demo-generic-no") },
-            { content: 2, label: i18n.t("cis_demo-generic-yes1") },
+            { content: 2, label: i18n.t("cis_demo-generic-yes-a1") },
           ],
         },
       ],
@@ -3799,7 +3799,7 @@ export const _state_properties: QuestionnaireProperties = {
           type: AnswerType.RADIO,
           options: [
             { content: 1, label: i18n.t("cis_demo-generic-no") },
-            { content: 2, label: i18n.t("cis_demo-generic-yes1") },
+            { content: 2, label: i18n.t("cis_demo-generic-yes-a1") },
           ],
         },
       ],
@@ -3824,7 +3824,7 @@ export const _state_properties: QuestionnaireProperties = {
           type: AnswerType.RADIO,
           options: [
             { content: 1, label: i18n.t("cis_demo-generic-no") },
-            { content: 2, label: i18n.t("cis_demo-generic-yes1") },
+            { content: 2, label: i18n.t("cis_demo-generic-yes-a1") },
           ],
         },
       ],
