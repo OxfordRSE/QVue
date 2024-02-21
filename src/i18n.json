@@ -413,7 +413,7 @@
   "pt-br": {
     "general_about_tool": "Sobre a plataforma",
     "cis_intro": "O Clinical Instrument Schedule (Revised) é uma ferramenta que\n permite que médicos e pesquisadores de saúde mental avaliem a\n condição de saúde mental de uma pessoa. Deve levar cerca de 30 minutos para ser concluído.",
-    "cis_demo-intro": "Para começar, gostaria de perguntar sobre você e sua experiência",
+    "cis_demo-intro": "Para começar, gostaria de perguntar alguns dados sociodemográficos.",
     "cis_demo-generic-no": "Não",
     "cis_demo-generic-yes-a1": "Sim",
     "cis_demo-generic-yes-a2": "Sim, em pelo menos uma ocasião",
