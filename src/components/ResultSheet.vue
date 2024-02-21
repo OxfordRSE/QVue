@@ -122,7 +122,7 @@ const markdown = computed(() => {
     "
     class="blank mb-2"
   >
-    <p>Thank you for completing the {{ questionnaire.name }}.</p>
+    <p>{{ i18n.t("qvue_resultsheet_thanks") }} {{ questionnaire.name }}.</p>
   </div>
   <div
     v-if="specification?.output?.custom"

@@ -63,19 +63,19 @@ const url_settings = useURLStore();
         {{ i18n.t("qvue_base-data-collection-content") }}
       </p>
       <details v-if="url_settings.fetch?.url">
-        <summary><h3>{{ i18n.t("qvue_base-data-data") }}</h3></summary>
+        <summary><h3>{{ i18n.t("qvue_base-sending-data") }}</h3></summary>
         <p>
-          {{ i18n.t("qvue_base-data-data-content1") }}
+          {{ i18n.t("qvue_base-sending-data-content1") }}
           <mark>{{
             url_settings.fetch?.url?.replace(/.+:\/\/([^/]+)\/?.*/, "$1")
           }}</mark
-          >{{ i18n.t("qvue_base-data-data-content2") }}
+          >{{ i18n.t("qvue_base-sending-data-content2") }}
         </p>
         <div v-if="url_settings.fetch?.data_policy">
           <p>
-            {{ i18n.t("qvue_base-data-data-content3") }}
+            {{ i18n.t("qvue_base-sending-data-content3") }}
             {{ url_settings.fetch?.url?.replace(/.+:\/\/([^/]+)\/?.*/, "$1") }}
-            {{ i18n.t("qvue_base-data-data-content4") }}
+            {{ i18n.t("qvue_base-sending-data-content4") }}
           </p>
           <div
             class="border-info border-1 card px-1 pt-2"
@@ -83,31 +83,31 @@ const url_settings = useURLStore();
           ></div>
         </div>
         <p v-else>
-          {{ i18n.t("qvue_base-data-data-content3") }}
+          {{ i18n.t("qvue_base-sending-data-content3") }}
           {{ url_settings.fetch?.url?.replace(/.+:\/\/([^/]+)\/?.*/, "$1") }}
-          {{ i18n.t("qvue_base-data-data-content5") }}
+          {{ i18n.t("qvue_base-sending-data-content5") }}
         </p>
         <p>
           <strong
-            >{{ i18n.t("qvue_base-data-data-content6") }}</strong
+            >{{ i18n.t("qvue_base-sending-data-content6") }}</strong
           >
         </p>
       </details>
       <details v-if="url_settings.content?.download">
-        <summary><h3>{{ i18n.t("qvue_base-data-saveable-data") }}</h3></summary>
+        <summary><h3>{{ i18n.t("qvue_base-saveable-data") }}</h3></summary>
         <p>
-          {{ i18n.t("qvue_base-data-saveable-data-content") }}
+          {{ i18n.t("qvue_base-saveable-data-content") }}
         </p>
       </details>
       <details>
-        <summary><h3>{{ i18n.t("qvue_base-data-temporary-data") }}</h3></summary>
+        <summary><h3>{{ i18n.t("qvue_base-temporary-data") }}</h3></summary>
         <p>
-          {{ i18n.t("qvue_base-data-temporary-data-content") }}
+          {{ i18n.t("qvue_base-temporary-data-content") }}
         </p>
       </details>
-      <h2>{{ i18n.t("qvue_base-data-note") }}</h2>
+      <h2>{{ i18n.t("qvue_base-note") }}</h2>
       <p>
-        {{ i18n.t("qvue_base-data-note-content") }}
+        {{ i18n.t("qvue_base-note-content") }}
       </p>
       <p>
         <strong

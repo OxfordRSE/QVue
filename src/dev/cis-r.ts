@@ -589,7 +589,7 @@ export const _state_properties: QuestionnaireProperties = {
     }),
     new Item({
       id: "somatic-discomfort",
-      question: i18n.t("cis_demo-somatic-pain-discomfort"),
+      question: i18n.t("cis_demo-somatic-discomfort"),
       answers: [
         {
           type: AnswerType.RADIO,

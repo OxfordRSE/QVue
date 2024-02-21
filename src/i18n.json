@@ -407,7 +407,8 @@
     "qvue_base-begin1": "B",
     "qvue_base-begin2": "egin",
     "qvue_base-resume1": "R",
-    "qvue_base-resume2": "esume"
+    "qvue_base-resume2": "esume",
+    "qvue_resultsheet_thanks": "Thank you for completing the"
   },
   "pt-br": {
     "general_about_tool": "Sobre a plataforma",
@@ -532,7 +533,7 @@
     "cis_demo-fatigue": "Nos últimos 30 dias, o(a) Sr(a) vem se sentindo cansado?",
     "cis_demo-fatigue-tired-cause": "O que o senhor acha que é a causa principal desse cansaço?",
     "cis_demo-fatigue-tired-frequency": "Nos últimos 7 dias, em quantos dias o(a) Sr(a) se sentiu cansado(a)?",
-    "cis_demo-fatigue-tired-duration": "Nos últimos 7 dias, o(a) Sr(a) se sentiu cansado por mais de 3 horas em algum desses dias? Exclua o tempo gasto dormindo?",
+    "cis_demo-fatigue-tired-duration": "Nos últimos 7 dias, o(a) Sr(a) se sentiu cansado por mais de 3 horas em algum desses dias? Exclua o tempo gasto dormindo.",
     "cis_demo-fatigue-tired-push": "Nos últimos 7 dias, o(a) Sr(a) se sentiu tão cansado(a) que precisou se esforçar para realizas as suas atividades?",
     "cis_demo-fatigue-tired-enjoy": "Nos últimos 7 dias, o(a) Sr(a) se sentiu cansando quando fazia coisas que gosta?",
     "cis_demo-fatigue-tired-enjoy-a1": "Não, não me senti cansado durante algo que gosto",
@@ -696,7 +697,7 @@
     "cis_demo-anxiety-long": "Nos últimos 7 dias, o(a) Sr(a) se sentiu ansioso(a), nervosa(a) ou tenso(a) por mais de 3 horas, no total, em algum desses dias?",
     "cis_demo-anxiety-long-a2": "Sim, mais de 3 horas por pelo menos um dia",
     "cis_demo-anxiety-duration": "Há quanto tempo o(a) Sr(a) tem sentido ansiedade/nervosismo/tensão do modo como o(a) Sr(a) me descreveu?",
-    "cis_demo-phobia": "Algumas vezes, as pessoas evitam uma situação ou coisa específica porque têm fobia disso. Por exemplo, algumas pessoas evitam comer em público ou evitam ir a lugares cheios porque isso as deixaria nervosas ou ansiosas.n\nNos últimos 30 dias, o(a) Sr(a) evitou alguma situação ou coisa porque isso lhe deixaria ansioso(a) ou nervoso(a), mesmo não havendo um perigo real?",
+    "cis_demo-phobia": "Algumas vezes, as pessoas evitam uma situação ou coisa específica porque têm fobia disso. Por exemplo, algumas pessoas evitam comer em público ou evitam ir a lugares cheios porque isso as deixaria nervosas ou ansiosas.\nNos últimos 30 dias, o(a) Sr(a) evitou alguma situação ou coisa porque isso lhe deixaria ansioso(a) ou nervoso(a), mesmo não havendo um perigo real?",
     "cis_demo-phobia_type": "Aqui temos uma lista de coisas sobre as quais as pessoas ficam nervosas.\n\nO(A) Sr(a) pode me dizer de qual destas tem mais medo?",
     "cis_demo-phobia_type-a1": "Viajar sozinho(a) de ônibus, trem ou avião",
     "cis_demo-phobia_type-a2": "Estar longe de casa",
@@ -817,6 +818,7 @@
     "qvue_base-begin1": "C",
     "qvue_base-begin2": "omeçar",
     "qvue_base-resume1": "R",
-    "qvue_base-resume2": "etomar"
+    "qvue_base-resume2": "etomar",
+    "qvue_resultsheet_thanks": "Obrigado por completar o"
   }
 }
